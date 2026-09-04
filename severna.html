@@ -405,6 +405,37 @@
       margin-top: 16px;
     }
 
+    /* ── 7. Project Availability Note ──────────────────── */
+    .cs-availability-note {
+      max-width: 740px;
+      margin-bottom: clamp(56px, 8vh, 80px);
+      padding: clamp(20px, 2.8vh, 26px) clamp(22px, 3.2vw, 30px);
+      background: rgba(18, 18, 18, 0.45);
+      border: 1px solid rgba(232, 230, 227, 0.08);
+      border-radius: 6px;
+    }
+
+    .cs-availability-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+    }
+
+    .cs-availability-text {
+      font-family: var(--font-primary);
+      font-size: clamp(0.92rem, 1.02vw, 1rem);
+      line-height: 1.7;
+      color: #a8a6a2;
+    }
+
+    .cs-availability-text + .cs-availability-text {
+      margin-top: 10px;
+    }
+
     /* ── 7. Two Vertical UI Screenshots ────────────────── */
     .cs-gallery {
       margin-bottom: clamp(64px, 10vh, 100px);
@@ -701,15 +732,7 @@
       <!-- 3. First Project Image / Screenshot (Featured Visual) -->
       <section class="cs-featured-media">
         <div class="cs-media-frame">
-          <!-- Replace this caption with: <img src="your-hero-screenshot.jpg" alt="Severna Gameplay UI"> -->
-          <div class="cs-placeholder-caption">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <circle cx="8.5" cy="8.5" r="1.5"></circle>
-              <polyline points="21 15 16 10 5 21"></polyline>
-            </svg>
-            FEATURED GAMEPLAY UI SCREENSHOT
-          </div>
+          <img src="severna-gameplay.jpg" alt="Severna: Blood &amp; Betrayal — In-Game Tactical UI &amp; Peasant Archer Deployment" />
         </div>
       </section>
 
@@ -752,32 +775,11 @@
         <p class="cs-body-text">My work focused primarily on the game’s interface layer and selected UI systems, including designing widgets, refining layouts, and creating interface elements that improve clarity and support the overall gameplay experience.</p>
       </section>
 
-      <!-- 7. Game UI Screenshots (Two Vertical Screenshots) -->
-      <section class="cs-gallery">
-        <div class="cs-gallery-grid">
-          <div class="cs-vertical-frame">
-            <!-- Replace this caption with: <img src="your-ui-widgets.jpg" alt="In-Game UI Widgets"> -->
-            <div class="cs-placeholder-caption">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-              IN-GAME UI WIDGETS
-            </div>
-          </div>
-          <div class="cs-vertical-frame">
-            <!-- Replace this caption with: <img src="your-interaction-ui.jpg" alt="Gameplay Interface"> -->
-            <div class="cs-placeholder-caption">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-              INTERACTION UI
-            </div>
-          </div>
-        </div>
+      <!-- 7. Project Availability Note -->
+      <section class="cs-availability-note">
+        <h3 class="cs-availability-title">PROJECT AVAILABILITY</h3>
+        <p class="cs-availability-text">Severna: Blood &amp; Betrayal is currently in development, so I’m unable to publicly share additional project details or a larger selection of in-game work at this time.</p>
+        <p class="cs-availability-text">Selected visuals and further details can be shared during an interview or upon request.</p>
       </section>
 
       <!-- 8. Simple Bottom Project Navigation -->

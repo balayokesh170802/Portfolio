@@ -45,7 +45,8 @@
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Instrument+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Bebas+Neue&family=Caveat:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=The+Nautigal:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     /* ── Reset & Foundation ─────────────────────────────── */
     *,
@@ -130,85 +131,304 @@
       color: var(--color-fg-hover);
     }
 
-    /* ── PORTFOLIO Word (SVG) ──────────────────────────── */
-    .portfolio-word {
+    /* ── Header Center Title ────────────────────────────── */
+    .header__center {
       grid-column: 2;
       justify-self: center;
-      display: block;
-      height: 1.11rem;
-      width: auto;
-      overflow: visible;
-      transform-origin: center center;
-      will-change: transform;
-      /* Hidden until JS positions it to prevent flash */
-      visibility: hidden;
-    }
-
-    .portfolio-word text {
       font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-fg);
+      user-select: none;
+      transition: color 0.4s var(--ease-out-expo);
     }
 
-    /*
-     * Layer 1 — Segmented / Dotted Outline
-     * Initial state: invisible dotted skeleton.
-     * Animation triggered by .animate class.
-     */
-    .text-outline {
-      fill: none;
-      stroke: var(--color-fg);
-      stroke-width: 1;
-      stroke-linecap: round;
-      stroke-dasharray: 2 14;
-      stroke-opacity: 0;
+    /* ── Fullscreen Cinematic Loading Screen ───────────── */
+    .intro-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      pointer-events: auto;
     }
 
-    .portfolio-word.animate .text-outline {
-      animation: outlineAnim 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    .intro-screen.is-dismissed {
+      pointer-events: none;
     }
 
-    @keyframes outlineAnim {
+    /* 4 Vertical Black Panels dividing the overlay */
+    .intro-screen__panels {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .intro-screen__panel {
+      flex: 1 1 25%;
+      width: 25%;
+      height: 100%;
+      background: #090a0e;
+      transform: translateY(0);
+      transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+      will-change: transform;
+      outline: 1px solid #090a0e;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85);
+    }
+
+    /* Staggered sequential slide up: left to right (1 -> 2 -> 3 -> 4) */
+    .intro-screen.is-dismissed .intro-screen__panel:nth-child(1) {
+      transform: translateY(-100%);
+      transition-delay: 0s;
+    }
+
+    .intro-screen.is-dismissed .intro-screen__panel:nth-child(2) {
+      transform: translateY(-100%);
+      transition-delay: 0.06s;
+    }
+
+    .intro-screen.is-dismissed .intro-screen__panel:nth-child(3) {
+      transform: translateY(-100%);
+      transition-delay: 0.12s;
+    }
+
+    .intro-screen.is-dismissed .intro-screen__panel:nth-child(4) {
+      transform: translateY(-100%);
+      transition-delay: 0.18s;
+    }
+
+    /* Ambient dark cinematic backdrop */
+    .intro-screen__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1),
+                  opacity 0.45s ease;
+    }
+
+    .intro-screen.is-dismissed .intro-screen__bg {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    .intro-screen__glow {
+      position: absolute;
+      top: 44%;
+      left: 50%;
+      width: clamp(300px, 50vw, 680px);
+      height: clamp(180px, 30vw, 380px);
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(226, 109, 92, 0.05) 0%, rgba(226, 109, 92, 0.012) 38%, transparent 60%);
+      filter: blur(48px);
+      opacity: 0;
+      animation: glowFadeIn 1.6s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes glowFadeIn {
+      to { opacity: 1; }
+    }
+
+    .intro-screen__grain {
+      position: absolute;
+      inset: 0;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+    }
+
+    .intro-screen__bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 40%, rgba(6, 7, 10, 0.88) 100%);
+    }
+
+    /* Centered typography container */
+    .intro-screen__content {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 1680px;
+      padding: 0 clamp(16px, 3vw, 48px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1),
+                  opacity 0.45s ease;
+    }
+
+    .intro-screen.is-dismissed .intro-screen__content {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    /* The Composition Lockup: Stacked two-line composition matching reference */
+    .intro-screen__lockup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      user-select: none;
+      width: auto;
+    }
+
+    /* Line 1: Script Balayokesh centered over PORTFOLIO */
+    .intro-screen__script-wrap {
+      position: relative;
+      z-index: 3;
+      transform: rotate(-3deg);
+      transform-origin: center bottom;
+      margin-left: 0;
+      margin-bottom: clamp(-30px, -3.6vw, -17px);
+      pointer-events: none;
+    }
+
+    .intro-screen__script {
+      display: inline-block;
+      font-family: 'The Nautigal', 'Allura', 'Alex Brush', cursive;
+      font-size: clamp(4.8rem, 14.5vw, 12.2rem);
+      font-weight: 400;
+      color: #e26d5c;
+      white-space: nowrap;
+      text-shadow: 0 0 5px rgba(226, 109, 92, 0.28),
+                   0 0 12px rgba(226, 109, 92, 0.1);
+      clip-path: inset(0 100% 0 0);
+      transform: translateX(-14px);
+      opacity: 0;
+      animation: scriptDraw 1.15s 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes scriptDraw {
       0% {
-        stroke-dasharray: 2 14;
-        stroke-opacity: 0;
+        clip-path: inset(0 100% 0 0);
+        transform: translateX(-14px);
+        opacity: 0;
       }
-      12% {
-        stroke-dasharray: 2 14;
-        stroke-opacity: 0.45;
-      }
-      45% {
-        stroke-dasharray: 8 4;
-        stroke-opacity: 0.55;
-      }
-      72% {
-        stroke-dasharray: 40 0;
-        stroke-opacity: 0.4;
+      25% {
+        opacity: 1;
       }
       100% {
-        stroke-dasharray: 40 0;
-        stroke-opacity: 0;
+        clip-path: inset(0 0% 0 0);
+        transform: translateX(0);
+        opacity: 1;
       }
     }
 
-    /*
-     * Layer 2 — Solid Fill
-     * Fades in as the outline becomes continuous.
-     * Final state: fully opaque bold text.
-     */
-    .text-solid {
-      fill: var(--color-fg);
-      fill-opacity: 0;
-      stroke: none;
+    /* Line 2: Large Bold PORTFOLIO clearly below */
+    .intro-screen__title-wrap {
+      overflow: hidden;
+      padding: 0 4px;
+      position: relative;
+      z-index: 1;
     }
 
-    .portfolio-word.animate .text-solid {
-      animation: fillAnim 1s 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    .intro-screen__title {
+      font-family: 'Bebas Neue', 'Anton', sans-serif;
+      font-size: clamp(5.4rem, 18.5vw, 15.5rem);
+      line-height: 0.88;
+      letter-spacing: 0.025em;
+      color: #F8D9D2; /* Peach/blush cream */
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0;
+      display: block;
+      transform: translateY(110%);
+      opacity: 0;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      animation: titleReveal 1.2s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes fillAnim {
-      0%   { fill-opacity: 0; }
-      100% { fill-opacity: 1; }
+    @keyframes titleReveal {
+      0% {
+        transform: translateY(110%);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* 3. Sleek cinematic progress bar & counter */
+    .intro-screen__footer {
+      margin-top: clamp(28px, 4vh, 48px);
+      width: clamp(280px, 40vw, 520px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: footerFade 0.8s 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes footerFade {
+      to { opacity: 1; }
+    }
+
+    .intro-screen__progress-track {
+      width: 100%;
+      height: 2px;
+      background: rgba(226, 109, 92, 0.12);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .intro-screen__progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(226, 109, 92, 0.5) 0%, #e26d5c 70%, #FFF5F0 100%);
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(226, 109, 92, 0.6);
+      position: relative;
+    }
+
+    .intro-screen__progress-bar::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 0 8px #FFFFFF, 0 0 14px #e26d5c;
+    }
+
+    .intro-screen__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(249, 223, 217, 0.45);
+    }
+
+    .intro-screen__counter {
+      font-variant-numeric: tabular-nums;
+      color: #e26d5c;
+      font-weight: 500;
     }
 
     /* ── Navigation ─────────────────────────────────────── */
@@ -300,11 +520,12 @@
     }
 
     body.intro .header {
-      background-color: transparent;
-      border-bottom-color: transparent;
+      background-color: var(--color-bg);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     body.intro .header__logo,
+    body.intro .header__center,
     body.intro .menu-toggle {
       opacity: 0;
       pointer-events: none;
@@ -316,7 +537,7 @@
     }
 
     body.intro .hero {
-      opacity: 0;
+      opacity: 1;
       pointer-events: none;
     }
 
@@ -346,6 +567,7 @@
     }
 
     html.skip-intro .header__logo,
+    html.skip-intro .header__center,
     html.skip-intro .menu-toggle,
     html.skip-intro .header__nav,
     html.skip-intro .hero,
@@ -366,30 +588,13 @@
       animation: none !important;
     }
 
-    html.skip-intro .portfolio-word {
-      transform: none !important;
-      visibility: visible !important;
-      animation: none !important;
-      transition: none !important;
-      will-change: auto !important;
-      height: 1.11rem !important;
-    }
-
-    html.skip-intro .portfolio-word .text-outline {
-      stroke-opacity: 0 !important;
-      opacity: 0 !important;
-      animation: none !important;
-    }
-
-    html.skip-intro .portfolio-word .text-solid {
-      fill-opacity: 1 !important;
-      opacity: 1 !important;
-      animation: none !important;
+    html.skip-intro .intro-screen {
+      display: none !important;
     }
 
     /* ══════════════════════════════════════════════════════
        POST-INTRO REVEAL
-       Staggered entrance after PORTFOLIO settles in header.
+       Staggered entrance when loading screen dismisses.
        ══════════════════════════════════════════════════════ */
     @keyframes reveal {
       from {
@@ -403,11 +608,15 @@
     }
 
     body.intro-complete .header__logo {
-      animation: reveal 0.6s 0.1s var(--ease-out-expo) both;
+      animation: reveal 0.5s 0.04s var(--ease-out-expo) both;
+    }
+
+    body.intro-complete .header__center {
+      animation: reveal 0.5s 0.06s var(--ease-out-expo) both;
     }
 
     body.intro-complete .menu-toggle {
-      animation: reveal 0.5s 0.15s var(--ease-out-expo) both;
+      animation: reveal 0.45s 0.08s var(--ease-out-expo) both;
     }
 
     body.intro-complete .hero {
@@ -417,11 +626,11 @@
 
     /* Status & Eyebrow reveal */
     body.intro-complete .hero__status {
-      animation: eyebrowReveal 0.6s 0.12s var(--ease-out-expo) both;
+      animation: eyebrowReveal 0.5s 0.04s var(--ease-out-expo) both;
     }
 
     body.intro-complete .hero__eyebrow {
-      animation: eyebrowReveal 0.6s 0.18s var(--ease-out-expo) both;
+      animation: eyebrowReveal 0.5s 0.08s var(--ease-out-expo) both;
     }
 
     @keyframes eyebrowReveal {
@@ -437,11 +646,11 @@
 
     /* Heading: Vertical Masked Reveal (Line 1, then Line 2) */
     body.intro-complete .hero__line-mask:nth-child(1) .hero__line {
-      animation: lineMaskReveal 0.95s 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: lineMaskReveal 0.8s 0.10s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     body.intro-complete .hero__line-mask:nth-child(2) .hero__line {
-      animation: lineMaskReveal 0.95s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: lineMaskReveal 0.8s 0.20s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     @keyframes lineMaskReveal {
@@ -455,11 +664,11 @@
 
     /* CTA Buttons: subtle stagger fade + slide up */
     body.intro-complete .hero__btn-wrap:nth-child(1) {
-      animation: btnReveal 0.65s 0.82s var(--ease-out-expo) both;
+      animation: btnReveal 0.55s 0.35s var(--ease-out-expo) both;
     }
 
     body.intro-complete .hero__btn-wrap:nth-child(2) {
-      animation: btnReveal 0.65s 0.94s var(--ease-out-expo) both;
+      animation: btnReveal 0.55s 0.43s var(--ease-out-expo) both;
     }
 
     @keyframes btnReveal {
@@ -475,23 +684,23 @@
 
     /* Bottom Information Strip: bar fade + columns stagger */
     body.intro-complete .hero__bottom-bar {
-      animation: barFade 0.6s 1.04s ease-out both;
+      animation: barFade 0.5s 0.48s ease-out both;
     }
 
     body.intro-complete .info-col:nth-child(1) {
-      animation: colReveal 0.65s 1.10s var(--ease-out-expo) both;
+      animation: colReveal 0.5s 0.52s var(--ease-out-expo) both;
     }
 
     body.intro-complete .info-col:nth-child(2) {
-      animation: colReveal 0.65s 1.18s var(--ease-out-expo) both;
+      animation: colReveal 0.5s 0.58s var(--ease-out-expo) both;
     }
 
     body.intro-complete .info-col:nth-child(3) {
-      animation: colReveal 0.65s 1.26s var(--ease-out-expo) both;
+      animation: colReveal 0.5s 0.64s var(--ease-out-expo) both;
     }
 
     body.intro-complete .info-col:nth-child(4) {
-      animation: colReveal 0.65s 1.34s var(--ease-out-expo) both;
+      animation: colReveal 0.5s 0.70s var(--ease-out-expo) both;
     }
 
     @keyframes barFade {
@@ -872,12 +1081,11 @@
         justify-self: start;
       }
 
-      .portfolio-word {
-        justify-self: center;
-      }
-
-      .portfolio-word text {
+      .header__center {
+        font-size: clamp(0.64rem, 2.7vw, 0.72rem);
         letter-spacing: 0.18em;
+        white-space: nowrap;
+        justify-self: center;
       }
 
       /* Mobile Menu Toggle Button */
@@ -1407,7 +1615,7 @@
        ══════════════════════════════════════════════════════ */
     .works {
       position: relative;
-      height: 480vh;
+      height: 380vh;
       background: var(--color-bg);
     }
 
@@ -1484,7 +1692,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, calc(-50% + 24px)) scale(0.88);
+      transform: translate(-50%, calc(-50% + 16px)) scale(0.92);
       transform-origin: center center;
       width: clamp(340px, 64vw, 1000px);
       aspect-ratio: 16 / 10;
@@ -2380,28 +2588,46 @@
     }
   </script>
 
+  <!-- ─── Fullscreen Cinematic Loading Screen ───────────── -->
+  <div id="intro-screen" class="intro-screen" aria-hidden="false">
+    <div class="intro-screen__panels" aria-hidden="true">
+      <div class="intro-screen__panel"></div>
+      <div class="intro-screen__panel"></div>
+      <div class="intro-screen__panel"></div>
+      <div class="intro-screen__panel"></div>
+    </div>
+    <div class="intro-screen__bg">
+      <div class="intro-screen__glow"></div>
+      <div class="intro-screen__grain"></div>
+    </div>
+
+    <div class="intro-screen__content">
+      <div class="intro-screen__lockup">
+        <div class="intro-screen__script-wrap">
+          <span class="intro-screen__script">Balayokesh</span>
+        </div>
+        <div class="intro-screen__title-wrap">
+          <h1 class="intro-screen__title">PORTFOLIO</h1>
+        </div>
+      </div>
+
+      <div class="intro-screen__footer">
+        <div class="intro-screen__progress-track">
+          <div class="intro-screen__progress-bar" id="intro-progress"></div>
+        </div>
+        <div class="intro-screen__meta">
+          <span>CREATING EXPERIENCES</span>
+          <span class="intro-screen__counter" id="intro-counter">00%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ─── Header ──────────────────────────────────────── -->
   <header class="header">
     <a href="#" class="header__logo">BALAYOKESH</a>
 
-    <!--
-      PORTFOLIO — single SVG element used for the entire intro sequence.
-      Stage 1: Dotted outline → solid fill (CSS animation at intro scale)
-      Stage 2: Scale down + move into this header position (JS FLIP)
-    -->
-    <svg class="portfolio-word"
-         viewBox="154.8 -8.3 690.4 139.0"
-         preserveAspectRatio="xMidYMid meet"
-         aria-label="PORTFOLIO">
-      <text class="text-outline"
-            x="500" y="96"
-            font-size="100"
-            text-anchor="middle">PORTFOLIO</text>
-      <text class="text-solid"
-            x="500" y="96"
-            font-size="100"
-            text-anchor="middle">PORTFOLIO</text>
-    </svg>
+    <span class="header__center">PORTFOLIO</span>
 
     <button class="menu-toggle" aria-label="Toggle menu">
       <span></span>
@@ -2892,86 +3118,44 @@
     })();
 
     /* ══════════════════════════════════════════════════════
-       CINEMATIC INTRO — Two-stage sequence
-       Stage 1: Dotted → Solid (CSS stroke animation)
-       Stage 2: Center → Header (JS FLIP transition)
+       CINEMATIC LOADING SCREEN CONTROLLER
+       - Reference: Overlapping handwritten "Balayokesh" across
+         bold condensed display "PORTFOLIO".
+       - Smooth progressive reveal & luxury counter animation.
+       - Transitions directly into Hero without touching header.
        ══════════════════════════════════════════════════════ */
-    (function runIntro() {
-      // Check navigation type
+    (function initIntro() {
       const navEntry = (window.performance && performance.getEntriesByType)
         ? performance.getEntriesByType('navigation')[0]
         : null;
-      const navType = navEntry ? navEntry.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
+      const navType = navEntry
+        ? navEntry.type
+        : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
       const isReload = navType === 'reload';
       const isReturn = sessionStorage.getItem('skip_intro_return') === '1';
       const isSkipClass = document.documentElement.classList.contains('skip-intro');
 
-      // Only skip intro if explicitly returning from a case study page, never on reload
+      // Skip intro when explicitly returning from a project page
       const shouldSkipIntro = !isReload && (isReturn || isSkipClass);
 
-      // Clean up single-use return flags and any saved positions
       try {
         sessionStorage.removeItem('skip_intro_return');
         sessionStorage.removeItem('intro-seen');
         sessionStorage.removeItem('portfolio_scroll_y');
       } catch (e) {}
 
-      function calibrateSvg(word) {
-        if (!word) return;
-        const logo = document.querySelector('.header__logo');
-        const outlineEl = word.querySelector('.text-outline');
-        const solidEl = word.querySelector('.text-solid');
-
-        let bbox = null;
-        try {
-          const el = solidEl || outlineEl;
-          if (el) {
-            const b = el.getBBox();
-            if (b && b.width > 100 && b.height > 20) {
-              bbox = b;
-            }
-          }
-        } catch (e) {}
-
-        if (!bbox) {
-          bbox = { x: 160.8, y: -2.3, width: 678.4, height: 127.0 };
-        }
-
-        const px = 6, py = 6;
-        const vbWidth = bbox.width + px * 2;
-        const vbHeight = bbox.height + py * 2;
-        word.setAttribute('viewBox',
-          `${(bbox.x - px).toFixed(2)} ${(bbox.y - py).toFixed(2)} ${vbWidth.toFixed(2)} ${vbHeight.toFixed(2)}`
-        );
-
-        const logoFontSize = logo ? (parseFloat(window.getComputedStyle(logo).fontSize) || 12.8) : 12.8;
-        const targetSvgHeight = logoFontSize * (vbHeight / 100);
-        word.style.height = `${targetSvgHeight.toFixed(3)}px`;
-      }
+      const introScreen = document.getElementById('intro-screen');
+      const progressBar = document.getElementById('intro-progress');
+      const counterEl = document.getElementById('intro-counter');
 
       function completeImmediately() {
         document.documentElement.classList.add('skip-intro');
         document.body.classList.remove('intro');
         document.body.classList.add('intro-complete');
 
-        const word = document.querySelector('.portfolio-word');
-        if (word) {
-          calibrateSvg(word);
-          word.style.visibility = 'visible';
-          word.style.transform = '';
-          word.style.transition = '';
-          word.style.willChange = 'auto';
-          word.classList.remove('animate');
-
-          /* Make solid text visible immediately and hide outline */
-          const solidEl = word.querySelector('.text-solid');
-          if (solidEl) solidEl.style.fillOpacity = '1';
-          const outlineEl = word.querySelector('.text-outline');
-          if (outlineEl) outlineEl.style.strokeOpacity = '0';
-
-          window.addEventListener('resize', () => {
-            calibrateSvg(word);
-          }, { passive: true });
+        if (introScreen) {
+          introScreen.classList.add('is-dismissed');
+          introScreen.style.display = 'none';
         }
 
         if (isReturn && window.location.hash) {
@@ -2992,85 +3176,89 @@
 
       // Fresh visit or reload: reset scroll position to top
       window.scrollTo(0, 0);
+      document.body.classList.add('intro');
 
       let started = false;
       function start() {
         if (started) return;
         started = true;
-
         window.scrollTo(0, 0);
 
-        const word = document.querySelector('.portfolio-word');
-        if (!word) return;
-        const outlineEl = word.querySelector('.text-outline');
-        const solidEl = word.querySelector('.text-solid');
-        const logo = document.querySelector('.header__logo');
+        let progress = 0;
+        const duration = 2200; // 2.2s cinematic animation duration
+        const startTime = performance.now();
 
-        /* ── Step 1: Fit viewBox tightly around the rendered text ── */
-        calibrateSvg(word);
+        function update(now) {
+          const elapsed = now - startTime;
+          progress = Math.min(1, elapsed / duration);
+          // Cubic ease-out for smooth natural deceleration
+          const easeVal = 1 - Math.pow(1 - progress, 3);
+          const percent = Math.floor(easeVal * 100);
 
-        /* ── Step 2: Measure final header position ── */
-        const rect = word.getBoundingClientRect();
-        const wordCenterX = rect.left + rect.width / 2;
-        const wordCenterY = rect.top + rect.height / 2;
-        const vpCenterX = window.innerWidth / 2;
-        const vpCenterY = window.innerHeight / 2;
+          if (progressBar) progressBar.style.width = percent + '%';
+          if (counterEl) counterEl.textContent = String(percent).padStart(2, '0') + '%';
 
-        const dx = vpCenterX - wordCenterX;
-        const dy = vpCenterY - wordCenterY;
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          } else {
+            // 1. Loading animation finishes: quick 100ms beat
+            setTimeout(() => {
+              // 2. Play the 4-panel black screen exit animation from left to right
+              if (introScreen) {
+                introScreen.classList.add('is-dismissed');
+              }
 
-        /* Scale to fill viewport width */
-        const fillRatio = window.innerWidth > 768 ? 0.82 : 0.92;
-        const targetWidth = window.innerWidth * fillRatio;
-        const scale = targetWidth / rect.width;
+              // 3. Wait until all panels have completely moved upward and Hero section is fully revealed
+              const panels = introScreen ? introScreen.querySelectorAll('.intro-screen__panel') : null;
+              const lastPanel = panels && panels.length > 0 ? panels[panels.length - 1] : null;
 
-        /* ── Step 3: Place at intro position (large, centered) ── */
-        word.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-        word.style.visibility = 'visible';
+              let heroStarted = false;
+              function startHero() {
+                if (heroStarted) return;
+                heroStarted = true;
 
-        /* ── Step 4: Start the dotted-to-solid animation ── */
-        requestAnimationFrame(() => {
-          word.classList.add('animate');
-        });
+                if (introScreen) {
+                  introScreen.style.display = 'none';
+                }
 
-        /* ── Step 5: After fill animation completes → FLIP to header ── */
-        solidEl.addEventListener('animationend', () => {
-          /* Brief beat before the move */
-          setTimeout(() => {
-            word.style.transition = 'transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)';
-            word.style.transform = 'translate(0, 0) scale(1)';
+                // 4. Only then start the existing Hero section animation
+                document.body.classList.remove('intro');
+                document.body.classList.add('intro-complete');
+              }
 
-            word.addEventListener('transitionend', (e) => {
-              if (e.propertyName !== 'transform') return;
+              if (lastPanel) {
+                lastPanel.addEventListener('transitionend', function onPanelEnd(e) {
+                  if (e.propertyName === 'transform') {
+                    lastPanel.removeEventListener('transitionend', onPanelEnd);
+                    startHero();
+                  }
+                });
+              }
 
-              /* Clean up inline styles but retain calibrated height */
-              word.style.transition = '';
-              word.style.transform = '';
-              word.style.willChange = 'auto';
-
-              /* Trigger post-intro reveal */
-              document.body.classList.remove('intro');
-              document.body.classList.add('intro-complete');
-            }, { once: true });
-          }, 300);
-        }, { once: true });
-
-        // Safety fallback: ensure intro unlock always executes within 6s
-        setTimeout(() => {
-          if (document.body.classList.contains('intro')) {
-            completeImmediately();
+              // Fallback timer matching panel 4 delay (180ms) + duration (550ms) + 50ms safety = 780ms
+              setTimeout(startHero, 780);
+            }, 100);
           }
-        }, 6000);
+        }
 
-        window.addEventListener('resize', () => {
-          calibrateSvg(word);
-        }, { passive: true });
+        requestAnimationFrame(update);
       }
+
+      // Safety timeout in case fonts or assets delay
+      const safetyTimer = setTimeout(() => {
+        if (document.body.classList.contains('intro')) {
+          completeImmediately();
+        }
+      }, 5500);
 
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(start);
+        document.fonts.ready.then(() => {
+          clearTimeout(safetyTimer);
+          start();
+        });
+      } else {
+        setTimeout(start, 250);
       }
-      setTimeout(start, 400);
     })();
 
     /* ── Interactive Parallax & Coordinate Tracker ───────── */
@@ -3178,21 +3366,20 @@
         const scrolled = -rect.top;
         const progress = clamp01(scrolled / scrollableDistance);
 
-        // Dynamic horizontal shift unit based on viewport width
-        const shiftUnit = Math.min(window.innerWidth * 0.11, 145);
+        // Balanced, natural horizontal shift unit
+        const shiftUnit = Math.min(window.innerWidth * 0.08, 95);
 
         // ════════════════════════════════════════════════════
-        // STAGE 1: Text Opens Apart & Project 01 Reveals
-        // progress: 0.00 → 0.28
+        // STAGE 1: Text Opens & Project 01 Reveals
         // ════════════════════════════════════════════════════
-        const p1Raw = clamp01(progress / 0.24);
+        const p1Raw = clamp01(progress / 0.18);
         const p1Ease = easeOutCubic(p1Raw);
 
-        // Typography moves horizontally apart and fades
-        const maxTextShift = window.innerWidth * 0.58;
+        // Typography moves apart with balanced distance and smooth fade
+        const maxTextShift = Math.min(window.innerWidth * 0.28, 260);
         const leftX = -p1Ease * maxTextShift;
         const rightX = p1Ease * maxTextShift;
-        const textOpacity = 1 - clamp01((p1Raw - 0.15) / 0.70);
+        const textOpacity = 1 - clamp01(p1Raw / 0.82);
 
         if (leftText) {
           leftText.style.transform = `translateX(${leftX}px)`;
@@ -3205,27 +3392,27 @@
 
         // ════════════════════════════════════════════════════
         // CARD 1 TRANSFORM
-        // - Stage 1 (0.00 → 0.30): Scales 0.88 → 1.0, Y-glide 24px → 0px, Opacity 0 → 1 at center
-        // - Stage 2 (0.30 → 0.62): Moves left (0 → -shiftUnit * 0.75), scales 1.0 → 0.91, dims to 0.72
-        // - Stage 3 (0.62 → 0.90): Moves further left (-shiftUnit * 0.75 → -shiftUnit * 1.5), scales to 0.84, dims to 0.52
+        // - Reveals smoothly with 16px settle and 0.92 → 1.0 scale
+        // - Stage 2: Moves left to -shiftUnit * 0.72
+        // - Stage 3: Moves to -shiftUnit * 1.42
         // ════════════════════════════════════════════════════
         let c1_x = 0;
-        let c1_y = lerp(24, 0, p1Ease);
-        let c1_scale = lerp(0.88, 1.0, p1Ease);
-        let c1_opacity = clamp01(p1Raw / 0.75);
+        let c1_y = lerp(16, 0, p1Ease);
+        let c1_scale = lerp(0.92, 1.0, p1Ease);
+        let c1_opacity = clamp01(p1Raw / 0.55);
 
-        if (progress > 0.30) {
-          const t12 = easeInOutCubic(clamp01((progress - 0.30) / 0.25));
-          c1_x = lerp(0, -shiftUnit * 0.75, t12);
-          c1_scale = lerp(1.0, 0.91, t12);
-          c1_opacity = lerp(1.0, 0.72, t12);
+        if (progress > 0.26) {
+          const t12 = easeInOutCubic(clamp01((progress - 0.26) / 0.24));
+          c1_x = lerp(0, -shiftUnit * 0.72, t12);
+          c1_scale = lerp(1.0, 0.93, t12);
+          c1_opacity = lerp(1.0, 0.76, t12);
         }
 
-        if (progress > 0.62) {
-          const t13 = easeInOutCubic(clamp01((progress - 0.62) / 0.24));
-          c1_x = lerp(-shiftUnit * 0.75, -shiftUnit * 1.5, t13);
-          c1_scale = lerp(0.91, 0.84, t13);
-          c1_opacity = lerp(0.72, 0.52, t13);
+        if (progress > 0.58) {
+          const t13 = easeInOutCubic(clamp01((progress - 0.58) / 0.24));
+          c1_x = lerp(-shiftUnit * 0.72, -shiftUnit * 1.42, t13);
+          c1_scale = lerp(0.93, 0.86, t13);
+          c1_opacity = lerp(0.76, 0.56, t13);
         }
 
         if (card1) {
@@ -3235,28 +3422,27 @@
 
         // ════════════════════════════════════════════════════
         // CARD 2 TRANSFORM
-        // - Hidden until progress > 0.28
-        // - Enters during 0.30 → 0.58: Enters from right/center, scales 0.88 → 1.0, opacity 0 → 1.0
-        // - In Stage 3 (0.62 → 0.90): Moves left to -shiftUnit * 0.5, scales 1.0 → 0.91, dims to 0.72
+        // - Enters during 0.24 → 0.50: 16px settle, scale 0.92 → 1.0
+        // - Stage 3: Moves left to -shiftUnit * 0.48
         // ════════════════════════════════════════════════════
-        let c2_x = shiftUnit * 0.75;
-        let c2_y = 24;
-        let c2_scale = 0.88;
+        let c2_x = shiftUnit * 0.55;
+        let c2_y = 16;
+        let c2_scale = 0.92;
         let c2_opacity = 0;
 
-        if (progress > 0.28) {
-          const t2Enter = easeInOutCubic(clamp01((progress - 0.30) / 0.25));
-          c2_x = lerp(shiftUnit * 0.75, shiftUnit * 0.15, t2Enter);
-          c2_y = lerp(24, 0, t2Enter);
-          c2_scale = lerp(0.88, 1.0, t2Enter);
-          c2_opacity = clamp01((progress - 0.28) / 0.16);
+        if (progress > 0.24) {
+          const t2Enter = easeInOutCubic(clamp01((progress - 0.26) / 0.24));
+          c2_x = lerp(shiftUnit * 0.55, shiftUnit * 0.12, t2Enter);
+          c2_y = lerp(16, 0, t2Enter);
+          c2_scale = lerp(0.92, 1.0, t2Enter);
+          c2_opacity = clamp01((progress - 0.24) / 0.14);
         }
 
-        if (progress > 0.62) {
-          const t23 = easeInOutCubic(clamp01((progress - 0.62) / 0.24));
-          c2_x = lerp(shiftUnit * 0.15, -shiftUnit * 0.5, t23);
-          c2_scale = lerp(1.0, 0.91, t23);
-          c2_opacity = lerp(1.0, 0.72, t23);
+        if (progress > 0.58) {
+          const t23 = easeInOutCubic(clamp01((progress - 0.58) / 0.24));
+          c2_x = lerp(shiftUnit * 0.12, -shiftUnit * 0.48, t23);
+          c2_scale = lerp(1.0, 0.93, t23);
+          c2_opacity = lerp(1.0, 0.76, t23);
         }
 
         if (card2) {
@@ -3266,21 +3452,20 @@
 
         // ════════════════════════════════════════════════════
         // CARD 3 TRANSFORM
-        // - Hidden until progress > 0.60
-        // - Enters during 0.62 → 0.88: Enters from right/center, scales 0.88 → 1.0, opacity 0 → 1.0
-        // - Holds in primary viewing position (+shiftUnit * 0.5) through 1.00
+        // - Enters during 0.56 → 0.82: 16px settle, scale 0.92 → 1.0
+        // - Holds in primary viewing position through 1.00
         // ════════════════════════════════════════════════════
-        let c3_x = shiftUnit * 1.2;
-        let c3_y = 24;
-        let c3_scale = 0.88;
+        let c3_x = shiftUnit * 0.85;
+        let c3_y = 16;
+        let c3_scale = 0.92;
         let c3_opacity = 0;
 
-        if (progress > 0.60) {
-          const t3Enter = easeInOutCubic(clamp01((progress - 0.62) / 0.24));
-          c3_x = lerp(shiftUnit * 1.2, shiftUnit * 0.5, t3Enter);
-          c3_y = lerp(24, 0, t3Enter);
-          c3_scale = lerp(0.88, 1.0, t3Enter);
-          c3_opacity = clamp01((progress - 0.60) / 0.16);
+        if (progress > 0.56) {
+          const t3Enter = easeInOutCubic(clamp01((progress - 0.58) / 0.24));
+          c3_x = lerp(shiftUnit * 0.85, shiftUnit * 0.42, t3Enter);
+          c3_y = lerp(16, 0, t3Enter);
+          c3_scale = lerp(0.92, 1.0, t3Enter);
+          c3_opacity = clamp01((progress - 0.56) / 0.14);
         }
 
         if (card3) {
@@ -3290,15 +3475,13 @@
 
         // ════════════════════════════════════════════════════
         // ACTIVE PROJECT CARD & POINTER-EVENTS MANAGEMENT
-        // - Currently active/front project gets pointer-events: auto and highest z-index
-        // - Background projects get pointer-events: none to prevent accidental clicks
         // ════════════════════════════════════════════════════
         let activeIdx = 0;
-        if (p1Raw > 0.4 && progress < 0.46) {
+        if (p1Raw > 0.35 && progress < 0.42) {
           activeIdx = 1;
-        } else if (progress >= 0.46 && progress < 0.74) {
+        } else if (progress >= 0.42 && progress < 0.70) {
           activeIdx = 2;
-        } else if (progress >= 0.74) {
+        } else if (progress >= 0.70) {
           activeIdx = 3;
         }
 
