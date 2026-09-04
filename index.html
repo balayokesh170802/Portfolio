@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BALAYOKESH — Portfolio</title>
   <script>
-    /* Immediate pre-render check: if reloading or returning from case study, bypass intro overlay */
+    /* Immediate pre-render: reset home page scroll to top and configure manual scroll restoration */
     (function() {
       try {
         if ('scrollRestoration' in history) {
           history.scrollRestoration = 'manual';
         }
+        window.scrollTo(0, 0);
+
         var nav = (window.performance && performance.getEntriesByType)
           ? performance.getEntriesByType('navigation')[0]
           : null;
@@ -18,16 +20,27 @@
         var isReload = navType === 'reload';
         var isReturn = sessionStorage.getItem('skip_intro_return') === '1';
 
-        if (isReload || isReturn) {
+        // Strip any URL hash immediately so browser does not jump to any section
+        if (window.location.hash) {
+          try {
+            history.replaceState(null, '', window.location.pathname);
+          } catch (err) {}
+        }
+
+        if (isReload) {
+          try {
+            sessionStorage.removeItem('skip_intro_return');
+            sessionStorage.removeItem('portfolio_scroll_y');
+          } catch (e) {}
+          window.scrollTo(0, 0);
+        } else if (isReturn) {
+          // Explicit return from case study page
           document.documentElement.classList.add('skip-intro');
         }
 
-        // On reload, immediately strip any leftover anchor hash so browser doesn't jump
-        if (isReload && window.location.hash) {
-          try {
-            history.replaceState(null, '', window.location.pathname + window.location.search);
-          } catch (err) {}
-        }
+        window.addEventListener('beforeunload', function() {
+          window.scrollTo(0, 0);
+        });
       } catch (e) {}
     })();
   </script>
@@ -279,7 +292,18 @@
     /* ══════════════════════════════════════════════════════
        INTRO STATE
        Everything except the PORTFOLIO SVG is invisible.
+       Locked to top of viewport during intro animation.
        ══════════════════════════════════════════════════════ */
+    body.intro {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
+
+    body.intro .header {
+      background-color: transparent;
+      border-bottom-color: transparent;
+    }
+
     body.intro .header__logo,
     body.intro .menu-toggle {
       opacity: 0;
@@ -2847,17 +2871,6 @@
       onScroll();
     })();
 
-    /* ── Continuous Scroll Position Tracking for Reload Preservation ── */
-    (function initScrollTracking() {
-      function saveScrollPos() {
-        try {
-          sessionStorage.setItem('portfolio_scroll_y', String(Math.round(window.scrollY)));
-        } catch (e) {}
-      }
-      window.addEventListener('scroll', saveScrollPos, { passive: true });
-      window.addEventListener('beforeunload', saveScrollPos);
-      window.addEventListener('pagehide', saveScrollPos);
-    })();
 
     /* ── Smooth In-Page Anchor Navigation (without URL hash jumps) ── */
     (function initSmoothAnchors() {
@@ -2893,13 +2906,14 @@
       const isReturn = sessionStorage.getItem('skip_intro_return') === '1';
       const isSkipClass = document.documentElement.classList.contains('skip-intro');
 
-      // Check if page load should complete immediately without intro overlay
-      const shouldCompleteImmediately = isReload || isReturn || isSkipClass || (window.scrollY > 30);
+      // Only skip intro if explicitly returning from a case study page, never on reload
+      const shouldSkipIntro = !isReload && (isReturn || isSkipClass);
 
-      // Clean up single-use return flags
+      // Clean up single-use return flags and any saved positions
       try {
         sessionStorage.removeItem('skip_intro_return');
         sessionStorage.removeItem('intro-seen');
+        sessionStorage.removeItem('portfolio_scroll_y');
       } catch (e) {}
 
       function calibrateSvg(word) {
@@ -2960,24 +2974,7 @@
           }, { passive: true });
         }
 
-        // On reload: DO NOT scroll to any section. Preserve exact scroll position.
-        // If no previous position exists, start from the top.
-        if (isReload) {
-          if (window.location.hash) {
-            try {
-              history.replaceState(null, '', window.location.pathname + window.location.search);
-            } catch (e) {}
-          }
-          const savedPos = sessionStorage.getItem('portfolio_scroll_y');
-          const parsedY = savedPos !== null ? parseInt(savedPos, 10) : NaN;
-          if (!isNaN(parsedY) && parsedY > 0) {
-            window.scrollTo(0, parsedY);
-            requestAnimationFrame(() => window.scrollTo(0, parsedY));
-          } else {
-            window.scrollTo(0, 0);
-          }
-        } else if (isReturn && window.location.hash) {
-          // Returning explicitly from a case study page with hash: scroll to projects
+        if (isReturn && window.location.hash) {
           const target = document.querySelector(window.location.hash);
           if (target) {
             target.scrollIntoView({ behavior: 'smooth' });
@@ -2988,32 +2985,20 @@
         }
       }
 
-      if (shouldCompleteImmediately) {
+      if (shouldSkipIntro) {
         completeImmediately();
         return;
       }
 
-      // Fresh visit: start from top
+      // Fresh visit or reload: reset scroll position to top
       window.scrollTo(0, 0);
-
-      // Early scroll guard: if user scrolls before intro starts, cancel intro immediately
-      function onEarlyScroll() {
-        if (window.scrollY > 30) {
-          window.removeEventListener('scroll', onEarlyScroll);
-          completeImmediately();
-        }
-      }
-      window.addEventListener('scroll', onEarlyScroll, { passive: true });
 
       let started = false;
       function start() {
         if (started) return;
-        if (window.scrollY > 30 || document.documentElement.classList.contains('skip-intro')) {
-          completeImmediately();
-          return;
-        }
         started = true;
-        window.removeEventListener('scroll', onEarlyScroll);
+
+        window.scrollTo(0, 0);
 
         const word = document.querySelector('.portfolio-word');
         if (!word) return;
@@ -3043,15 +3028,6 @@
         word.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
         word.style.visibility = 'visible';
 
-        // Guard while intro is in flight: if user scrolls, cancel overlay immediately
-        const flightScrollHandler = () => {
-          if (window.scrollY > 30 && document.body.classList.contains('intro')) {
-            window.removeEventListener('scroll', flightScrollHandler);
-            completeImmediately();
-          }
-        };
-        window.addEventListener('scroll', flightScrollHandler, { passive: true });
-
         /* ── Step 4: Start the dotted-to-solid animation ── */
         requestAnimationFrame(() => {
           word.classList.add('animate');
@@ -3066,7 +3042,6 @@
 
             word.addEventListener('transitionend', (e) => {
               if (e.propertyName !== 'transform') return;
-              window.removeEventListener('scroll', flightScrollHandler);
 
               /* Clean up inline styles but retain calibrated height */
               word.style.transition = '';
@@ -3080,13 +3055,12 @@
           }, 300);
         }, { once: true });
 
-        // Safety fallback: ensure intro unlock always executes within 4.5s
+        // Safety fallback: ensure intro unlock always executes within 6s
         setTimeout(() => {
           if (document.body.classList.contains('intro')) {
-            window.removeEventListener('scroll', flightScrollHandler);
             completeImmediately();
           }
-        }, 4500);
+        }, 6000);
 
         window.addEventListener('resize', () => {
           calibrateSvg(word);
