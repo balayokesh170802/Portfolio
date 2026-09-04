@@ -4,24 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BALAYOKESH — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Instrument+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script>
+    /* Immediate pre-render check: if reloading or returning from case study, bypass intro overlay */
     (function() {
       try {
-        var nav = (window.performance && performance.getEntriesByType) ? performance.getEntriesByType('navigation')[0] : null;
-        var isReload = nav ? nav.type === 'reload' : false;
-        var hasHash = Boolean(window.location.hash && window.location.hash !== '#');
-        var storedScroll = parseInt(sessionStorage.getItem('portfolio_scroll_pos') || '0', 10);
-        var wasScrolled = sessionStorage.getItem('was_scrolled') === '1' || storedScroll > 60;
-        var skipReturn = sessionStorage.getItem('skip_intro_return') === '1';
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        var nav = (window.performance && performance.getEntriesByType)
+          ? performance.getEntriesByType('navigation')[0]
+          : null;
+        var navType = nav ? nav.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
+        var isReload = navType === 'reload';
+        var isReturn = sessionStorage.getItem('skip_intro_return') === '1';
 
-        if (hasHash || wasScrolled || skipReturn || (isReload && wasScrolled)) {
-          document.documentElement.classList.add('no-intro');
+        if (isReload || isReturn) {
+          document.documentElement.classList.add('skip-intro');
+        }
+
+        // On reload, immediately strip any leftover anchor hash so browser doesn't jump
+        if (isReload && window.location.hash) {
+          try {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+          } catch (err) {}
         }
       } catch (e) {}
     })();
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Instrument+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     /* ── Reset & Foundation ─────────────────────────────── */
     *,
@@ -280,10 +291,7 @@
       pointer-events: none;
     }
 
-    body.intro .hero,
-    body.intro .works,
-    body.intro .experience,
-    body.intro .section-contact {
+    body.intro .hero {
       opacity: 0;
       pointer-events: none;
     }
@@ -297,47 +305,61 @@
       pointer-events: none;
     }
 
-    /* Instant bypass when reloading at any section or returning */
-    html.no-intro body.intro {
+    /* ══════════════════════════════════════════════════════
+       INTRO OVERLAY BYPASS (RELOAD / SECTION NAV / RETURN)
+       Guarantees zero overlay, zero flickering, and resting
+       state when reloading on any section of the page.
+       ══════════════════════════════════════════════════════ */
+    html.skip-intro body,
+    html.skip-intro body.intro,
+    html.skip-intro body.intro-complete {
       overflow: visible !important;
     }
-    html.no-intro body.intro .header {
+
+    html.skip-intro .header {
       background-color: var(--color-bg) !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
-    html.no-intro body.intro .header__logo,
-    html.no-intro body.intro .menu-toggle,
-    html.no-intro body.intro .header__nav {
+
+    html.skip-intro .header__logo,
+    html.skip-intro .menu-toggle,
+    html.skip-intro .header__nav,
+    html.skip-intro .hero,
+    html.skip-intro .hero__status,
+    html.skip-intro .hero__eyebrow,
+    html.skip-intro .hero__heading,
+    html.skip-intro .hero__actions,
+    html.skip-intro .hero__bottom-bar,
+    html.skip-intro .hero__line,
+    html.skip-intro .hero__btn-wrap,
+    html.skip-intro .info-col,
+    html.skip-intro .works,
+    html.skip-intro .experience,
+    html.skip-intro .section-contact {
       opacity: 1 !important;
       pointer-events: auto !important;
-    }
-    html.no-intro body.intro .hero,
-    html.no-intro body.intro .works,
-    html.no-intro body.intro .experience,
-    html.no-intro body.intro .section-contact {
-      opacity: 1 !important;
-      pointer-events: auto !important;
-    }
-    html.no-intro body.intro .hero__status,
-    html.no-intro body.intro .hero__eyebrow,
-    html.no-intro body.intro .hero__heading,
-    html.no-intro body.intro .hero__actions,
-    html.no-intro body.intro .hero__bottom-bar {
-      opacity: 1 !important;
-      pointer-events: auto !important;
+      transform: none !important;
       animation: none !important;
     }
-    html.no-intro body.intro .portfolio-word {
-      visibility: visible !important;
+
+    html.skip-intro .portfolio-word {
       transform: none !important;
+      visibility: visible !important;
+      animation: none !important;
+      transition: none !important;
+      will-change: auto !important;
       height: 1.11rem !important;
     }
-    html.no-intro body.intro .text-outline {
+
+    html.skip-intro .portfolio-word .text-outline {
       stroke-opacity: 0 !important;
+      opacity: 0 !important;
       animation: none !important;
     }
-    html.no-intro body.intro .text-solid {
+
+    html.skip-intro .portfolio-word .text-solid {
       fill-opacity: 1 !important;
+      opacity: 1 !important;
       animation: none !important;
     }
 
@@ -2328,7 +2350,7 @@
 </head>
 <body class="intro">
   <script>
-    if (document.documentElement.classList.contains('no-intro')) {
+    if (document.documentElement.classList.contains('skip-intro')) {
       document.body.classList.remove('intro');
       document.body.classList.add('intro-complete');
     }
@@ -2344,7 +2366,7 @@
       Stage 2: Scale down + move into this header position (JS FLIP)
     -->
     <svg class="portfolio-word"
-         viewBox="0 0 1000 130"
+         viewBox="154.8 -8.3 690.4 139.0"
          preserveAspectRatio="xMidYMid meet"
          aria-label="PORTFOLIO">
       <text class="text-outline"
@@ -2825,22 +2847,35 @@
       onScroll();
     })();
 
-    /* ── Scroll Tracking for Reliable Section Reloads ── */
-    (function trackScroll() {
-      function saveScroll() {
+    /* ── Continuous Scroll Position Tracking for Reload Preservation ── */
+    (function initScrollTracking() {
+      function saveScrollPos() {
         try {
-          if (window.scrollY > 60) {
-            sessionStorage.setItem('portfolio_scroll_pos', String(Math.round(window.scrollY)));
-            sessionStorage.setItem('was_scrolled', '1');
-          } else {
-            sessionStorage.removeItem('portfolio_scroll_pos');
-            sessionStorage.removeItem('was_scrolled');
-          }
+          sessionStorage.setItem('portfolio_scroll_y', String(Math.round(window.scrollY)));
         } catch (e) {}
       }
-      window.addEventListener('scroll', saveScroll, { passive: true });
-      window.addEventListener('beforeunload', saveScroll);
-      window.addEventListener('pagehide', saveScroll);
+      window.addEventListener('scroll', saveScrollPos, { passive: true });
+      window.addEventListener('beforeunload', saveScrollPos);
+      window.addEventListener('pagehide', saveScrollPos);
+    })();
+
+    /* ── Smooth In-Page Anchor Navigation (without URL hash jumps) ── */
+    (function initSmoothAnchors() {
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          const targetId = link.getAttribute('href');
+          if (targetId && targetId.length > 1) {
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+              e.preventDefault();
+              targetEl.scrollIntoView({ behavior: 'smooth' });
+              try {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+              } catch (err) {}
+            }
+          }
+        });
+      });
     })();
 
     /* ══════════════════════════════════════════════════════
@@ -2849,88 +2884,136 @@
        Stage 2: Center → Header (JS FLIP transition)
        ══════════════════════════════════════════════════════ */
     (function runIntro() {
-      // Check if this page load is a user reload/refresh
+      // Check navigation type
       const navEntry = (window.performance && performance.getEntriesByType)
         ? performance.getEntriesByType('navigation')[0]
         : null;
-      const isReload = navEntry ? navEntry.type === 'reload' : false;
-
-      const hasSectionHash = Boolean(window.location.hash && window.location.hash !== '#');
-      const storedScroll = parseInt(sessionStorage.getItem('portfolio_scroll_pos') || '0', 10);
-      const wasScrolled = (sessionStorage.getItem('was_scrolled') === '1') || storedScroll > 60 || window.scrollY > 40;
+      const navType = navEntry ? navEntry.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
+      const isReload = navType === 'reload';
       const isReturn = sessionStorage.getItem('skip_intro_return') === '1';
-      const hasNoIntroClass = document.documentElement.classList.contains('no-intro');
+      const isSkipClass = document.documentElement.classList.contains('skip-intro');
 
-      // Only skip intro if returning from subpage, direct section hash, reload while scrolled, or marked no-intro
-      const shouldSkipIntro = isReturn || hasSectionHash || (isReload && wasScrolled) || hasNoIntroClass || (window.scrollY > 40);
+      // Check if page load should complete immediately without intro overlay
+      const shouldCompleteImmediately = isReload || isReturn || isSkipClass || (window.scrollY > 30);
 
-      // Clean up single-use return flag
+      // Clean up single-use return flags
       try {
         sessionStorage.removeItem('skip_intro_return');
         sessionStorage.removeItem('intro-seen');
-        if (!isReload && window.scrollY <= 40) {
-          sessionStorage.removeItem('portfolio_scroll_pos');
-          sessionStorage.removeItem('was_scrolled');
-        }
       } catch (e) {}
 
-      function settleHeaderDirectly() {
-        const word = document.querySelector('.portfolio-word');
+      function calibrateSvg(word) {
+        if (!word) return;
         const logo = document.querySelector('.header__logo');
-        if (word && logo) {
-          const outlineEl = word.querySelector('.text-outline');
-          const bbox = outlineEl ? outlineEl.getBBox() : { x: 20, y: 15, width: 960, height: 100 };
-          const px = 6, py = 6;
-          const vbWidth = bbox.width + px * 2;
-          const vbHeight = bbox.height + py * 2;
-          word.setAttribute('viewBox',
-            `${bbox.x - px} ${bbox.y - py} ${vbWidth} ${vbHeight}`
-          );
-          const logoFontSize = parseFloat(window.getComputedStyle(logo).fontSize) || 12.8;
-          word.style.height = `${(logoFontSize * (vbHeight / 100)).toFixed(3)}px`;
-          word.style.visibility = 'visible';
-          word.style.transform = '';
-          word.style.willChange = 'auto';
-          word.classList.remove('animate');
-          /* Make the solid text visible immediately */
-          const solidEl = word.querySelector('.text-solid');
-          if (solidEl) solidEl.style.fillOpacity = '1';
-          window.addEventListener('resize', () => {
-            const sz = parseFloat(window.getComputedStyle(logo).fontSize) || 12.8;
-            word.style.height = `${(sz * (vbHeight / 100)).toFixed(3)}px`;
-          }, { passive: true });
+        const outlineEl = word.querySelector('.text-outline');
+        const solidEl = word.querySelector('.text-solid');
+
+        let bbox = null;
+        try {
+          const el = solidEl || outlineEl;
+          if (el) {
+            const b = el.getBBox();
+            if (b && b.width > 100 && b.height > 20) {
+              bbox = b;
+            }
+          }
+        } catch (e) {}
+
+        if (!bbox) {
+          bbox = { x: 160.8, y: -2.3, width: 678.4, height: 127.0 };
         }
+
+        const px = 6, py = 6;
+        const vbWidth = bbox.width + px * 2;
+        const vbHeight = bbox.height + py * 2;
+        word.setAttribute('viewBox',
+          `${(bbox.x - px).toFixed(2)} ${(bbox.y - py).toFixed(2)} ${vbWidth.toFixed(2)} ${vbHeight.toFixed(2)}`
+        );
+
+        const logoFontSize = logo ? (parseFloat(window.getComputedStyle(logo).fontSize) || 12.8) : 12.8;
+        const targetSvgHeight = logoFontSize * (vbHeight / 100);
+        word.style.height = `${targetSvgHeight.toFixed(3)}px`;
+      }
+
+      function completeImmediately() {
+        document.documentElement.classList.add('skip-intro');
         document.body.classList.remove('intro');
         document.body.classList.add('intro-complete');
+
+        const word = document.querySelector('.portfolio-word');
+        if (word) {
+          calibrateSvg(word);
+          word.style.visibility = 'visible';
+          word.style.transform = '';
+          word.style.transition = '';
+          word.style.willChange = 'auto';
+          word.classList.remove('animate');
+
+          /* Make solid text visible immediately and hide outline */
+          const solidEl = word.querySelector('.text-solid');
+          if (solidEl) solidEl.style.fillOpacity = '1';
+          const outlineEl = word.querySelector('.text-outline');
+          if (outlineEl) outlineEl.style.strokeOpacity = '0';
+
+          window.addEventListener('resize', () => {
+            calibrateSvg(word);
+          }, { passive: true });
+        }
+
+        // On reload: DO NOT scroll to any section. Preserve exact scroll position.
+        // If no previous position exists, start from the top.
+        if (isReload) {
+          if (window.location.hash) {
+            try {
+              history.replaceState(null, '', window.location.pathname + window.location.search);
+            } catch (e) {}
+          }
+          const savedPos = sessionStorage.getItem('portfolio_scroll_y');
+          const parsedY = savedPos !== null ? parseInt(savedPos, 10) : NaN;
+          if (!isNaN(parsedY) && parsedY > 0) {
+            window.scrollTo(0, parsedY);
+            requestAnimationFrame(() => window.scrollTo(0, parsedY));
+          } else {
+            window.scrollTo(0, 0);
+          }
+        } else if (isReturn && window.location.hash) {
+          // Returning explicitly from a case study page with hash: scroll to projects
+          const target = document.querySelector(window.location.hash);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+          try {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+          } catch (e) {}
+        }
       }
 
-      if (shouldSkipIntro) {
-        settleHeaderDirectly();
-
-        // If returned or reloaded with hash e.g. #projects, scroll to it smoothly
-        if (window.location.hash) {
-          setTimeout(() => {
-            const target = document.querySelector(window.location.hash);
-            if (target) {
-              target.scrollIntoView({ behavior: 'smooth' });
-            }
-          }, 80);
-        }
+      if (shouldCompleteImmediately) {
+        completeImmediately();
         return;
       }
+
+      // Fresh visit: start from top
+      window.scrollTo(0, 0);
+
+      // Early scroll guard: if user scrolls before intro starts, cancel intro immediately
+      function onEarlyScroll() {
+        if (window.scrollY > 30) {
+          window.removeEventListener('scroll', onEarlyScroll);
+          completeImmediately();
+        }
+      }
+      window.addEventListener('scroll', onEarlyScroll, { passive: true });
 
       let started = false;
       function start() {
         if (started) return;
-
-        // If user scrolled before fonts loaded or intro began, cancel intro immediately
-        if (window.scrollY > 40 || document.documentElement.classList.contains('no-intro')) {
-          settleHeaderDirectly();
+        if (window.scrollY > 30 || document.documentElement.classList.contains('skip-intro')) {
+          completeImmediately();
           return;
         }
-
         started = true;
-        window.scrollTo(0, 0);
+        window.removeEventListener('scroll', onEarlyScroll);
 
         const word = document.querySelector('.portfolio-word');
         if (!word) return;
@@ -2939,18 +3022,7 @@
         const logo = document.querySelector('.header__logo');
 
         /* ── Step 1: Fit viewBox tightly around the rendered text ── */
-        const bbox = outlineEl.getBBox();
-        const px = 6, py = 6;
-        const vbWidth = bbox.width + px * 2;
-        const vbHeight = bbox.height + py * 2;
-        word.setAttribute('viewBox',
-          `${bbox.x - px} ${bbox.y - py} ${vbWidth} ${vbHeight}`
-        );
-
-        /* Match static PORTFOLIO font size exactly to BALAYOKESH (0.8rem = 12.8px) */
-        const logoFontSize = parseFloat(window.getComputedStyle(logo).fontSize) || 12.8;
-        const targetSvgHeight = logoFontSize * (vbHeight / 100);
-        word.style.height = `${targetSvgHeight.toFixed(3)}px`;
+        calibrateSvg(word);
 
         /* ── Step 2: Measure final header position ── */
         const rect = word.getBoundingClientRect();
@@ -2971,52 +3043,53 @@
         word.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
         word.style.visibility = 'visible';
 
+        // Guard while intro is in flight: if user scrolls, cancel overlay immediately
+        const flightScrollHandler = () => {
+          if (window.scrollY > 30 && document.body.classList.contains('intro')) {
+            window.removeEventListener('scroll', flightScrollHandler);
+            completeImmediately();
+          }
+        };
+        window.addEventListener('scroll', flightScrollHandler, { passive: true });
+
         /* ── Step 4: Start the dotted-to-solid animation ── */
         requestAnimationFrame(() => {
           word.classList.add('animate');
         });
 
-        let transitionTriggered = false;
-        function finishIntro() {
-          if (transitionTriggered) return;
-          transitionTriggered = true;
-
-          word.style.transition = 'transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)';
-          word.style.transform = 'translate(0, 0) scale(1)';
-
-          word.addEventListener('transitionend', (e) => {
-            if (e.propertyName !== 'transform') return;
-
-            /* Clean up inline styles but retain calibrated height */
-            word.style.transition = '';
-            word.style.transform = '';
-            word.style.willChange = 'auto';
-
-            /* Trigger post-intro reveal */
-            document.body.classList.remove('intro');
-            document.body.classList.add('intro-complete');
-          }, { once: true });
-
-          setTimeout(() => {
-            word.style.transition = '';
-            word.style.transform = '';
-            word.style.willChange = 'auto';
-            document.body.classList.remove('intro');
-            document.body.classList.add('intro-complete');
-          }, 1800);
-        }
-
         /* ── Step 5: After fill animation completes → FLIP to header ── */
         solidEl.addEventListener('animationend', () => {
-          setTimeout(finishIntro, 300);
+          /* Brief beat before the move */
+          setTimeout(() => {
+            word.style.transition = 'transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            word.style.transform = 'translate(0, 0) scale(1)';
+
+            word.addEventListener('transitionend', (e) => {
+              if (e.propertyName !== 'transform') return;
+              window.removeEventListener('scroll', flightScrollHandler);
+
+              /* Clean up inline styles but retain calibrated height */
+              word.style.transition = '';
+              word.style.transform = '';
+              word.style.willChange = 'auto';
+
+              /* Trigger post-intro reveal */
+              document.body.classList.remove('intro');
+              document.body.classList.add('intro-complete');
+            }, { once: true });
+          }, 300);
         }, { once: true });
 
-        // Safety fallback: ensure intro unlock always executes within 3.5s
-        setTimeout(finishIntro, 3500);
+        // Safety fallback: ensure intro unlock always executes within 4.5s
+        setTimeout(() => {
+          if (document.body.classList.contains('intro')) {
+            window.removeEventListener('scroll', flightScrollHandler);
+            completeImmediately();
+          }
+        }, 4500);
 
         window.addEventListener('resize', () => {
-          const currentLogoSize = parseFloat(window.getComputedStyle(logo).fontSize) || 12.8;
-          word.style.height = `${(currentLogoSize * (vbHeight / 100)).toFixed(3)}px`;
+          calibrateSvg(word);
         }, { passive: true });
       }
 
