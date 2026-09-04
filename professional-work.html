@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PROFESSIONAL WORK — BALAYOKESH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Instrument+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Foundation ─────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #0a0a0a;
+      --color-fg: #e8e6e3;
+      --color-fg-muted: #6b6b6b;
+      --color-fg-hover: #ffffff;
+      --color-accent: #c4b5a0;
+      --font-primary: 'Instrument Sans', 'Inter', -apple-system, sans-serif;
+      --header-height: 72px;
+      --page-padding-x: clamp(24px, 5vw, 72px);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background-color: var(--color-bg);
+      color: var(--color-fg);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Subtle full-page grain texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: var(--header-height);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 var(--page-padding-x);
+      background-color: var(--color-bg);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: visible;
+    }
+
+    .header__logo {
+      grid-column: 1;
+      justify-self: start;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      color: var(--color-fg);
+      text-decoration: none;
+      user-select: none;
+      transition: color 0.4s var(--ease-out-expo);
+    }
+
+    .header__logo:hover {
+      color: var(--color-fg-hover);
+    }
+
+    .header__center {
+      grid-column: 2;
+      justify-self: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-fg);
+      user-select: none;
+    }
+
+    .header__nav {
+      grid-column: 3;
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: clamp(24px, 3.5vw, 56px);
+    }
+
+    .nav-link {
+      position: relative;
+      font-family: 'Space Grotesk', var(--font-primary);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+      text-decoration: none;
+      padding: 4px 0;
+      transition: color 0.5s var(--ease-out-expo);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-accent);
+      transition: width 0.5s var(--ease-out-expo);
+    }
+
+    .nav-link:hover {
+      color: var(--color-fg-hover);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* ── Mobile Menu Toggle ─────────────────────────────── */
+    .menu-toggle {
+      display: none;
+      grid-column: 3;
+      justify-self: end;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 200;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--color-fg);
+      transition: transform 0.4s var(--ease-out-expo),
+                  opacity 0.3s ease;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* ── Page Layout ────────────────────────────────────── */
+    .pw-page {
+      position: relative;
+      z-index: 2;
+      padding-top: var(--header-height);
+    }
+
+    .pw-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--page-padding-x);
+      width: 100%;
+    }
+
+    /* ── Top Navigation Label ───────────────────────────── */
+    .pw-top-nav {
+      padding-top: clamp(32px, 5vh, 48px);
+      margin-bottom: clamp(24px, 3.5vh, 36px);
+    }
+
+    .pw-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+      text-decoration: none;
+      transition: color 0.35s var(--ease-out-expo);
+    }
+
+    .pw-back-link:hover {
+      color: var(--color-fg-hover);
+    }
+
+    .pw-back-link svg {
+      transition: transform 0.35s var(--ease-out-expo);
+    }
+
+    .pw-back-link:hover svg {
+      transform: translateX(-4px);
+    }
+
+    /* ── Main Page Header ───────────────────────────────── */
+    .pw-header-block {
+      margin-bottom: clamp(48px, 7vh, 72px);
+      padding-bottom: clamp(32px, 4.5vh, 44px);
+      border-bottom: 1px solid rgba(232, 230, 227, 0.08);
+      max-width: 860px;
+    }
+
+    .pw-main-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.4rem, 5.2vw, 4.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--color-fg);
+      margin-bottom: clamp(16px, 2.4vh, 24px);
+    }
+
+    .pw-main-intro {
+      font-family: var(--font-primary);
+      font-size: clamp(1rem, 1.2vw, 1.16rem);
+      line-height: 1.65;
+      color: #a8a6a2;
+      max-width: 680px;
+    }
+
+    /* ── Two-Column Main Layout ─────────────────────────── */
+    .pw-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: clamp(40px, 5.5vw, 84px);
+      align-items: flex-start;
+      margin-bottom: clamp(80px, 12vh, 130px);
+    }
+
+    /* ── Left Sidebar (Sticky Project Navigation) ──────── */
+    .pw-sidebar {
+      position: sticky;
+      top: calc(var(--header-height) + 36px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .pw-sidebar-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 4px;
+    }
+
+    .pw-tab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      role: tablist;
+    }
+
+    .pw-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 16px 20px;
+      background: rgba(14, 14, 14, 0.4);
+      border: 1px solid rgba(232, 230, 227, 0.08);
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.3s var(--ease-out-expo);
+      width: 100%;
+      user-select: none;
+      position: relative;
+    }
+
+    .pw-tab:hover {
+      border-color: rgba(232, 230, 227, 0.2);
+      background: rgba(20, 20, 20, 0.6);
+    }
+
+    .pw-tab-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: var(--color-fg-muted);
+      transition: color 0.3s ease;
+    }
+
+    .pw-tab-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+      transition: color 0.3s ease;
+    }
+
+    /* Active Tab State */
+    .pw-tab.is-active {
+      background: rgba(22, 22, 22, 0.85);
+      border-color: rgba(232, 230, 227, 0.28);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .pw-tab.is-active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      background: var(--color-accent);
+      border-radius: 2px;
+    }
+
+    .pw-tab.is-active .pw-tab-num {
+      color: var(--color-accent);
+    }
+
+    .pw-tab.is-active .pw-tab-title {
+      color: var(--color-fg);
+    }
+
+    /* ── Right Content Area ─────────────────────────────── */
+    .pw-content-area {
+      min-width: 0; /* Prevent flex/grid overflow */
+      position: relative;
+    }
+
+    /* Tab Panels with subtle fade transition */
+    .pw-panel {
+      display: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.35s var(--ease-out-expo),
+                  transform 0.35s var(--ease-out-expo);
+    }
+
+    .pw-panel.is-active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Single Project Inner Structure ─────────────────── */
+    .project-hero-block {
+      margin-bottom: clamp(36px, 5vh, 48px);
+      max-width: 760px;
+    }
+
+    .project-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(232, 230, 227, 0.14);
+      background: rgba(14, 14, 14, 0.65);
+      backdrop-filter: blur(4px);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(232, 230, 227, 0.7);
+      margin-bottom: 18px;
+    }
+
+    .project-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 3.8vw, 3.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      text-transform: uppercase;
+      color: var(--color-fg);
+      margin-bottom: 12px;
+    }
+
+    .project-subheading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.15rem, 2vw, 1.55rem);
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+    }
+
+    .project-description {
+      font-family: var(--font-primary);
+      font-size: clamp(0.98rem, 1.1vw, 1.1rem);
+      line-height: 1.65;
+      color: #b0ada8;
+      max-width: 660px;
+    }
+
+    /* ── Featured Visual Frame ──────────────────────────── */
+    .project-featured-visual {
+      margin-bottom: clamp(40px, 6vh, 56px);
+    }
+
+    .project-media-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: rgba(18, 18, 18, 0.8);
+      border: 1px solid rgba(232, 230, 227, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .project-media-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+      pointer-events: none;
+    }
+
+    .project-media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-media-frame:has(img) .placeholder-badge {
+      display: none;
+    }
+
+    .placeholder-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(232, 230, 227, 0.3);
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .placeholder-badge svg {
+      opacity: 0.5;
+    }
+
+    /* ── Compact Project Details Grid ───────────────────── */
+    .project-details-card {
+      margin-bottom: clamp(40px, 6vh, 56px);
+      padding: 22px 0;
+      border-top: 1px solid rgba(232, 230, 227, 0.08);
+      border-bottom: 1px solid rgba(232, 230, 227, 0.08);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 32px;
+    }
+
+    .detail-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .detail-key {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+    }
+
+    .detail-val {
+      font-family: var(--font-primary);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--color-fg);
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Narrative Blocks (About & Contribution) ────────── */
+    .narrative-block {
+      margin-bottom: clamp(36px, 5vh, 48px);
+      max-width: 720px;
+    }
+
+    .narrative-block:last-of-type {
+      margin-bottom: clamp(48px, 7vh, 64px);
+    }
+
+    .narrative-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.18rem, 1.7vw, 1.45rem);
+      letter-spacing: -0.015em;
+      text-transform: uppercase;
+      color: var(--color-fg);
+      margin-bottom: 14px;
+    }
+
+    .narrative-text {
+      font-family: var(--font-primary);
+      font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+      line-height: 1.7;
+      color: #a8a6a2;
+    }
+
+    .narrative-text + .narrative-text {
+      margin-top: 14px;
+    }
+
+    /* ── Project 01 Preview Gallery ─────────────────────── */
+    .gallery-grid-2col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(18px, 2.5vw, 28px);
+      margin-top: 24px;
+    }
+
+    .preview-card-half {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: rgba(18, 18, 18, 0.75);
+      border: 1px solid rgba(232, 230, 227, 0.09);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .preview-card-half::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+      pointer-events: none;
+    }
+
+    .preview-card-half img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-card-half:has(img) .placeholder-badge {
+      display: none;
+    }
+
+    /* ── Project 02: 5-Page Showcase Grid ───────────────── */
+    .pages-showcase {
+      margin-top: 28px;
+    }
+
+    .showcase-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(14px, 2vw, 22px);
+    }
+
+    .page-card {
+      position: relative;
+      background: rgba(18, 18, 18, 0.75);
+      border: 1px solid rgba(232, 230, 227, 0.09);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s ease;
+    }
+
+    .page-card:hover {
+      border-color: rgba(232, 230, 227, 0.2);
+    }
+
+    .page-card-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(232, 230, 227, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(12, 12, 12, 0.5);
+    }
+
+    .page-card-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--color-accent);
+    }
+
+    .page-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+    }
+
+    .page-card-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .page-card-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+      pointer-events: none;
+    }
+
+    .page-card-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .page-card-frame:has(img) .placeholder-badge {
+      display: none;
+    }
+
+    /* ── Bottom Project Navigation ──────────────────────── */
+    .pw-bottom-nav {
+      border-top: 1px solid rgba(232, 230, 227, 0.08);
+      padding: clamp(28px, 4vh, 40px) 0 clamp(64px, 8vh, 96px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .pw-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+      text-decoration: none;
+      transition: color 0.35s var(--ease-out-expo);
+      user-select: none;
+    }
+
+    .pw-nav-btn:hover {
+      color: var(--color-fg-hover);
+    }
+
+    .pw-nav-btn svg {
+      transition: transform 0.35s var(--ease-out-expo);
+    }
+
+    .pw-nav-btn--prev:hover svg {
+      transform: translateX(-4px);
+    }
+
+    .pw-nav-btn--next:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* ── Responsive: Tablet ─────────────────────────────── */
+    @media (max-width: 1024px) {
+      .pw-layout {
+        grid-template-columns: 220px 1fr;
+        gap: 36px;
+      }
+
+      .pw-tab {
+        padding: 14px 16px;
+      }
+
+      .pw-tab-title {
+        font-size: 0.84rem;
+      }
+
+      .details-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .pages-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* ── Responsive: Mobile ─────────────────────────────── */
+    @media (max-width: 768px) {
+      :root {
+        --header-height: 58px;
+        --page-padding-x: clamp(16px, 4.5vw, 24px);
+      }
+
+      /* Mobile Header */
+      .header {
+        height: var(--header-height);
+        padding: 0 var(--page-padding-x);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+      }
+
+      .header__logo {
+        font-size: clamp(0.64rem, 2.7vw, 0.72rem);
+        letter-spacing: 0.18em;
+        white-space: nowrap;
+        justify-self: start;
+      }
+
+      .header__center {
+        font-size: clamp(0.64rem, 2.7vw, 0.72rem);
+        letter-spacing: 0.18em;
+      }
+
+      .menu-toggle {
+        display: flex;
+        grid-column: 3;
+        justify-self: end;
+        padding: 8px;
+        margin-right: -8px;
+        z-index: 200;
+      }
+
+      .menu-toggle span {
+        width: 20px;
+        height: 1.5px;
+      }
+
+      .header__nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(28px, 5.5vh, 44px);
+        background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity 0.35s var(--ease-out-expo),
+                    transform 0.35s var(--ease-out-expo),
+                    visibility 0.35s;
+        z-index: 150;
+        pointer-events: none;
+      }
+
+      .header__nav.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .header__nav .nav-link {
+        font-size: clamp(1.35rem, 5.5vw, 1.75rem);
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        padding: 8px 16px;
+      }
+
+      /* Stack two-column layout to single column on mobile */
+      .pw-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      /* Place project navigation above content */
+      .pw-sidebar {
+        position: static;
+        width: 100%;
+        top: auto;
+      }
+
+      .pw-tab-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        width: 100%;
+      }
+
+      .pw-tab {
+        padding: 12px 14px;
+        min-height: 54px;
+      }
+
+      .pw-tab-num {
+        font-size: 0.62rem;
+      }
+
+      .pw-tab-title {
+        font-size: 0.74rem;
+        line-height: 1.25;
+      }
+
+      .pw-main-title {
+        font-size: clamp(2rem, 8vw, 2.8rem);
+      }
+
+      .project-name {
+        font-size: 1.8rem;
+      }
+
+      .project-subheading {
+        font-size: 1.1rem;
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .gallery-grid-2col {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .pages-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .pw-bottom-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+    }
+
+    /* ── Responsive: Ultra-Narrow Mobile ────────────────── */
+    @media (max-width: 360px) {
+      .pw-tab-list {
+        grid-template-columns: 1fr;
+      }
+
+      .pw-main-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Fixed Header ─────────────────────────────────── -->
+  <header class="header">
+    <a href="index.html" class="header__logo">BALAYOKESH</a>
+
+    <span class="header__center">CASE STUDY</span>
+
+    <button class="menu-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav">
+      <a href="index.html#projects" class="nav-link">PROJECTS</a>
+      <a href="index.html#experience" class="nav-link">EXPERIENCE</a>
+      <a href="index.html#contact" class="nav-link">CONTACT</a>
+    </nav>
+  </header>
+
+  <!-- ─── Main Content ────────────────────────────────── -->
+  <main class="pw-page">
+    <div class="pw-container">
+
+      <!-- Top Navigation Label -->
+      <nav class="pw-top-nav">
+        <a href="index.html#projects" class="pw-back-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          BACK TO SELECTED WORKS
+        </a>
+      </nav>
+
+      <!-- Main Page Header Block -->
+      <header class="pw-header-block">
+        <h1 class="pw-main-title">PROFESSIONAL<br>WORK</h1>
+        <p class="pw-main-intro">A selection of digital experiences created through professional projects, with a focus on clear interfaces, structured layouts, and responsive web experiences.</p>
+      </header>
+
+      <!-- Two-Column Layout: Left Sticky Tabs / Right Project Content -->
+      <div class="pw-layout">
+
+        <!-- Left Column: Sticky Project Navigation -->
+        <aside class="pw-sidebar">
+          <span class="pw-sidebar-label">PROJECT INDEX</span>
+          <div class="pw-tab-list" role="tablist" aria-label="Professional Work Projects">
+            <button class="pw-tab is-active" id="tab-nyt" role="tab" aria-selected="true" aria-controls="panel-nyt" data-target="panel-nyt">
+              <span class="pw-tab-num">01</span>
+              <span class="pw-tab-title">NYT WOLF GAMES</span>
+            </button>
+            <button class="pw-tab" id="tab-teball" role="tab" aria-selected="false" aria-controls="panel-teball" data-target="panel-teball">
+              <span class="pw-tab-num">02</span>
+              <span class="pw-tab-title">TEBALL TAMILNADU</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Right Column: Project Content Area -->
+        <div class="pw-content-area">
+
+          <!-- ═════════════════════════════════════════════════
+               PROJECT 01 — NYT WOLF GAMES
+               ═════════════════════════════════════════════════ -->
+          <article class="pw-panel is-active" id="panel-nyt" role="tabpanel" aria-labelledby="tab-nyt">
+
+            <!-- Project Hero Block -->
+            <div class="project-hero-block">
+              <div class="project-tag">PROJECT 01 · COMPANY WEBSITE</div>
+              <h2 class="project-name">NYT WOLF GAMES</h2>
+              <h3 class="project-subheading">A DIGITAL PRESENCE<br>FOR A GAME STUDIO.</h3>
+              <p class="project-description">Designed a responsive website experience to present the studio, its work, and its identity through a clear and engaging digital interface.</p>
+            </div>
+
+            <!-- Featured Visual (Large Preview Area) -->
+            <div class="project-featured-visual">
+              <div class="project-media-frame">
+                <!-- Replace with: <img src="your-nytwolf-screenshot.jpg" alt="NYT Wolf Games Website"> -->
+                <div class="placeholder-badge">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  FEATURED STUDIO WEBSITE PREVIEW
+                </div>
+              </div>
+            </div>
+
+            <!-- Compact Project Details -->
+            <div class="project-details-card">
+              <div class="details-grid">
+                <div class="detail-cell">
+                  <span class="detail-key">TYPE</span>
+                  <span class="detail-val">Company Website</span>
+                </div>
+                <div class="detail-cell">
+                  <span class="detail-key">ROLE</span>
+                  <span class="detail-val">UX/UI Designer</span>
+                </div>
+                <div class="detail-cell">
+                  <span class="detail-key">FOCUS</span>
+                  <span class="detail-val">Responsive Web Design</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- About The Project -->
+            <section class="narrative-block">
+              <h4 class="narrative-heading">ABOUT THE PROJECT</h4>
+              <p class="narrative-text">Nytwolf Games is a game-focused studio, and the website was designed to create a digital space that introduces the studio and presents its work in a clear and visually engaging way.</p>
+              <p class="narrative-text">The focus was on building a responsive layout, maintaining visual consistency, and creating a browsing experience that works smoothly across different screen sizes.</p>
+            </section>
+
+            <!-- My Contribution -->
+            <section class="narrative-block">
+              <h4 class="narrative-heading">MY CONTRIBUTION</h4>
+              <p class="narrative-text">My contribution focused on the website's UX/UI design, including structuring page layouts, designing interface elements, and adapting the experience across different screen sizes.</p>
+            </section>
+
+            <!-- Supporting Website Visuals Area -->
+            <div class="project-featured-visual">
+              <div class="gallery-grid-2col">
+                <div class="preview-card-half">
+                  <!-- Replace with: <img src="your-nytwolf-ui-1.jpg" alt="Desktop View"> -->
+                  <div class="placeholder-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    DESKTOP INTERFACE
+                  </div>
+                </div>
+                <div class="preview-card-half">
+                  <!-- Replace with: <img src="your-nytwolf-ui-2.jpg" alt="Responsive View"> -->
+                  <div class="placeholder-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                      <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                    RESPONSIVE ADAPTATION
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </article>
+
+          <!-- ═════════════════════════════════════════════════
+               PROJECT 02 — TEBALL TAMILNADU
+               ═════════════════════════════════════════════════ -->
+          <article class="pw-panel" id="panel-teball" role="tabpanel" aria-labelledby="tab-teball">
+
+            <!-- Project Hero Block -->
+            <div class="project-hero-block">
+              <div class="project-tag">PROJECT 02 · MULTI-PAGE WEBSITE</div>
+              <h2 class="project-name">TEBALL TAMILNADU</h2>
+              <h3 class="project-subheading">A MULTI-PAGE DIGITAL<br>EXPERIENCE FOR TEBALL.</h3>
+              <p class="project-description">Designed five individual website pages, creating a consistent experience while giving each page its own structure and purpose.</p>
+            </div>
+
+            <!-- Featured Visual (Large Preview Area) -->
+            <div class="project-featured-visual">
+              <div class="project-media-frame">
+                <!-- Replace with: <img src="your-teball-main.jpg" alt="Teball Tamilnadu Website"> -->
+                <div class="placeholder-badge">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  FEATURED MULTI-PAGE EXPERIENCE PREVIEW
+                </div>
+              </div>
+            </div>
+
+            <!-- Compact Project Details -->
+            <div class="project-details-card">
+              <div class="details-grid">
+                <div class="detail-cell">
+                  <span class="detail-key">TYPE</span>
+                  <span class="detail-val">Multi-Page Website</span>
+                </div>
+                <div class="detail-cell">
+                  <span class="detail-key">ROLE</span>
+                  <span class="detail-val">UX/UI Designer</span>
+                </div>
+                <div class="detail-cell">
+                  <span class="detail-key">SCOPE</span>
+                  <span class="detail-val">5 Individual Pages</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- About The Project -->
+            <section class="narrative-block">
+              <h4 class="narrative-heading">ABOUT THE PROJECT</h4>
+              <p class="narrative-text">The Teball Tamilnadu website involved designing five individual pages, each created to present different content and support a specific part of the overall website experience.</p>
+              <p class="narrative-text">The challenge was to create consistency across all pages while adapting the layout, content hierarchy, and user flow to suit the purpose of each page.</p>
+            </section>
+
+            <!-- My Contribution -->
+            <section class="narrative-block">
+              <h4 class="narrative-heading">MY CONTRIBUTION</h4>
+              <p class="narrative-text">I worked on the UX/UI design across all five pages, defining page structures, organising content, creating layouts, and maintaining a consistent visual system throughout the website.</p>
+            </section>
+
+            <!-- 5 Individual Pages Showcase Grid -->
+            <section class="pages-showcase">
+              <span class="showcase-label">5 INDIVIDUAL PAGES SHOWCASE</span>
+              <div class="pages-grid">
+                <!-- Page 01 -->
+                <div class="page-card">
+                  <div class="page-card-header">
+                    <span class="page-card-num">01</span>
+                    <span class="page-card-title">HOME PAGE</span>
+                  </div>
+                  <div class="page-card-frame">
+                    <!-- Replace with: <img src="teball-page-1.jpg" alt="Home Page"> -->
+                    <div class="placeholder-badge">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      PREVIEW 01
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 02 -->
+                <div class="page-card">
+                  <div class="page-card-header">
+                    <span class="page-card-num">02</span>
+                    <span class="page-card-title">ABOUT &amp; RULES</span>
+                  </div>
+                  <div class="page-card-frame">
+                    <!-- Replace with: <img src="teball-page-2.jpg" alt="About and Rules Page"> -->
+                    <div class="placeholder-badge">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      PREVIEW 02
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 03 -->
+                <div class="page-card">
+                  <div class="page-card-header">
+                    <span class="page-card-num">03</span>
+                    <span class="page-card-title">TOURNAMENT</span>
+                  </div>
+                  <div class="page-card-frame">
+                    <!-- Replace with: <img src="teball-page-3.jpg" alt="Tournament Page"> -->
+                    <div class="placeholder-badge">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      PREVIEW 03
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 04 -->
+                <div class="page-card">
+                  <div class="page-card-header">
+                    <span class="page-card-num">04</span>
+                    <span class="page-card-title">TEAMS &amp; ROSTER</span>
+                  </div>
+                  <div class="page-card-frame">
+                    <!-- Replace with: <img src="teball-page-4.jpg" alt="Teams Page"> -->
+                    <div class="placeholder-badge">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      PREVIEW 04
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 05 -->
+                <div class="page-card">
+                  <div class="page-card-header">
+                    <span class="page-card-num">05</span>
+                    <span class="page-card-title">CONTACT &amp; ENQUIRY</span>
+                  </div>
+                  <div class="page-card-frame">
+                    <!-- Replace with: <img src="teball-page-5.jpg" alt="Contact Page"> -->
+                    <div class="placeholder-badge">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      PREVIEW 05
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+          </article>
+
+        </div>
+
+      </div>
+
+      <!-- Bottom Navigation -->
+      <nav class="pw-bottom-nav">
+        <a href="index.html#projects" class="pw-nav-btn pw-nav-btn--prev">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          BACK TO SELECTED WORKS
+        </a>
+        <a href="personal-exploration.html" class="pw-nav-btn pw-nav-btn--next">
+          NEXT PROJECT
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <!-- ─── JavaScript ──────────────────────────────────── -->
+  <script>
+    /* ── Mobile Menu Toggle ─────────────────────────────── */
+    const menuToggle = document.querySelector('.menu-toggle');
+    const headerNav = document.querySelector('.header__nav');
+
+    if (menuToggle && headerNav) {
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        headerNav.classList.toggle('open');
+        document.body.style.overflow = headerNav.classList.contains('open') ? 'hidden' : '';
+      });
+
+      headerNav.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          menuToggle.classList.remove('active');
+          headerNav.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+
+    /* ── Header Scroll State ────────────────────────────── */
+    const header = document.querySelector('.header');
+
+    function onScroll() {
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      if (scrollY > 10) {
+        header.classList.add('is-scrolled');
+      } else {
+        header.classList.remove('is-scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ── Interactive Sticky Project Tabs ────────────────── */
+    const tabs = document.querySelectorAll('.pw-tab');
+    const panels = document.querySelectorAll('.pw-panel');
+
+    function switchProject(targetPanelId) {
+      tabs.forEach(tab => {
+        const isMatch = tab.getAttribute('data-target') === targetPanelId;
+        tab.classList.toggle('is-active', isMatch);
+        tab.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+      });
+
+      panels.forEach(panel => {
+        if (panel.id === targetPanelId) {
+          panel.classList.add('is-active');
+        } else {
+          panel.classList.remove('is-active');
+        }
+      });
+
+      // On mobile or when scrolled past the content area, smoothly align view
+      const contentArea = document.querySelector('.pw-content-area');
+      if (contentArea) {
+        const rect = contentArea.getBoundingClientRect();
+        if (rect.top < 80) {
+          const scrollTarget = window.pageYOffset + rect.top - (window.innerWidth <= 768 ? 80 : 100);
+          window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+        }
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-target');
+        if (targetId) {
+          switchProject(targetId);
+        }
+      });
+    });
+
+    /* ── Mark return navigation to index.html so intro is not re-played on back ── */
+    document.querySelectorAll('a[href*="index.html"]').forEach(link => {
+      link.addEventListener('click', () => {
+        try { sessionStorage.setItem('skip_intro_return', '1'); } catch (e) {}
+      });
+    });
+
+    window.addEventListener('pagehide', () => {
+      try { sessionStorage.setItem('skip_intro_return', '1'); } catch (e) {}
+    });
+  </script>
+
+</body>
+</html>
