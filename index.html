@@ -6,6 +6,22 @@
   <title>BALAYOKESH — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Instrument+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function() {
+      try {
+        var nav = (window.performance && performance.getEntriesByType) ? performance.getEntriesByType('navigation')[0] : null;
+        var isReload = nav ? nav.type === 'reload' : false;
+        var hasHash = Boolean(window.location.hash && window.location.hash !== '#');
+        var storedScroll = parseInt(sessionStorage.getItem('portfolio_scroll_pos') || '0', 10);
+        var wasScrolled = sessionStorage.getItem('was_scrolled') === '1' || storedScroll > 60;
+        var skipReturn = sessionStorage.getItem('skip_intro_return') === '1';
+
+        if (hasHash || wasScrolled || skipReturn || (isReload && wasScrolled)) {
+          document.documentElement.classList.add('no-intro');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     /* ── Reset & Foundation ─────────────────────────────── */
     *,
@@ -264,7 +280,10 @@
       pointer-events: none;
     }
 
-    body.intro .hero {
+    body.intro .hero,
+    body.intro .works,
+    body.intro .experience,
+    body.intro .section-contact {
       opacity: 0;
       pointer-events: none;
     }
@@ -276,6 +295,50 @@
     body.intro .hero__bottom-bar {
       opacity: 0;
       pointer-events: none;
+    }
+
+    /* Instant bypass when reloading at any section or returning */
+    html.no-intro body.intro {
+      overflow: visible !important;
+    }
+    html.no-intro body.intro .header {
+      background-color: var(--color-bg) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    html.no-intro body.intro .header__logo,
+    html.no-intro body.intro .menu-toggle,
+    html.no-intro body.intro .header__nav {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    html.no-intro body.intro .hero,
+    html.no-intro body.intro .works,
+    html.no-intro body.intro .experience,
+    html.no-intro body.intro .section-contact {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    html.no-intro body.intro .hero__status,
+    html.no-intro body.intro .hero__eyebrow,
+    html.no-intro body.intro .hero__heading,
+    html.no-intro body.intro .hero__actions,
+    html.no-intro body.intro .hero__bottom-bar {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      animation: none !important;
+    }
+    html.no-intro body.intro .portfolio-word {
+      visibility: visible !important;
+      transform: none !important;
+      height: 1.11rem !important;
+    }
+    html.no-intro body.intro .text-outline {
+      stroke-opacity: 0 !important;
+      animation: none !important;
+    }
+    html.no-intro body.intro .text-solid {
+      fill-opacity: 1 !important;
+      animation: none !important;
     }
 
     /* ══════════════════════════════════════════════════════
@@ -2023,55 +2086,69 @@
       }
     }
 
-    /* Follow-up Section / Contact */
+    /* ── Follow-up Section / Contact Redesign ─────────── */
     .section-contact {
       position: relative;
-      min-height: 80vh;
       background: var(--color-bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(60px, 10vh, 120px) var(--page-padding-x);
+      padding: clamp(80px, 12vh, 140px) var(--page-padding-x) clamp(40px, 6vh, 60px);
       border-top: 1px solid rgba(232, 230, 227, 0.08);
-      text-align: center;
       z-index: 5;
     }
 
-    .section-contact__tag {
+    .contact__container {
+      max-width: 100%;
+      width: 100%;
+      margin: 0;
+    }
+
+    .contact__top-bar {
+      margin-bottom: clamp(32px, 5vh, 48px);
+    }
+
+    .contact__label {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
       color: var(--color-accent);
-      margin-bottom: 20px;
+      display: inline-block;
     }
 
-    .section-contact__heading {
+    .contact__content-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(40px, 6vw, 96px);
+      align-items: flex-start;
+    }
+
+    /* Primary Column: Display Heading & Main CTA */
+    .contact__col-primary {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .contact__heading {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      letter-spacing: -0.02em;
+      font-size: clamp(2.8rem, 5.8vw, 5.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
       text-transform: uppercase;
       color: var(--color-fg);
-      margin: 0 0 20px;
-      line-height: 1.1;
+      margin: 0 0 clamp(32px, 5vh, 48px);
     }
 
-    .section-contact__desc {
-      font-family: var(--font-primary);
-      font-size: 1rem;
-      color: var(--color-fg-muted);
-      max-width: 480px;
-      margin: 0 auto 36px;
-      line-height: 1.6;
+    .contact__cta-wrap {
+      display: flex;
     }
 
-    .section-contact__cta {
+    .contact__cta-btn {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 28px;
+      padding: 16px 34px;
       background: var(--color-fg);
       color: var(--color-bg);
       font-family: 'Space Grotesk', sans-serif;
@@ -2080,17 +2157,182 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       text-decoration: none;
-      border-radius: 4px;
-      transition: background 0.25s ease, transform 0.25s ease;
+      border-radius: 999px;
+      transition: background 0.3s var(--ease-out-expo),
+                  transform 0.3s var(--ease-out-expo),
+                  box-shadow 0.3s var(--ease-out-expo);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      user-select: none;
     }
 
-    .section-contact__cta:hover {
+    .contact__cta-btn:hover {
       background: var(--color-accent);
       transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(196, 181, 160, 0.2);
+    }
+
+    .contact__cta-arrow {
+      transition: transform 0.3s var(--ease-out-expo);
+    }
+
+    .contact__cta-btn:hover .contact__cta-arrow {
+      transform: translateX(4px);
+    }
+
+    /* Secondary Column: Description & Contact Options */
+    .contact__col-secondary {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(36px, 5vh, 52px);
+      padding-top: clamp(8px, 1.5vh, 16px);
+    }
+
+    .contact__description {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact__desc-lead {
+      font-family: var(--font-primary);
+      font-size: clamp(1.08rem, 1.35vw, 1.25rem);
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--color-fg);
+    }
+
+    .contact__desc-body {
+      font-family: var(--font-primary);
+      font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+      line-height: 1.65;
+      color: #a8a6a2;
+      max-width: 480px;
+    }
+
+    .contact__details {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      border-top: 1px solid rgba(232, 230, 227, 0.08);
+      padding-top: 28px;
+    }
+
+    .contact__detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .contact__detail-key {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+    }
+
+    .contact__detail-link {
+      font-family: var(--font-primary);
+      font-size: clamp(1.02rem, 1.2vw, 1.15rem);
+      font-weight: 500;
+      color: var(--color-fg);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease;
+      width: fit-content;
+    }
+
+    .contact__detail-link:hover {
+      color: var(--color-accent);
+    }
+
+    .contact__detail-link--arrow {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .contact__detail-link svg {
+      transition: transform 0.3s var(--ease-out-expo);
+    }
+
+    .contact__detail-link:hover svg {
+      transform: translate(3px, -3px);
+    }
+
+    /* Footer */
+    .contact__footer {
+      margin-top: clamp(64px, 10vh, 104px);
+      padding-top: 28px;
+      border-top: 1px solid rgba(232, 230, 227, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .contact__copyright,
+    .contact__credit {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-fg-muted);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .contact__content-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .contact__col-secondary {
+        padding-top: 0;
+      }
+
+      .contact__heading {
+        margin-bottom: 28px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .section-contact {
+        padding: 64px var(--page-padding-x) 36px;
+      }
+
+      .contact__heading {
+        font-size: clamp(2.2rem, 9.5vw, 3.2rem);
+      }
+
+      .contact__cta-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 24px;
+      }
+
+      .contact__footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 48px;
+      }
     }
   </style>
 </head>
 <body class="intro">
+  <script>
+    if (document.documentElement.classList.contains('no-intro')) {
+      document.body.classList.remove('intro');
+      document.body.classList.add('intro-complete');
+    }
+  </script>
 
   <!-- ─── Header ──────────────────────────────────────── -->
   <header class="header">
@@ -2453,18 +2695,68 @@
     </div>
   </section>
 
-  <!-- ─── Follow-up Section (Contact & Continuation) ────── -->
+  <!-- ─── Contact Section ──────────────────────────────── -->
   <section class="section-contact" id="contact">
-    <span class="section-contact__tag">03 / GET IN TOUCH</span>
-    <h2 class="section-contact__heading">LET'S BUILD SOMETHING INTENTIONAL</h2>
-    <p class="section-contact__desc">Currently open for UX/UI design roles and product design collaborations worldwide.</p>
-    <a href="https://drive.google.com/file/d/1SQUbkBLW7hvUpSyqCyUIZ28dICbkw_NC/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="section-contact__cta">
-      <span>VIEW RESUME</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="7" y1="17" x2="17" y2="7"></line>
-        <polyline points="7 7 17 7 17 17"></polyline>
-      </svg>
-    </a>
+    <div class="contact__container">
+      <div class="contact__top-bar">
+        <span class="contact__label">CONTACT</span>
+      </div>
+
+      <div class="contact__content-grid">
+        <!-- Primary: Display Heading & Main CTA -->
+        <div class="contact__col-primary">
+          <h2 class="contact__heading">
+            LET'S CREATE<br />
+            SOMETHING<br />
+            TOGETHER.
+          </h2>
+
+          <div class="contact__cta-wrap">
+            <a href="mailto:balayokesh1708@gmail.com" class="contact__cta-btn" aria-label="Send email - Let's Talk">
+              <span>LET'S TALK</span>
+              <svg class="contact__cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Secondary: Description & Contact Options -->
+        <div class="contact__col-secondary">
+          <div class="contact__description">
+            <p class="contact__desc-lead">Have a project, idea, or opportunity in mind?</p>
+            <p class="contact__desc-body">I'm always open to discussing new experiences, creative collaborations, and design opportunities.</p>
+          </div>
+
+          <div class="contact__details">
+            <div class="contact__detail-item">
+              <span class="contact__detail-key">EMAIL</span>
+              <a href="mailto:balayokesh1708@gmail.com" class="contact__detail-link">
+                balayokesh1708@gmail.com
+              </a>
+            </div>
+
+            <div class="contact__detail-item">
+              <span class="contact__detail-key">LINKEDIN</span>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="contact__detail-link contact__detail-link--arrow">
+                <span>VIEW PROFILE</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subtle Footer -->
+      <footer class="contact__footer">
+        <span class="contact__copyright">© 2026 BALAYOKESH</span>
+        <span class="contact__credit">DESIGNED &amp; BUILT BY ME</span>
+      </footer>
+    </div>
   </section>
 
   <!-- ─── Scripts ─────────────────────────────────────── -->
@@ -2533,6 +2825,24 @@
       onScroll();
     })();
 
+    /* ── Scroll Tracking for Reliable Section Reloads ── */
+    (function trackScroll() {
+      function saveScroll() {
+        try {
+          if (window.scrollY > 60) {
+            sessionStorage.setItem('portfolio_scroll_pos', String(Math.round(window.scrollY)));
+            sessionStorage.setItem('was_scrolled', '1');
+          } else {
+            sessionStorage.removeItem('portfolio_scroll_pos');
+            sessionStorage.removeItem('was_scrolled');
+          }
+        } catch (e) {}
+      }
+      window.addEventListener('scroll', saveScroll, { passive: true });
+      window.addEventListener('beforeunload', saveScroll);
+      window.addEventListener('pagehide', saveScroll);
+    })();
+
     /* ══════════════════════════════════════════════════════
        CINEMATIC INTRO — Two-stage sequence
        Stage 1: Dotted → Solid (CSS stroke animation)
@@ -2545,21 +2855,31 @@
         : null;
       const isReload = navEntry ? navEntry.type === 'reload' : false;
 
-      // Only skip intro if explicitly returning from case study AND this is NOT a fresh reload
-      const shouldSkipIntro = !isReload && (sessionStorage.getItem('skip_intro_return') === '1');
+      const hasSectionHash = Boolean(window.location.hash && window.location.hash !== '#');
+      const storedScroll = parseInt(sessionStorage.getItem('portfolio_scroll_pos') || '0', 10);
+      const wasScrolled = (sessionStorage.getItem('was_scrolled') === '1') || storedScroll > 60 || window.scrollY > 40;
+      const isReturn = sessionStorage.getItem('skip_intro_return') === '1';
+      const hasNoIntroClass = document.documentElement.classList.contains('no-intro');
 
-      // Always clear the flag immediately so ANY subsequent reload or regular navigation plays the intro!
+      // Only skip intro if returning from subpage, direct section hash, reload while scrolled, or marked no-intro
+      const shouldSkipIntro = isReturn || hasSectionHash || (isReload && wasScrolled) || hasNoIntroClass || (window.scrollY > 40);
+
+      // Clean up single-use return flag
       try {
         sessionStorage.removeItem('skip_intro_return');
         sessionStorage.removeItem('intro-seen');
+        if (!isReload && window.scrollY <= 40) {
+          sessionStorage.removeItem('portfolio_scroll_pos');
+          sessionStorage.removeItem('was_scrolled');
+        }
       } catch (e) {}
 
-      if (shouldSkipIntro) {
+      function settleHeaderDirectly() {
         const word = document.querySelector('.portfolio-word');
         const logo = document.querySelector('.header__logo');
         if (word && logo) {
           const outlineEl = word.querySelector('.text-outline');
-          const bbox = outlineEl.getBBox();
+          const bbox = outlineEl ? outlineEl.getBBox() : { x: 20, y: 15, width: 960, height: 100 };
           const px = 6, py = 6;
           const vbWidth = bbox.width + px * 2;
           const vbHeight = bbox.height + py * 2;
@@ -2571,6 +2891,7 @@
           word.style.visibility = 'visible';
           word.style.transform = '';
           word.style.willChange = 'auto';
+          word.classList.remove('animate');
           /* Make the solid text visible immediately */
           const solidEl = word.querySelector('.text-solid');
           if (solidEl) solidEl.style.fillOpacity = '1';
@@ -2581,8 +2902,12 @@
         }
         document.body.classList.remove('intro');
         document.body.classList.add('intro-complete');
+      }
 
-        // If returned with hash e.g. #projects, scroll to it smoothly
+      if (shouldSkipIntro) {
+        settleHeaderDirectly();
+
+        // If returned or reloaded with hash e.g. #projects, scroll to it smoothly
         if (window.location.hash) {
           setTimeout(() => {
             const target = document.querySelector(window.location.hash);
@@ -2597,7 +2922,15 @@
       let started = false;
       function start() {
         if (started) return;
+
+        // If user scrolled before fonts loaded or intro began, cancel intro immediately
+        if (window.scrollY > 40 || document.documentElement.classList.contains('no-intro')) {
+          settleHeaderDirectly();
+          return;
+        }
+
         started = true;
+        window.scrollTo(0, 0);
 
         const word = document.querySelector('.portfolio-word');
         if (!word) return;
@@ -2643,38 +2976,43 @@
           word.classList.add('animate');
         });
 
-        /* ── Step 5: After fill animation completes → FLIP to header ── */
-        solidEl.addEventListener('animationend', () => {
-          /* Brief beat before the move */
+        let transitionTriggered = false;
+        function finishIntro() {
+          if (transitionTriggered) return;
+          transitionTriggered = true;
+
+          word.style.transition = 'transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)';
+          word.style.transform = 'translate(0, 0) scale(1)';
+
+          word.addEventListener('transitionend', (e) => {
+            if (e.propertyName !== 'transform') return;
+
+            /* Clean up inline styles but retain calibrated height */
+            word.style.transition = '';
+            word.style.transform = '';
+            word.style.willChange = 'auto';
+
+            /* Trigger post-intro reveal */
+            document.body.classList.remove('intro');
+            document.body.classList.add('intro-complete');
+          }, { once: true });
+
           setTimeout(() => {
-            word.style.transition = 'transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)';
-            word.style.transform = 'translate(0, 0) scale(1)';
-
-            word.addEventListener('transitionend', (e) => {
-              if (e.propertyName !== 'transform') return;
-
-              /* Clean up inline styles but retain calibrated height */
-              word.style.transition = '';
-              word.style.transform = '';
-              word.style.willChange = 'auto';
-
-              /* Trigger post-intro reveal */
-              document.body.classList.remove('intro');
-              document.body.classList.add('intro-complete');
-            }, { once: true });
-          }, 300);
-        }, { once: true });
-
-        // Safety fallback: ensure intro unlock always executes within 4.5s
-        setTimeout(() => {
-          if (document.body.classList.contains('intro')) {
             word.style.transition = '';
             word.style.transform = '';
             word.style.willChange = 'auto';
             document.body.classList.remove('intro');
             document.body.classList.add('intro-complete');
-          }
-        }, 4500);
+          }, 1800);
+        }
+
+        /* ── Step 5: After fill animation completes → FLIP to header ── */
+        solidEl.addEventListener('animationend', () => {
+          setTimeout(finishIntro, 300);
+        }, { once: true });
+
+        // Safety fallback: ensure intro unlock always executes within 3.5s
+        setTimeout(finishIntro, 3500);
 
         window.addEventListener('resize', () => {
           const currentLogoSize = parseFloat(window.getComputedStyle(logo).fontSize) || 12.8;
