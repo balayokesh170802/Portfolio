@@ -252,121 +252,22 @@
       max-width: 680px;
     }
 
-    /* ── Two-Column Main Layout ─────────────────────────── */
-    .pe-layout {
+    /* ── Balanced Editorial Two-Column Layout ───────────── */
+    .pe-editorial-grid {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: clamp(40px, 5.5vw, 84px);
+      grid-template-columns: 1.08fr 1fr;
+      gap: clamp(48px, 6vw, 96px);
       align-items: flex-start;
-      margin-bottom: clamp(80px, 12vh, 130px);
+      margin-bottom: clamp(72px, 10vh, 120px);
     }
 
-    /* ── Left Sidebar (Sticky Project Navigation) ──────── */
-    .pe-sidebar {
-      position: sticky;
-      top: calc(var(--header-height) + 36px);
+    /* Left Column: Project Identity, CTA, Metadata */
+    .pe-col-left {
       display: flex;
       flex-direction: column;
-      gap: 20px;
     }
 
-    .pe-sidebar-label {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.66rem;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      margin-bottom: 4px;
-    }
-
-    .pe-tab-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      role: tablist;
-    }
-
-    .pe-tab {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-      padding: 16px 20px;
-      background: rgba(14, 14, 14, 0.4);
-      border: 1px solid rgba(232, 230, 227, 0.08);
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.3s var(--ease-out-expo);
-      width: 100%;
-      user-select: none;
-      position: relative;
-    }
-
-    .pe-tab:hover {
-      border-color: rgba(232, 230, 227, 0.2);
-      background: rgba(20, 20, 20, 0.6);
-    }
-
-    .pe-tab-num {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      color: var(--color-fg-muted);
-      transition: color 0.3s ease;
-    }
-
-    .pe-tab-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--color-fg-muted);
-      transition: color 0.3s ease;
-    }
-
-    /* Active Tab State */
-    .pe-tab.is-active {
-      background: rgba(22, 22, 22, 0.85);
-      border-color: rgba(232, 230, 227, 0.28);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-    }
-
-    .pe-tab.is-active::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 12px;
-      bottom: 12px;
-      width: 2px;
-      background: var(--color-accent);
-      border-radius: 2px;
-    }
-
-    .pe-tab.is-active .pe-tab-num {
-      color: var(--color-accent);
-    }
-
-    .pe-tab.is-active .pe-tab-title {
-      color: var(--color-fg);
-    }
-
-    /* ── Right Content Area ─────────────────────────────── */
-    .pe-content-area {
-      min-width: 0;
-      position: relative;
-    }
-
-    /* ── Single Project Inner Structure ─────────────────── */
-    .project-hero-block {
-      margin-bottom: clamp(36px, 5vh, 48px);
-      max-width: 760px;
-    }
-
-    /* Tags / Metadata: Two separate outlined tags */
+    /* Tags / Metadata: Outlined badges */
     .project-tags-group {
       display: flex;
       flex-wrap: wrap;
@@ -426,14 +327,14 @@
 
     /* Live Website CTA Button */
     .project-cta-wrap {
-      margin-top: 24px;
+      margin-top: 28px;
     }
 
     .live-website-cta {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 22px;
+      padding: 13px 24px;
       border-radius: 4px;
       border: 1px solid rgba(232, 230, 227, 0.22);
       background: rgba(232, 230, 227, 0.04);
@@ -466,69 +367,9 @@
       transform: translate(3px, -2px);
     }
 
-    /* ── Featured Visual Showcase Frame ─────────────────── */
-    .project-featured-visual {
-      margin-bottom: clamp(40px, 6vh, 56px);
-    }
-
-    .project-media-frame {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: rgba(18, 18, 18, 0.8);
-      border: 1px solid rgba(232, 230, 227, 0.1);
-      border-radius: 6px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
-    }
-
-    .project-media-frame::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
-      pointer-events: none;
-    }
-
-    .project-media-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .project-media-frame:has(img) .placeholder-badge {
-      display: none;
-    }
-
-    .placeholder-badge {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(232, 230, 227, 0.3);
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .placeholder-badge svg {
-      opacity: 0.5;
-    }
-
     /* ── Compact Project Details Grid ───────────────────── */
     .project-details-card {
-      margin-bottom: clamp(40px, 6vh, 56px);
+      margin-top: clamp(28px, 4vh, 36px);
       padding: 22px 0;
       border-top: 1px solid rgba(232, 230, 227, 0.08);
       border-bottom: 1px solid rgba(232, 230, 227, 0.08);
@@ -537,7 +378,7 @@
     .details-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px 32px;
+      gap: 18px 24px;
     }
 
     .detail-cell {
@@ -563,14 +404,18 @@
       letter-spacing: 0.01em;
     }
 
-    /* ── Narrative Blocks (About & Contribution) ────────── */
+    /* ── Right Column: Narrative Blocks ─────────────────── */
+    .pe-col-right {
+      display: flex;
+      flex-direction: column;
+    }
+
     .narrative-block {
-      margin-bottom: clamp(36px, 5vh, 48px);
-      max-width: 720px;
+      margin-bottom: clamp(32px, 4.5vh, 44px);
     }
 
     .narrative-block:last-of-type {
-      margin-bottom: clamp(48px, 7vh, 64px);
+      margin-bottom: 0;
     }
 
     .narrative-heading {
@@ -592,55 +437,6 @@
 
     .narrative-text + .narrative-text {
       margin-top: 14px;
-    }
-
-    /* ── Supporting Preview Showcase ────────────────────── */
-    .preview-showcase {
-      margin-top: 24px;
-      margin-bottom: clamp(64px, 9vh, 96px);
-    }
-
-    .gallery-grid-2col {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: clamp(18px, 2.5vw, 28px);
-    }
-
-    .preview-card-half {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      background: rgba(18, 18, 18, 0.75);
-      border: 1px solid rgba(232, 230, 227, 0.09);
-      border-radius: 6px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .preview-card-half::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
-      pointer-events: none;
-    }
-
-    .preview-card-half img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .preview-card-half:has(img) .placeholder-badge {
-      display: none;
     }
 
     /* ── Bottom Project Navigation ──────────────────────── */
@@ -685,18 +481,10 @@
     }
 
     /* ── Responsive: Tablet ─────────────────────────────── */
-    @media (max-width: 1024px) {
-      .pe-layout {
-        grid-template-columns: 220px 1fr;
-        gap: 36px;
-      }
-
-      .pe-tab {
-        padding: 14px 16px;
-      }
-
-      .pe-tab-title {
-        font-size: 0.84rem;
+    @media (max-width: 960px) {
+      .pe-editorial-grid {
+        grid-template-columns: 1fr;
+        gap: clamp(40px, 6vh, 56px);
       }
 
       .details-grid {
@@ -787,36 +575,10 @@
         padding: 8px 16px;
       }
 
-      /* Stack two-column layout on mobile */
-      .pe-layout {
-        display: flex;
-        flex-direction: column;
-        gap: 32px;
-      }
-
-      /* Project navigation above content */
-      .pe-sidebar {
-        position: static;
-        width: 100%;
-        top: auto;
-      }
-
-      .pe-tab-list {
-        width: 100%;
-      }
-
-      .pe-tab {
-        padding: 12px 14px;
-        min-height: 52px;
-      }
-
-      .pe-tab-num {
-        font-size: 0.62rem;
-      }
-
-      .pe-tab-title {
-        font-size: 0.8rem;
-        line-height: 1.25;
+      .pe-editorial-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        margin-bottom: clamp(56px, 8vh, 80px);
       }
 
       .pe-main-title {
@@ -841,12 +603,7 @@
 
       .details-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .gallery-grid-2col {
-        grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 14px;
       }
 
       .pe-bottom-nav {
@@ -906,125 +663,66 @@
         <p class="pe-main-intro">Self-initiated projects exploring different visual directions, design systems, and digital interactions beyond client briefs.</p>
       </header>
 
-      <!-- Two-Column Layout: Left Sticky Navigation / Right Project Content -->
-      <div class="pe-layout">
+      <!-- Balanced Editorial Two-Column Layout -->
+      <div class="pe-editorial-grid">
 
-        <!-- Left Column: Sticky Project Navigation -->
-        <aside class="pe-sidebar">
-          <span class="pe-sidebar-label">PROJECT INDEX</span>
-          <div class="pe-tab-list" role="tablist" aria-label="Personal Exploration Projects">
-            <button class="pe-tab is-active" id="tab-aether" role="tab" aria-selected="true" aria-controls="panel-aether" data-target="panel-aether">
-              <span class="pe-tab-num">01</span>
-              <span class="pe-tab-title">ÆTHER</span>
-            </button>
+        <!-- Left Column: Project Identity, CTA, Metadata -->
+        <div class="pe-col-left">
+          <!-- Outlined Tags Metadata -->
+          <div class="project-tags-group">
+            <span class="project-outlined-tag">01 · CONCEPT WEBSITE</span>
+            <span class="project-outlined-tag">WEB DESIGN</span>
           </div>
-        </aside>
 
-        <!-- Right Column: Project Content Area -->
-        <div class="pe-content-area">
+          <h2 class="project-name">ÆTHER</h2>
+          <h3 class="project-subheading">A DIGITAL STUDIO,<br>DESIGNED AS A CONCEPT.</h3>
+          <p class="project-description">A self-initiated website concept exploring how a modern digital studio could present its services, process, and brand through a bold and structured web experience.</p>
 
-          <article class="pe-panel is-active" id="panel-aether" role="tabpanel" aria-labelledby="tab-aether">
+          <!-- Live Website CTA -->
+          <div class="project-cta-wrap">
+            <a href="https://balayokesh170802.github.io/Project_01/" target="_blank" rel="noopener noreferrer" class="live-website-cta">
+              VIEW LIVE WEBSITE
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
 
-            <!-- Project Hero Block -->
-            <div class="project-hero-block">
-              <!-- Outlined Tags Metadata -->
-              <div class="project-tags-group">
-                <span class="project-outlined-tag">CONCEPT WEBSITE</span>
-                <span class="project-outlined-tag">WEB DESIGN</span>
+          <!-- Compact Project Details -->
+          <div class="project-details-card">
+            <div class="details-grid">
+              <div class="detail-cell">
+                <span class="detail-key">TYPE</span>
+                <span class="detail-val">Concept Website</span>
               </div>
-
-              <h2 class="project-name">ÆTHER</h2>
-              <h3 class="project-subheading">A DIGITAL STUDIO,<br>DESIGNED AS A CONCEPT.</h3>
-              <p class="project-description">A self-initiated website concept exploring how a modern digital studio could present its services, process, and brand through a bold and structured web experience.</p>
-
-              <!-- Live Website CTA -->
-              <div class="project-cta-wrap">
-                <a href="https://balayokesh170802.github.io/Project_01/" target="_blank" rel="noopener noreferrer" class="live-website-cta">
-                  VIEW LIVE WEBSITE
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </a>
+              <div class="detail-cell">
+                <span class="detail-key">ROLE</span>
+                <span class="detail-val">UX/UI Designer</span>
               </div>
-            </div>
-
-            <!-- Featured Visual Showcase (Large Preview Area) -->
-            <div class="project-featured-visual">
-              <div class="project-media-frame">
-                <!-- Replace with: <img src="your-aether-screenshot.jpg" alt="ÆTHER Studio Concept Website"> -->
-                <div class="placeholder-badge">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <polyline points="21 15 16 10 5 21"></polyline>
-                  </svg>
-                  FEATURED CONCEPT WEBSITE PREVIEW
-                </div>
+              <div class="detail-cell">
+                <span class="detail-key">FOCUS</span>
+                <span class="detail-val">Web Design &amp; Interaction</span>
               </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Compact Project Details -->
-            <div class="project-details-card">
-              <div class="details-grid">
-                <div class="detail-cell">
-                  <span class="detail-key">TYPE</span>
-                  <span class="detail-val">Concept Website</span>
-                </div>
-                <div class="detail-cell">
-                  <span class="detail-key">ROLE</span>
-                  <span class="detail-val">UX/UI Designer</span>
-                </div>
-                <div class="detail-cell">
-                  <span class="detail-key">FOCUS</span>
-                  <span class="detail-val">Web Design &amp; Interaction</span>
-                </div>
-              </div>
-            </div>
+        <!-- Right Column: Narrative Blocks -->
+        <div class="pe-col-right">
+          <!-- About The Project -->
+          <section class="narrative-block">
+            <h4 class="narrative-heading">ABOUT THE PROJECT</h4>
+            <p class="narrative-text">ÆTHER is a self-initiated concept for a premium digital studio. The project explores a structured website experience that introduces the studio's philosophy, capabilities, working process, and services.</p>
+            <p class="narrative-text">The design focuses on creating a strong first impression through bold typography, controlled spacing, and a clear content flow that guides users through the experience.</p>
+          </section>
 
-            <!-- About The Project -->
-            <section class="narrative-block">
-              <h4 class="narrative-heading">ABOUT THE PROJECT</h4>
-              <p class="narrative-text">ÆTHER is a self-initiated concept for a premium digital studio. The project explores a structured website experience that introduces the studio's philosophy, capabilities, working process, and services.</p>
-              <p class="narrative-text">The design focuses on creating a strong first impression through bold typography, controlled spacing, and a clear content flow that guides users through the experience.</p>
-            </section>
-
-            <!-- My Contribution -->
-            <section class="narrative-block">
-              <h4 class="narrative-heading">MY CONTRIBUTION</h4>
-              <p class="narrative-text">I designed the overall website experience, including the visual direction, page structure, content hierarchy, interface layouts, and responsive behaviour.</p>
-              <p class="narrative-text">The project also served as an exploration of interaction, motion, and how individual sections could create a more engaging browsing experience.</p>
-            </section>
-
-            <!-- Supporting Visual Showcase Area -->
-            <section class="preview-showcase">
-              <div class="gallery-grid-2col">
-                <div class="preview-card-half">
-                  <!-- Replace with: <img src="aether-preview-1.jpg" alt="Studio Direction"> -->
-                  <div class="placeholder-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                      <line x1="8" y1="21" x2="16" y2="21"></line>
-                      <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                    STUDIO PHILOSOPHY &amp; CAPABILITIES
-                  </div>
-                </div>
-                <div class="preview-card-half">
-                  <!-- Replace with: <img src="aether-preview-2.jpg" alt="Interaction & Grid"> -->
-                  <div class="placeholder-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                      <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                    </svg>
-                    INTERACTION &amp; MOTION FLOW
-                  </div>
-                </div>
-              </div>
-            </section>
-
-          </article>
-
+          <!-- My Contribution -->
+          <section class="narrative-block">
+            <h4 class="narrative-heading">MY CONTRIBUTION</h4>
+            <p class="narrative-text">I designed the overall website experience, including the visual direction, page structure, content hierarchy, interface layouts, and responsive behaviour.</p>
+            <p class="narrative-text">The project also served as an exploration of interaction, motion, and how individual sections could create a more engaging browsing experience.</p>
+          </section>
         </div>
 
       </div>
