@@ -1732,9 +1732,8 @@
     }
 
     .works__project-placeholder--1 {
-      background:
-        radial-gradient(ellipse 50% 60% at 50% 40%, rgba(196, 181, 160, 0.08) 0%, transparent 70%),
-        linear-gradient(160deg, #1e1e1e 0%, #121212 100%);
+      background: #141414;
+      overflow: hidden;
     }
 
     .works__project-placeholder--2 {
@@ -1755,6 +1754,10 @@
       object-position: center;
       display: block;
       transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .works__project-placeholder--1 .works__project-img {
+      object-position: center 36%;
     }
 
     .works__project-container.is-active:hover .works__project-img {
@@ -2805,7 +2808,9 @@
 
       <!-- Project 01 Card (Clickable Component) -->
       <a href="severna.html" class="works__project-container works__project-container--1" id="project-card-1" data-project="1" aria-label="Open Project 01: SEVERNA: BLOOD &amp; BETRAYAL">
-        <div class="works__project-placeholder works__project-placeholder--1"></div>
+        <div class="works__project-placeholder works__project-placeholder--1">
+          <img src="severna-cover.png" alt="Severna: Blood &amp; Betrayal" class="works__project-img" loading="lazy" />
+        </div>
         <div class="works__project-overlay">
           <span class="works__project-category">GAME UI</span>
           <h3 class="works__project-title">SEVERNA: BLOOD &amp; BETRAYAL</h3>
