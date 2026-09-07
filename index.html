@@ -1630,14 +1630,14 @@
        STATEMENT DOORS & SCALING CARD SECTION (Bhhavesh Style)
        - Top-left & Bottom-right balanced editorial typography
        - Zero rectangle at start (pure typography and clean space)
-       - Sharp, un-distorted 16:9 widescreen aperture (0px border-radius)
-       - Smooth proportional scaling without squishing/stretching
-       - Philosophy statement reveals ONLY when card is wide and spacious
-       - Silky smooth rAF lerp physics
+       - Reduced scroll distance (175vh) for fast, effortless opening
+       - Continuous smoothstep motion curve with zero harsh jumps
+       - Sharp 16:9 widescreen aperture expanding to 100vw × 100vh
+       - Direct 120fps rAF ticking for lag-free buttery smoothness
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
-      height: 250vh;
+      height: 175vh;
       background: var(--color-bg);
     }
 
@@ -1708,6 +1708,7 @@
 
     @media (max-width: 767px) {
       .statement-doors {
+        height: 165vh;
         --page-padding-x: clamp(16px, 5vw, 24px);
       }
       .doors-panel--left {
@@ -1763,7 +1764,6 @@
       pointer-events: none;
       background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.08) 0%, transparent 75%);
       opacity: var(--statement-opacity, 0);
-      transition: opacity 0.3s ease;
     }
 
     .statement-card__inner {
@@ -1778,7 +1778,7 @@
       align-items: center;
       justify-content: center;
       opacity: var(--statement-opacity, 0);
-      transform: scale(var(--statement-scale, 0.94));
+      transform: scale(var(--statement-scale, 0.95));
       will-change: opacity, transform;
       pointer-events: none;
     }
@@ -3998,14 +3998,13 @@
     })();
 
             /* ══════════════════════════════════════════════════════
-       STATEMENT DOORS & SCALING CARD ENGINE (Authentic Bhhavesh Model)
-       - Zero rectangle at start (pure clean editorial typography)
-       - On initial scroll: blooms swiftly into a 16:9 aperture (never stays stretched small)
-       - Main scroll: majestically and smoothly expands from aperture to full viewport (100vw × 100vh)
-       - Sharp 0px border-radius without distortion or pill rounding
-       - Doors glide outward off-screen as card expands
-       - Statement reveals inside ONLY when card has expanded large enough
-       - Silky smooth rAF lerp loop for fluid, physical scroll damping
+       STATEMENT DOORS & SCALING CARD ENGINE (Smooth & Fast Open)
+       - Reduced scroll travel (175vh) for effortless, natural opening
+       - Zero rectangle at start (pure typography, vast negative space)
+       - One continuous smoothstep curve: zero jerk, zero hard bumps
+       - Direct 120fps hardware ticking for buttery responsive motion
+       - Doors glide outward smoothly off-screen as card expands
+       - Statement reveals serenely inside spacious canvas
        ══════════════════════════════════════════════════════ */
     (function initStatementDoors() {
       const section = document.querySelector('.statement-doors');
@@ -4020,26 +4019,20 @@
         return Math.max(0, Math.min(1, v));
       }
 
-      function easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3);
+      // Smoothstep polynomial (3t^2 - 2t^3): continuous 1st derivative, zero jerk
+      function smoothCurve(t) {
+        return t * t * (3 - 2 * t);
       }
 
-      function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      }
-
-      let currentProgress = 0;
-      let targetProgress = 0;
-      let rafId = null;
+      let ticking = false;
 
       function applyProgress(progress) {
         const vpW = window.innerWidth;
         const isMobile = vpW < 768;
-        const baseScale = isMobile ? 0.36 : 0.22;
 
-        // ── Phase 1: Card Appearance & Scaling ──
-        // At start (progress <= 0.04): absolutely NO rectangle visible
-        if (progress <= 0.04) {
+        // ── Phase 1: Clean Start & Smooth Proportional Aperture ──
+        // At start (progress <= 0.02): completely clean canvas, zero rectangle
+        if (progress <= 0.02) {
           if (card) {
             card.style.setProperty('--card-scale', '0');
             card.style.setProperty('--card-opacity', '0');
@@ -4047,46 +4040,41 @@
           }
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-scale', '0.94');
+            cardInner.style.setProperty('--statement-scale', '0.95');
           }
-        } else if (progress <= 0.14) {
-          // Swift bloom: rapidly forms a handsome 16:9 aperture (never lingers stretched small)
-          const t = (progress - 0.04) / 0.10;
-          const bloomEase = easeOutCubic(t);
-          const currentScale = bloomEase * baseScale;
-          const cardOpacity = bloomEase;
-          const borderOpacity = 0.08 * cardOpacity;
-
-          if (card) {
-            card.style.setProperty('--card-scale', currentScale.toFixed(4));
-            card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
-            card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
+          if (leftPanel) {
+            leftPanel.style.transform = 'translate3d(0px, 0, 0)';
+            leftPanel.style.opacity = '1';
           }
-          if (cardInner) {
-            cardInner.style.setProperty('--statement-opacity', '0');
+          if (rightPanel) {
+            rightPanel.style.transform = 'translate3d(0px, 0, 0)';
+            rightPanel.style.opacity = '1';
           }
-        } else {
-          // Main expansion: smoothly scales from baseline aperture to full viewport (100vw × 100vh)
-          const t = clamp01((progress - 0.14) / 0.66);
-          const scaleEase = easeInOutCubic(t);
-          const currentScale = baseScale + scaleEase * (1.0 - baseScale);
-          const borderFade = 1 - clamp01((progress - 0.65) / 0.15);
-          const borderOpacity = 0.08 * borderFade;
-
-          if (card) {
-            card.style.setProperty('--card-scale', currentScale.toFixed(4));
-            card.style.setProperty('--card-opacity', '1');
-            card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
-          }
+          return;
         }
 
-        // ── Phase 2: Left & Right Doors Outward Displacement ──
-        const doorProgress = clamp01((progress - 0.06) / 0.50);
-        const doorEase = easeOutCubic(doorProgress);
+        // Single unified, continuous progression (0.02 to 0.78)
+        const u = clamp01((progress - 0.02) / 0.76);
+        const easedScale = smoothCurve(u);
+
+        // Soft initial fade-in over the first 8% of motion
+        const cardOpacity = clamp01(u / 0.08);
+        const borderFade = 1 - clamp01((u - 0.70) / 0.20);
+        const borderOpacity = 0.08 * cardOpacity * borderFade;
+
+        if (card) {
+          card.style.setProperty('--card-scale', easedScale.toFixed(4));
+          card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
+          card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
+        }
+
+        // ── Phase 2: Doors Displace Outward Smoothly ──
+        const doorProgress = clamp01(u / 0.68);
+        const doorEase = smoothCurve(doorProgress);
         const maxShift = isMobile ? (vpW * 0.58) : Math.min(vpW * 0.60, 850);
         const leftX = -doorEase * maxShift;
         const rightX = doorEase * maxShift;
-        const textOpacity = clamp01(1 - (progress - 0.12) / 0.42);
+        const textOpacity = clamp01(1 - u * 1.5);
 
         if (leftPanel) {
           leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
@@ -4097,13 +4085,12 @@
           rightPanel.style.opacity = textOpacity.toFixed(3);
         }
 
-        // ── Phase 3: Statement Reveal Inside Card (Delayed until Card is Large) ──
-        // In Bhhavesh, statement reveals ONLY when card is wide and spacious (progress > 0.36)
-        if (progress > 0.36) {
-          const statementProgress = clamp01((progress - 0.36) / 0.38);
-          const statementEase = easeOutCubic(statementProgress);
+        // ── Phase 3: Statement Reveals Inside Spacious Canvas ──
+        if (u > 0.32) {
+          const statementU = clamp01((u - 0.32) / 0.40);
+          const statementEase = smoothCurve(statementU);
           const statementOpacity = statementEase;
-          const statementScale = 0.94 + statementEase * 0.06;
+          const statementScale = 0.95 + statementEase * 0.05;
 
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', statementOpacity.toFixed(3));
@@ -4112,46 +4099,33 @@
         } else {
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-scale', '0.94');
+            cardInner.style.setProperty('--statement-scale', '0.95');
           }
         }
       }
 
-      function renderLoop() {
-        const diff = targetProgress - currentProgress;
-        if (Math.abs(diff) > 0.0003) {
-          currentProgress += diff * 0.14;
-          applyProgress(currentProgress);
-          rafId = requestAnimationFrame(renderLoop);
-        } else {
-          currentProgress = targetProgress;
-          applyProgress(currentProgress);
-          rafId = null;
+      function onScroll() {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const rect = section.getBoundingClientRect();
+            const sectionH = section.offsetHeight;
+            const vpH = window.innerHeight;
+            const scrollable = sectionH - vpH;
+            if (scrollable > 0) {
+              const scrolled = -rect.top;
+              const progress = clamp01(scrolled / scrollable);
+              applyProgress(progress);
+            }
+            ticking = false;
+          });
+          ticking = true;
         }
       }
 
-      function onScroll(instant) {
-        const rect = section.getBoundingClientRect();
-        const sectionH = section.offsetHeight;
-        const vpH = window.innerHeight;
-        const scrollable = sectionH - vpH;
-        if (scrollable <= 0) return;
-
-        const scrolled = -rect.top;
-        targetProgress = clamp01(scrolled / scrollable);
-
-        if (instant === true) {
-          currentProgress = targetProgress;
-          applyProgress(currentProgress);
-        } else if (!rafId) {
-          rafId = requestAnimationFrame(renderLoop);
-        }
-      }
-
-      window.addEventListener('scroll', () => onScroll(false), { passive: true });
-      window.addEventListener('resize', () => onScroll(true), { passive: true });
-      window.addEventListener('load', () => onScroll(true), { passive: true });
-      onScroll(true);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      window.addEventListener('load', onScroll, { passive: true });
+      onScroll();
     })();
 /* ══════════════════════════════════════════════════════
        EXPERIENCE SECTION — Single Continuous Path & Traveling Dot
