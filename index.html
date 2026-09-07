@@ -1629,14 +1629,15 @@
     /* ══════════════════════════════════════════════════════
        STATEMENT DOORS & SCALING CARD SECTION (Bhhavesh Style)
        - Instrument Sans & Inter typography (exact match to bhhaveshmd.framer.website)
-       - Zero rectangle at start (0% scroll)
-       - Smooth proportional scaling from 0% to full viewport at 90%
-       - Text appears inside rectangle ONLY AFTER rectangle has arrived
-       - Doors glide outward off-screen as card expands
+       - Zero rectangle at start: 0% scroll -> 0.0000 scale
+       - Opening: 70% scroll -> 0.7000 scale
+       - Full Viewport: 90% scroll -> 1.0000 scale (100% fully open)
+       - Quote/text remains completely hidden during opening
+       - Only after rectangle is 100% open, text reveals with subtle fade-in
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
-      height: 185vh;
+      height: 190vh;
       background: var(--color-bg);
     }
 
@@ -1707,7 +1708,7 @@
 
     @media (max-width: 767px) {
       .statement-doors {
-        height: 170vh;
+        height: 175vh;
         --page-padding-x: clamp(16px, 5vw, 24px);
       }
       .doors-panel--left {
@@ -1735,7 +1736,7 @@
       align-items: center;
       justify-content: center;
       pointer-events: none;
-      z-index: 15;
+      z-index: 5;
     }
 
     .statement-card {
@@ -1763,8 +1764,10 @@
       pointer-events: none;
       background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.08) 0%, transparent 75%);
       opacity: var(--statement-opacity, 0);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    /* Statement Text Container — completely hidden during opening, subtle fade-in when 100% open */
     .statement-card__inner {
       position: relative;
       z-index: 2;
@@ -1777,9 +1780,17 @@
       align-items: center;
       justify-content: center;
       opacity: var(--statement-opacity, 0);
-      transform: scale(var(--statement-scale, 0.96));
+      transform: translateY(var(--statement-translate-y, 16px)) scale(var(--statement-scale, 0.98));
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: opacity, transform;
       pointer-events: none;
+    }
+
+    .statement-card__inner.is-revealed {
+      --statement-opacity: 1;
+      --statement-translate-y: 0px;
+      --statement-scale: 1;
+      pointer-events: auto;
     }
 
     .statement-card__badge {
@@ -3998,9 +4009,13 @@
 
             /* ══════════════════════════════════════════════════════
        STATEMENT DOORS & SCALING CARD ENGINE
-       - Start state (0%): Zero box, pure typography
-       - Scales smoothly and continuously to full viewport at 90% scroll
-       - Text appears inside rectangle ONLY AFTER rectangle has arrived
+       - scroll state specification:
+           start (0%) -> 0.0000
+           opening (70%) -> 0.7000
+           full viewport (90%) -> 1.0000
+       - Text inside remains 100% COMPLETELY HIDDEN while opening
+       - Only after rectangle reaches 100% full open (at 90% scroll),
+         text reveals with subtle fade-in animation
        - Doors glide outward smoothly off-screen as card expands
        - Direct 120fps hardware ticking for buttery responsiveness
        ══════════════════════════════════════════════════════ */
@@ -4017,9 +4032,24 @@
         return Math.max(0, Math.min(1, v));
       }
 
-      // Smoothstep polynomial (3t^2 - 2t^3): continuous 1st derivative, zero jerk
-      function smoothCurve(t) {
-        return t * t * (3 - 2 * t);
+      // Exact scroll state curve:
+      // start (0%) -> 0.0000
+      // opening (70%) -> 0.7000
+      // full viewport (90%) -> 1.0000
+      // holds 1.0000 for progress >= 0.90
+      function getRectangleScale(progress) {
+        const p = clamp01(progress);
+        if (p <= 0.001) return 0;
+        if (p >= 0.90) return 1;
+        if (p <= 0.70) {
+          const u = p / 0.70;
+          // Hermite curve: s(0)=0, s(1)=0.70, matching slope at 0.70 of 1.25
+          return 0.70 * (-0.75 * Math.pow(u, 3) + 1.75 * Math.pow(u, 2));
+        } else {
+          const v = (p - 0.70) / 0.20;
+          // Hermite curve: s(0)=0.70, s(1)=1.00, matching slope at 0.70 of 1.25, zero slope at 0.90
+          return 0.70 + 0.25 * v + 0.40 * Math.pow(v, 2) - 0.35 * Math.pow(v, 3);
+        }
       }
 
       let ticking = false;
@@ -4028,9 +4058,9 @@
         const vpW = window.innerWidth;
         const isMobile = vpW < 768;
 
-        // ── Phase 1: Clean Start & Continuous Scaling to 90% Full Viewport ──
-        // At start (0%): completely clean canvas, zero rectangle
-        if (progress <= 0.01) {
+        // ── Phase 1: Clean Start State (0% Scroll) ──
+        // Zero rectangle at start, doors in natural resting position
+        if (progress <= 0.001) {
           if (card) {
             card.style.setProperty('--card-scale', '0');
             card.style.setProperty('--card-opacity', '0');
@@ -4038,7 +4068,9 @@
           }
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-scale', '0.96');
+            cardInner.style.setProperty('--statement-translate-y', '16px');
+            cardInner.style.setProperty('--statement-scale', '0.98');
+            cardInner.classList.remove('is-revealed');
           }
           if (leftPanel) {
             leftPanel.style.transform = 'translate3d(0px, 0, 0)';
@@ -4051,11 +4083,10 @@
           return;
         }
 
-        // User requirement: Start (0%) to Full Viewport (90%)
-        const scaleProgress = clamp01(progress / 0.90);
-        const currentScale = smoothCurve(scaleProgress);
-        const cardOpacity = clamp01(scaleProgress / 0.08);
-        const borderFade = 1 - clamp01((scaleProgress - 0.75) / 0.20);
+        // ── Phase 2: Rectangle Aperture Scaling (0% -> 0.0000, 70% -> 0.7000, 90% -> 1.0000) ──
+        const currentScale = getRectangleScale(progress);
+        const cardOpacity = clamp01(progress / 0.05);
+        const borderFade = 1 - clamp01((progress - 0.70) / 0.20);
         const borderOpacity = 0.08 * cardOpacity * borderFade;
 
         if (card) {
@@ -4064,13 +4095,13 @@
           card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
         }
 
-        // ── Phase 2: Doors Displace Outward Smoothly ──
-        const doorProgress = clamp01(scaleProgress / 0.70);
-        const doorEase = smoothCurve(doorProgress);
-        const maxShift = isMobile ? (vpW * 0.58) : Math.min(vpW * 0.60, 850);
+        // Doors glide outward smoothly off-screen as card expands
+        const doorProgress = clamp01(progress / 0.65);
+        const doorEase = doorProgress * doorProgress * (3 - 2 * doorProgress);
+        const maxShift = isMobile ? (vpW * 0.60) : Math.min(vpW * 0.65, 900);
         const leftX = -doorEase * maxShift;
         const rightX = doorEase * maxShift;
-        const textOpacity = clamp01(1 - (progress - 0.10) / 0.45);
+        const textOpacity = clamp01(1 - progress / 0.45);
 
         if (leftPanel) {
           leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
@@ -4081,22 +4112,24 @@
           rightPanel.style.opacity = textOpacity.toFixed(3);
         }
 
-        // ── Phase 3: Text Appears ONLY AFTER Rectangle Has Arrived ──
-        // Rectangle expands first (0% - 72%). Then text appears inside (72% - 92%).
-        if (progress > 0.72) {
-          const textProgress = clamp01((progress - 0.72) / 0.20);
-          const textEase = smoothCurve(textProgress);
-          const statementOpacity = textEase;
-          const statementScale = 0.96 + textEase * 0.04;
-
+        // ── Phase 3: Quote / Text Reveal ──
+        // Strict requirement: The quote/text inside MUST remain completely hidden while opening.
+        // Only after rectangle reaches 100% full open (at 90% scroll) and opening is completely finished,
+        // reveal the text inside with a subtle fade-in animation.
+        // Do not show, fade, or reveal any part of the text before rectangle is fully open.
+        if (progress >= 0.90) {
           if (cardInner) {
-            cardInner.style.setProperty('--statement-opacity', statementOpacity.toFixed(3));
-            cardInner.style.setProperty('--statement-scale', statementScale.toFixed(3));
+            cardInner.style.setProperty('--statement-opacity', '1');
+            cardInner.style.setProperty('--statement-translate-y', '0px');
+            cardInner.style.setProperty('--statement-scale', '1');
+            cardInner.classList.add('is-revealed');
           }
         } else {
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-scale', '0.96');
+            cardInner.style.setProperty('--statement-translate-y', '16px');
+            cardInner.style.setProperty('--statement-scale', '0.98');
+            cardInner.classList.remove('is-revealed');
           }
         }
       }
