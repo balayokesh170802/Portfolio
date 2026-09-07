@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Pre-render theme check to prevent flash of wrong theme -->
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('portfolio_theme');
+        if (savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BALAYOKESH — Portfolio</title>
@@ -2642,6 +2656,334 @@
         margin-top: 48px;
       }
     }
+  
+    /* ── Light Mode System ──────────────────────────────── */
+    html[data-theme="light"] {
+      --color-bg: #f7f6f2;
+      --color-fg: #141413;
+      --color-fg-muted: #6e6d69;
+      --color-accent: #8a7864;
+      --color-fg-hover: #e26d5c;
+    }
+
+    html[data-theme="light"] body {
+      background-color: var(--color-bg);
+      color: var(--color-fg);
+    }
+
+    html[data-theme="light"] body::before {
+      opacity: 0.035;
+      filter: invert(1);
+    }
+
+    html[data-theme="light"] .header {
+      background-color: rgba(247, 246, 242, 0.92);
+      border-bottom: 1px solid rgba(20, 20, 19, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    html[data-theme="light"] .header__nav {
+      background: rgba(247, 246, 242, 0.98);
+    }
+
+    html[data-theme="light"] .menu-toggle span {
+      background: var(--color-fg);
+    }
+
+    /* Hero Light Mode */
+    html[data-theme="light"] .hero__status {
+      color: #55534e;
+    }
+
+    html[data-theme="light"] .hero__desc {
+      color: #4a4844;
+    }
+
+    html[data-theme="light"] .hero__btn--primary {
+      background: #141413;
+      color: #ffffff;
+      border-color: #141413;
+    }
+
+    html[data-theme="light"] .hero__btn--secondary {
+      color: #141413;
+      border-color: rgba(20, 20, 19, 0.2);
+      background: rgba(20, 20, 19, 0.03);
+    }
+
+    html[data-theme="light"] .info-col__title {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .info-col__text {
+      color: #6e6d69;
+    }
+
+    html[data-theme="light"] .hero__bottom-bar {
+      border-top: 1px solid rgba(20, 20, 19, 0.08);
+    }
+
+    /* Selected Works Light Mode */
+    html[data-theme="light"] .works {
+      background: #f7f6f2;
+    }
+
+    html[data-theme="light"] .works__left-line,
+    html[data-theme="light"] .works__right-line {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .works__project-container {
+      border: 1px solid rgba(20, 20, 19, 0.1);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.07);
+    }
+
+    html[data-theme="light"] .works__project-container.is-active:hover {
+      border-color: rgba(20, 20, 19, 0.25);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.12), 0 0 24px rgba(0, 0, 0, 0.04);
+    }
+
+    html[data-theme="light"] .works__project-overlay {
+      background: linear-gradient(
+        to top,
+        rgba(247, 246, 242, 0.96) 0%,
+        rgba(247, 246, 242, 0.78) 55%,
+        transparent 100%
+      );
+    }
+
+    html[data-theme="light"] .works__project-category {
+      color: #8a7864;
+    }
+
+    html[data-theme="light"] .works__project-title {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .works__project-desc {
+      color: #55534e;
+    }
+
+    html[data-theme="light"] .works__project-tag {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: rgba(20, 20, 19, 0.12);
+      color: #3c3b38;
+    }
+
+    html[data-theme="light"] .works__project-container.is-active:hover .works__project-tag {
+      border-color: rgba(20, 20, 19, 0.28);
+      color: #141413;
+    }
+
+    html[data-theme="light"] .works__project-placeholder--2 {
+      background:
+        radial-gradient(ellipse 50% 60% at 50% 40%, rgba(88, 130, 180, 0.14) 0%, transparent 70%),
+        linear-gradient(160deg, #e4e7ec 0%, #d8dce2 100%);
+    }
+
+    html[data-theme="light"] .works__project-placeholder--3 {
+      background: #eae8e3;
+    }
+
+    /* Experience Light Mode */
+    html[data-theme="light"] .experience {
+      background: #f2f0eb;
+    }
+
+    html[data-theme="light"] .experience__sticky {
+      background: #f2f0eb;
+      background-image: radial-gradient(circle at 65% 50%, rgba(138, 120, 100, 0.06) 0%, transparent 70%);
+    }
+
+    html[data-theme="light"] .experience__heading {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .timeline-curve {
+      stroke: rgba(20, 20, 19, 0.2);
+    }
+
+    html[data-theme="light"] .timeline-vertical-line {
+      stroke: rgba(20, 20, 19, 0.15);
+    }
+
+    html[data-theme="light"] .timeline-node-base {
+      fill: #f2f0eb;
+      stroke: rgba(20, 20, 19, 0.35);
+    }
+
+    html[data-theme="light"] .timeline-node-inner {
+      fill: rgba(20, 20, 19, 0.35);
+    }
+
+    html[data-theme="light"] .timeline-node-group.is-active .timeline-node-base {
+      stroke: #8a7864;
+      fill: rgba(138, 120, 100, 0.15);
+    }
+
+    html[data-theme="light"] .timeline-node-group.is-active .timeline-node-inner {
+      fill: #8a7864;
+    }
+
+    html[data-theme="light"] .timeline-node-group.is-passed .timeline-node-base {
+      stroke: rgba(138, 120, 100, 0.6);
+      fill: #f2f0eb;
+    }
+
+    html[data-theme="light"] .timeline-node-group.is-passed .timeline-node-inner {
+      fill: rgba(138, 120, 100, 0.6);
+    }
+
+    html[data-theme="light"] .exp-card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(20, 20, 19, 0.1);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06);
+    }
+
+    html[data-theme="light"] .exp-card__role {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .exp-card__company {
+      color: #8a7864;
+    }
+
+    html[data-theme="light"] .exp-card__desc {
+      color: #4a4844;
+    }
+
+    html[data-theme="light"] .exp-tag {
+      background: rgba(20, 20, 19, 0.04);
+      border: 1px solid rgba(20, 20, 19, 0.1);
+      color: #3c3b38;
+    }
+
+    /* Contact Light Mode */
+    html[data-theme="light"] .section-contact {
+      background: #f7f6f2;
+    }
+
+    html[data-theme="light"] .contact__heading {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .contact__subheading {
+      color: #6e6d69;
+    }
+
+    html[data-theme="light"] .contact__desc-lead {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .contact__desc-body {
+      color: #55534e;
+    }
+
+    html[data-theme="light"] .contact__details {
+      border-top: 1px solid rgba(20, 20, 19, 0.08);
+    }
+
+    html[data-theme="light"] .contact__detail-link {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .contact__footer {
+      border-top: 1px solid rgba(20, 20, 19, 0.08);
+    }
+
+    /* ── Floating Theme Switcher Button ─────────────────── */
+    .theme-toggle-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(18, 18, 18, 0.85);
+      border: 1px solid rgba(232, 230, 227, 0.18);
+      color: #e8e6e3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.3s ease,
+                  color 0.3s ease,
+                  background 0.35s ease,
+                  box-shadow 0.35s ease;
+      outline: none;
+      user-select: none;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: #e26d5c;
+      color: #e26d5c;
+      transform: translateY(-3px) scale(1.06);
+      box-shadow: 0 12px 36px rgba(226, 109, 92, 0.28);
+    }
+
+    .theme-toggle-btn:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    .theme-icon {
+      position: absolute;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.35s ease;
+    }
+
+    html[data-theme="dark"] .theme-icon--moon,
+    :root:not([data-theme="light"]) .theme-icon--moon {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+
+    html[data-theme="dark"] .theme-icon--sun,
+    :root:not([data-theme="light"]) .theme-icon--sun {
+      opacity: 0;
+      transform: rotate(90deg) scale(0.4);
+      pointer-events: none;
+    }
+
+    html[data-theme="light"] .theme-toggle-btn {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(20, 20, 19, 0.14);
+      color: #141413;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    html[data-theme="light"] .theme-toggle-btn:hover {
+      border-color: #e26d5c;
+      color: #e26d5c;
+      box-shadow: 0 12px 36px rgba(226, 109, 92, 0.25);
+    }
+
+    html[data-theme="light"] .theme-icon--sun {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+
+    html[data-theme="light"] .theme-icon--moon {
+      opacity: 0;
+      transform: rotate(-90deg) scale(0.4);
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      .theme-toggle-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+      }
+    }
+
+
   </style>
 </head>
 <body class="intro">
@@ -4097,10 +4439,12 @@
       }
 
       function drawGrid() {
+        window.__redrawGrid = drawGrid;
         ctx.clearRect(0, 0, width, height);
 
         // Thin, subtle, low-contrast dark line style blending into the black background
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        ctx.strokeStyle = isLight ? 'rgba(20, 20, 19, 0.06)' : 'rgba(255, 255, 255, 0.04)';
         ctx.lineWidth = 1;
 
         // Draw horizontal smooth curves across rows
@@ -4213,6 +4557,64 @@
       }, { passive: true });
 
       resize();
+    })();
+  </script>
+
+
+
+  <!-- ─── Floating Theme Switcher Button (Bottom-Right) ─── -->
+  <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle light and dark mode" title="Toggle theme">
+    <svg class="theme-icon theme-icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg class="theme-icon theme-icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </button>
+
+
+  <!-- ─── Theme Switcher JavaScript ─── -->
+  <script>
+    (function() {
+      const toggleBtn = document.getElementById('theme-toggle-btn');
+      if (!toggleBtn) return;
+
+      function getEffectiveTheme() {
+        return document.documentElement.getAttribute('data-theme') || 'dark';
+      }
+
+      function updateButtonState(theme) {
+        const isLight = theme === 'light';
+        toggleBtn.setAttribute('aria-label', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+        toggleBtn.setAttribute('title', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+      }
+
+      toggleBtn.addEventListener('click', function() {
+        const currentTheme = getEffectiveTheme();
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        try {
+          localStorage.setItem('portfolio_theme', newTheme);
+        } catch (e) {}
+
+        updateButtonState(newTheme);
+
+        if (typeof window.__redrawGrid === 'function') {
+          window.__redrawGrid();
+        }
+      });
+
+      // Initialize button title/aria
+      updateButtonState(getEffectiveTheme());
     })();
   </script>
 
