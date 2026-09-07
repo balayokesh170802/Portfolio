@@ -61,7 +61,7 @@
       --color-bg: #0a0a0a;
       --color-fg: #e8e6e3;
       --color-fg-muted: #6b6b6b;
-      --color-fg-hover: #ffffff;
+      --color-fg-hover: #e26d5c;
       --color-accent: #c4b5a0;
       --font-primary: 'Instrument Sans', 'Inter', -apple-system, sans-serif;
       --header-height: 72px;
@@ -460,7 +460,7 @@
       left: 0;
       width: 0;
       height: 1px;
-      background: var(--color-accent);
+      background: #e26d5c;
       transition: width 0.5s var(--ease-out-expo);
     }
 
@@ -951,9 +951,10 @@
     }
 
     .hero__btn--primary:hover {
-      background: var(--color-fg);
+      background: #e26d5c;
       color: var(--color-bg);
-      border-color: var(--color-fg);
+      border-color: #e26d5c;
+      box-shadow: 0 8px 24px rgba(226, 109, 92, 0.35);
       transform: translateY(-2px);
     }
 
@@ -974,8 +975,8 @@
 
     .hero__btn--secondary:hover {
       color: var(--color-fg-hover);
-      border-color: rgba(232, 230, 227, 0.4);
-      background: rgba(232, 230, 227, 0.05);
+      border-color: #e26d5c;
+      background: rgba(226, 109, 92, 0.08);
       transform: translateY(-2px);
     }
 
@@ -1150,7 +1151,7 @@
 
       .header__nav .nav-link:hover,
       .header__nav .nav-link:active {
-        color: var(--color-fg);
+        color: #e26d5c;
       }
 
       /* Mobile Menu Items Order: EXPERIENCE, PROJECTS, CONTACT */
@@ -1717,8 +1718,8 @@
     }
 
     .works__project-container.is-active:hover {
-      border-color: rgba(255, 255, 255, 0.22);
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 24px rgba(255, 255, 255, 0.04);
+      border-color: rgba(226, 109, 92, 0.5);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 28px rgba(226, 109, 92, 0.18);
     }
 
     .works__project-container--1 { z-index: 10; }
@@ -1853,8 +1854,8 @@
     }
 
     .works__project-container.is-active:hover .works__project-tag {
-      border-color: rgba(232, 230, 227, 0.26);
-      color: rgba(232, 230, 227, 0.85);
+      border-color: rgba(226, 109, 92, 0.45);
+      color: #e26d5c;
     }
 
     /* Responsive: Selected Works */
@@ -2437,9 +2438,9 @@
     }
 
     .contact__cta-btn:hover {
-      background: var(--color-accent);
+      background: #e26d5c;
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(196, 181, 160, 0.2);
+      box-shadow: 0 12px 32px rgba(226, 109, 92, 0.35);
     }
 
     .contact__cta-arrow {
@@ -2517,7 +2518,7 @@
     }
 
     .contact__detail-link:hover {
-      color: var(--color-accent);
+      color: #e26d5c;
     }
 
     .contact__detail-link--arrow {
