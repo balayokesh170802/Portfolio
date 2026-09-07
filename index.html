@@ -1628,16 +1628,15 @@
 
     /* ══════════════════════════════════════════════════════
        STATEMENT DOORS & SCALING CARD SECTION (Bhhavesh Style)
-       - Top-left & Bottom-right balanced editorial typography
-       - Zero rectangle at start (pure typography and clean space)
-       - Reduced scroll distance (175vh) for fast, effortless opening
-       - Continuous smoothstep motion curve with zero harsh jumps
-       - Sharp 16:9 widescreen aperture expanding to 100vw × 100vh
-       - Direct 120fps rAF ticking for lag-free buttery smoothness
+       - Instrument Sans & Inter typography (exact match to bhhaveshmd.framer.website)
+       - Zero rectangle at start (0% scroll)
+       - Smooth proportional scaling from 0% to full viewport at 90%
+       - Text appears inside rectangle ONLY AFTER rectangle has arrived
+       - Doors glide outward off-screen as card expands
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
-      height: 175vh;
+      height: 185vh;
       background: var(--color-bg);
     }
 
@@ -1655,7 +1654,7 @@
       justify-content: center;
     }
 
-    /* Left & Right Door Panels (Staggered Diagonally like Bhhavesh) */
+    /* Left & Right Door Panels (Diagonal Editorial Framing) */
     .doors-panel {
       position: absolute;
       will-change: transform, opacity;
@@ -1679,15 +1678,15 @@
       align-items: flex-end;
     }
 
-    /* Symmetrical typography with matching sizing, line-height & weight */
+    /* Typography: Instrument Sans (Exact font used in Bhhavesh reference) */
     .doors-line {
       display: block;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 600;
-      color: var(--color-fg);
+      font-family: 'Instrument Sans', sans-serif;
+      font-weight: 500;
+      color: #f7edd8;
       font-size: clamp(2.4rem, 5.2vw, 4.8rem);
-      line-height: 1.08;
-      letter-spacing: -0.03em;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
       white-space: nowrap;
     }
 
@@ -1708,7 +1707,7 @@
 
     @media (max-width: 767px) {
       .statement-doors {
-        height: 165vh;
+        height: 170vh;
         --page-padding-x: clamp(16px, 5vw, 24px);
       }
       .doors-panel--left {
@@ -1723,7 +1722,7 @@
       }
     }
 
-    /* Center Scaling Card Container (Widescreen 16:9 Viewport Canvas) */
+    /* Center Scaling Card Container (Widescreen Viewport Geometry) */
     .statement-card-wrap {
       position: absolute;
       top: 50%;
@@ -1778,14 +1777,14 @@
       align-items: center;
       justify-content: center;
       opacity: var(--statement-opacity, 0);
-      transform: scale(var(--statement-scale, 0.95));
+      transform: scale(var(--statement-scale, 0.96));
       will-change: opacity, transform;
       pointer-events: none;
     }
 
     .statement-card__badge {
       display: inline-block;
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
       font-size: clamp(0.66rem, 0.8vw, 0.78rem);
       font-weight: 600;
       letter-spacing: 0.18em;
@@ -1795,17 +1794,17 @@
     }
 
     .statement-card__headline {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
+      font-family: 'Instrument Sans', sans-serif;
+      font-weight: 500;
       font-size: clamp(1.5rem, 3.2vw, 2.75rem);
       line-height: 1.18;
       letter-spacing: -0.02em;
-      color: var(--color-fg);
+      color: #f7edd8;
       margin: 0 0 clamp(12px, 1.8vh, 18px) 0;
     }
 
     .statement-card__subtitle {
-      font-family: var(--font-primary);
+      font-family: 'Inter', sans-serif;
       font-size: clamp(0.92rem, 1.25vw, 1.2rem);
       line-height: 1.5;
       color: var(--color-fg-muted);
@@ -1828,14 +1827,14 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Instrument Sans', sans-serif;
       font-size: clamp(0.7rem, 0.82vw, 0.8rem);
       letter-spacing: 0.14em;
       text-transform: uppercase;
     }
 
     .statement-card__author .author-name {
-      font-weight: 700;
+      font-weight: 600;
       color: var(--color-accent);
     }
 
@@ -3998,13 +3997,12 @@
     })();
 
             /* ══════════════════════════════════════════════════════
-       STATEMENT DOORS & SCALING CARD ENGINE (Smooth & Fast Open)
-       - Reduced scroll travel (175vh) for effortless, natural opening
-       - Zero rectangle at start (pure typography, vast negative space)
-       - One continuous smoothstep curve: zero jerk, zero hard bumps
-       - Direct 120fps hardware ticking for buttery responsive motion
+       STATEMENT DOORS & SCALING CARD ENGINE
+       - Start state (0%): Zero box, pure typography
+       - Scales smoothly and continuously to full viewport at 90% scroll
+       - Text appears inside rectangle ONLY AFTER rectangle has arrived
        - Doors glide outward smoothly off-screen as card expands
-       - Statement reveals serenely inside spacious canvas
+       - Direct 120fps hardware ticking for buttery responsiveness
        ══════════════════════════════════════════════════════ */
     (function initStatementDoors() {
       const section = document.querySelector('.statement-doors');
@@ -4030,9 +4028,9 @@
         const vpW = window.innerWidth;
         const isMobile = vpW < 768;
 
-        // ── Phase 1: Clean Start & Smooth Proportional Aperture ──
-        // At start (progress <= 0.02): completely clean canvas, zero rectangle
-        if (progress <= 0.02) {
+        // ── Phase 1: Clean Start & Continuous Scaling to 90% Full Viewport ──
+        // At start (0%): completely clean canvas, zero rectangle
+        if (progress <= 0.01) {
           if (card) {
             card.style.setProperty('--card-scale', '0');
             card.style.setProperty('--card-opacity', '0');
@@ -4040,7 +4038,7 @@
           }
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-scale', '0.95');
+            cardInner.style.setProperty('--statement-scale', '0.96');
           }
           if (leftPanel) {
             leftPanel.style.transform = 'translate3d(0px, 0, 0)';
@@ -4053,28 +4051,26 @@
           return;
         }
 
-        // Single unified, continuous progression (0.02 to 0.78)
-        const u = clamp01((progress - 0.02) / 0.76);
-        const easedScale = smoothCurve(u);
-
-        // Soft initial fade-in over the first 8% of motion
-        const cardOpacity = clamp01(u / 0.08);
-        const borderFade = 1 - clamp01((u - 0.70) / 0.20);
+        // User requirement: Start (0%) to Full Viewport (90%)
+        const scaleProgress = clamp01(progress / 0.90);
+        const currentScale = smoothCurve(scaleProgress);
+        const cardOpacity = clamp01(scaleProgress / 0.08);
+        const borderFade = 1 - clamp01((scaleProgress - 0.75) / 0.20);
         const borderOpacity = 0.08 * cardOpacity * borderFade;
 
         if (card) {
-          card.style.setProperty('--card-scale', easedScale.toFixed(4));
+          card.style.setProperty('--card-scale', currentScale.toFixed(4));
           card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
           card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
         }
 
         // ── Phase 2: Doors Displace Outward Smoothly ──
-        const doorProgress = clamp01(u / 0.68);
+        const doorProgress = clamp01(scaleProgress / 0.70);
         const doorEase = smoothCurve(doorProgress);
         const maxShift = isMobile ? (vpW * 0.58) : Math.min(vpW * 0.60, 850);
         const leftX = -doorEase * maxShift;
         const rightX = doorEase * maxShift;
-        const textOpacity = clamp01(1 - u * 1.5);
+        const textOpacity = clamp01(1 - (progress - 0.10) / 0.45);
 
         if (leftPanel) {
           leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
@@ -4085,12 +4081,13 @@
           rightPanel.style.opacity = textOpacity.toFixed(3);
         }
 
-        // ── Phase 3: Statement Reveals Inside Spacious Canvas ──
-        if (u > 0.32) {
-          const statementU = clamp01((u - 0.32) / 0.40);
-          const statementEase = smoothCurve(statementU);
-          const statementOpacity = statementEase;
-          const statementScale = 0.95 + statementEase * 0.05;
+        // ── Phase 3: Text Appears ONLY AFTER Rectangle Has Arrived ──
+        // Rectangle expands first (0% - 72%). Then text appears inside (72% - 92%).
+        if (progress > 0.72) {
+          const textProgress = clamp01((progress - 0.72) / 0.20);
+          const textEase = smoothCurve(textProgress);
+          const statementOpacity = textEase;
+          const statementScale = 0.96 + textEase * 0.04;
 
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', statementOpacity.toFixed(3));
@@ -4099,7 +4096,7 @@
         } else {
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-scale', '0.95');
+            cardInner.style.setProperty('--statement-scale', '0.96');
           }
         }
       }
