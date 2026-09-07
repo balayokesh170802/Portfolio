@@ -65,7 +65,7 @@
       --color-accent: #c4b5a0;
       --font-primary: 'Instrument Sans', 'Inter', -apple-system, sans-serif;
       --header-height: 72px;
-      --page-padding-x: clamp(24px, 5vw, 72px);
+      --page-padding-x: 15vw;
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -73,12 +73,14 @@
       font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
     body {
       font-family: var(--font-primary);
       background-color: var(--color-bg);
       color: var(--color-fg);
+      overflow-x: hidden;
     }
 
     /* Lock scroll during intro */
@@ -262,7 +264,7 @@
       z-index: 3;
       width: 100%;
       max-width: 1680px;
-      padding: 0 clamp(16px, 3vw, 48px);
+      padding: 0 var(--page-padding-x);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1042,7 +1044,7 @@
     @media (max-width: 960px) {
       .hero__bottom-grid {
         grid-template-columns: repeat(2, 1fr);
-        padding: 0 clamp(20px, 4vw, 40px);
+        padding: 0 var(--page-padding-x);
       }
       .info-col:first-child {
         padding-left: clamp(16px, 2vw, 28px);
@@ -1063,7 +1065,6 @@
     @media (max-width: 768px) {
       :root {
         --header-height: 58px;
-        --page-padding-x: clamp(16px, 4.5vw, 24px);
       }
 
       /* ── Mobile Header Single Row Layout ──────────────── */
@@ -1219,10 +1220,10 @@
 
       /* Heading: bold, perfectly balanced 4-line composition */
       .hero__heading {
-        font-size: clamp(1.85rem, 7.6vw, 2.45rem);
-        line-height: 1.1;
+        font-size: clamp(1.4rem, 5.6vw, 2.1rem);
+        line-height: 1.15;
         letter-spacing: -0.03em;
-        margin: 0 0 clamp(22px, 3.6vh, 32px) 0;
+        margin: 0 0 clamp(20px, 3.2vh, 28px) 0;
       }
 
       .hero__line {
@@ -1232,17 +1233,19 @@
       .hero__phrase {
         display: block;
         margin-right: 0;
-        white-space: nowrap;
+        white-space: normal;
+        word-break: break-word;
       }
 
-      /* CTA Buttons: side-by-side on standard mobile */
+      /* CTA Buttons: responsive layout on mobile */
       .hero__actions {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         align-items: center;
         gap: 10px;
         width: 100%;
-        max-width: 380px;
+        max-width: 100%;
       }
 
       .hero__btn-wrap {
@@ -1616,7 +1619,7 @@
        ══════════════════════════════════════════════════════ */
     .works {
       position: relative;
-      height: 380vh;
+      height: 260vh;
       background: var(--color-bg);
     }
 
@@ -1647,7 +1650,7 @@
     .works__left {
       position: absolute;
       top: clamp(14%, 16vh, 20%);
-      left: clamp(32px, 7vw, 120px);
+      left: var(--page-padding-x);
       will-change: transform, opacity;
     }
 
@@ -1673,7 +1676,7 @@
     .works__right {
       position: absolute;
       bottom: clamp(10%, 14vh, 18%);
-      right: clamp(32px, 7vw, 120px);
+      right: var(--page-padding-x);
       text-align: right;
       will-change: transform, opacity;
     }
@@ -1688,43 +1691,76 @@
       color: #ffffff;
     }
 
-    /* Project card container — independent clickable card component */
-    .works__project-container {
+    /* Unified Project Showcase Grid — 1 row 2 projects (2x2 grid for 4 projects) */
+    .works__track {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, calc(-50% + 16px)) scale(0.92);
-      transform-origin: center center;
-      width: clamp(340px, 64vw, 1000px);
-      aspect-ratio: 16 / 10;
+      transform: translate(-50%, calc(-50% + 28px)) scale(0.94);
+      width: calc(100vw - (2 * var(--page-padding-x)));
+      max-width: calc(100vw - (2 * var(--page-padding-x)));
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(14px, 1.8vw, 24px);
+      will-change: transform, opacity;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Project card container — 2 per row */
+    .works__project-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9.2;
+      max-height: clamp(180px, 32vh, 320px);
       border-radius: 12px;
       overflow: hidden;
-      opacity: 0;
-      will-change: transform, opacity;
+      opacity: 1;
+      will-change: transform;
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.08);
       text-decoration: none;
       color: inherit;
       display: block;
-      pointer-events: none; /* Background cards do not accidentally receive clicks */
-      cursor: default;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    /* Active / foreground project card */
-    .works__project-container.is-active {
-      pointer-events: auto;
       cursor: pointer;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .works__project-container.is-active:hover {
-      border-color: rgba(255, 255, 255, 0.22);
+    .works__project-container:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.24);
       box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 24px rgba(255, 255, 255, 0.04);
     }
 
-    .works__project-container--1 { z-index: 10; }
-    .works__project-container--2 { z-index: 11; }
-    .works__project-container--3 { z-index: 12; }
+    @media (max-width: 768px) {
+      .works__track {
+        grid-template-columns: repeat(2, 1fr);
+        width: calc(100vw - (2 * var(--page-padding-x)));
+        max-width: calc(100vw - (2 * var(--page-padding-x)));
+        padding: 0;
+        gap: 12px;
+      }
+      .works__project-container {
+        aspect-ratio: 16 / 10;
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .works__track {
+        grid-template-columns: 1fr;
+        width: calc(100vw - (2 * var(--page-padding-x)));
+        max-width: calc(100vw - (2 * var(--page-padding-x)));
+        padding: 0;
+        gap: 12px;
+        max-height: 82vh;
+        overflow-y: auto;
+      }
+      .works__project-container {
+        aspect-ratio: 16 / 8.5;
+      }
+    }
 
     /* Placeholder visual variations for each project */
     .works__project-placeholder {
@@ -1744,6 +1780,12 @@
     }
 
     .works__project-placeholder--3 {
+      background:
+        radial-gradient(ellipse 50% 60% at 50% 40%, rgba(226, 109, 92, 0.12) 0%, transparent 70%),
+        linear-gradient(160deg, #1e1514 0%, #100c0c 100%);
+    }
+
+    .works__project-placeholder--4 {
       background: #111413;
       overflow: hidden;
     }
@@ -1761,7 +1803,7 @@
       object-position: center 36%;
     }
 
-    .works__project-container.is-active:hover .works__project-img {
+    .works__project-container:hover .works__project-img {
       transform: scale(1.04);
     }
 
@@ -1785,11 +1827,11 @@
       left: 0;
       right: 0;
       bottom: 0;
-      padding: clamp(20px, 3vw, 40px) clamp(20px, 3vw, 36px);
+      padding: clamp(14px, 2vw, 32px) clamp(16px, 2.2vw, 28px);
       background: linear-gradient(
         to top,
-        rgba(10, 10, 10, 0.95) 0%,
-        rgba(10, 10, 10, 0.7) 55%,
+        rgba(10, 10, 10, 0.96) 0%,
+        rgba(10, 10, 10, 0.72) 60%,
         transparent 100%
       );
       z-index: 2;
@@ -1798,52 +1840,57 @@
     .works__project-category {
       display: block;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.68rem, 0.85vw, 0.78rem);
+      font-size: clamp(0.62rem, 0.75vw, 0.74rem);
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: #8e8c88;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .works__project-title {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-      letter-spacing: 0.06em;
+      font-size: clamp(0.95rem, 1.35vw, 1.45rem);
+      line-height: 1.15;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--color-fg);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .works__project-desc {
       font-family: var(--font-primary);
       font-weight: 400;
-      font-size: clamp(0.8rem, 1vw, 0.95rem);
-      line-height: 1.6;
+      font-size: clamp(0.74rem, 0.88vw, 0.9rem);
+      line-height: 1.48;
       color: var(--color-fg-muted);
       max-width: 520px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .works__project-tags {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
-      margin-top: 14px;
+      gap: 6px;
+      margin-top: 10px;
     }
 
     .works__project-tag {
       display: inline-flex;
       align-items: center;
-      padding: 4px 9px;
+      padding: 3px 8px;
       border-radius: 4px;
       border: 1px solid rgba(232, 230, 227, 0.14);
       background: rgba(14, 14, 14, 0.65);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.62rem, 0.74vw, 0.7rem);
+      font-size: clamp(0.58rem, 0.68vw, 0.66rem);
       font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -1853,7 +1900,7 @@
       transition: border-color 0.25s ease, color 0.25s ease;
     }
 
-    .works__project-container.is-active:hover .works__project-tag {
+    .works__project-container:hover .works__project-tag {
       border-color: rgba(232, 230, 227, 0.26);
       color: rgba(232, 230, 227, 0.85);
     }
@@ -1862,12 +1909,12 @@
     @media (max-width: 768px) {
       .works__left {
         top: clamp(14%, 18vh, 22%);
-        left: clamp(20px, 5vw, 32px);
+        left: var(--page-padding-x);
       }
 
       .works__right {
         bottom: clamp(10%, 14vh, 18%);
-        right: clamp(20px, 5vw, 32px);
+        right: var(--page-padding-x);
       }
 
       .works__right-line {
@@ -1875,8 +1922,8 @@
       }
 
       .works__project-container {
-        width: clamp(280px, 86vw, 500px);
-        aspect-ratio: 4 / 3;
+        width: 100%;
+        aspect-ratio: 16 / 10;
       }
     }
 
@@ -1926,7 +1973,7 @@
     .experience__heading {
       position: absolute;
       top: calc(var(--header-height) + clamp(16px, 3vh, 32px));
-      left: clamp(28px, 6vw, 90px);
+      left: var(--page-padding-x);
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
       text-transform: uppercase;
@@ -2078,30 +2125,28 @@
 
     .experience__card {
       position: absolute;
-      width: clamp(280px, 30vw, 420px);
+      width: clamp(260px, 22vw, 360px);
       opacity: 0;
       pointer-events: none;
       padding-left: 20px;
       will-change: opacity, transform;
     }
 
-    /* 1. Left experience positioned further toward the left edge */
+    /* Initial desktop placements matching 15% margins (dynamically refined by JS in 1:1 pixels) */
     .experience__card--1 {
-      left: 9.72%;
-      top: calc(48.75% + 18px);
+      left: 15%;
+      top: calc(49% + 18px);
     }
 
-    /* 2. Center experience positioned comfortably in the middle */
     .experience__card--2 {
-      left: 43.05%;
-      top: calc(43.75% + 18px);
+      left: 42%;
+      top: calc(43% + 18px);
     }
 
-    /* 3. Right experience positioned further toward the right edge */
     .experience__card--3 {
-      left: 76.39%;
-      top: calc(48.12% + 18px);
-      width: clamp(250px, 20vw, 310px);
+      left: 68%;
+      right: auto;
+      top: calc(48% + 18px);
     }
 
     .experience__card.is-active {
@@ -2171,13 +2216,13 @@
       display: contents;
     }
 
-    /* Mobile Responsive Vertical Timeline (<= 768px) */
-    @media (max-width: 768px) {
+    /* Mobile & Tablet Responsive Vertical Timeline (<= 1024px) */
+    @media (max-width: 1024px) {
       .experience {
         position: relative;
         height: auto;
         min-height: auto;
-        padding: clamp(48px, 6vh, 64px) var(--page-padding-x) clamp(64px, 8vh, 88px);
+        padding: clamp(48px, 6vh, 80px) var(--page-padding-x) clamp(64px, 8vh, 96px);
         overflow-x: hidden;
         border-top: 1px solid rgba(232, 230, 227, 0.08);
       }
@@ -2201,7 +2246,7 @@
         position: relative;
         top: auto;
         left: auto;
-        font-size: clamp(2.2rem, 8vw, 3rem);
+        font-size: clamp(2.2rem, 6.5vw, 3.8rem);
         letter-spacing: -0.03em;
         line-height: 1;
         margin-bottom: clamp(36px, 5vh, 48px);
@@ -2218,7 +2263,7 @@
         display: none !important;
       }
 
-      /* Show mobile vertical SVG rail */
+      /* Show mobile & tablet vertical SVG rail */
       .experience__mobile-svg {
         display: block;
         position: absolute;
@@ -2236,7 +2281,7 @@
         inset: auto;
         display: flex;
         flex-direction: column;
-        gap: clamp(48px, 7vh, 68px);
+        gap: clamp(44px, 6vh, 64px);
         width: 100%;
         padding-left: 36px;
         box-sizing: border-box;
@@ -2248,7 +2293,7 @@
         right: auto !important;
         top: auto !important;
         width: 100% !important;
-        max-width: 100%;
+        max-width: 680px;
         padding-left: 0 !important;
         opacity: 0.55;
         transform: none !important;
@@ -2324,7 +2369,7 @@
       .experience__date {
         display: block;
         font-family: 'Space Grotesk', sans-serif;
-        font-size: clamp(0.72rem, 2.7vw, 0.8rem);
+        font-size: clamp(0.72rem, 2vw, 0.82rem);
         font-weight: 600;
         letter-spacing: 0.14em;
         text-transform: uppercase;
@@ -2343,7 +2388,7 @@
       }
 
       .experience__role {
-        font-size: clamp(1.25rem, 5vw, 1.6rem);
+        font-size: clamp(1.3rem, 4vw, 1.85rem);
         line-height: 1.15;
         margin: 0 0 10px 0;
         letter-spacing: -0.02em;
@@ -2351,10 +2396,11 @@
       }
 
       .experience__desc {
-        font-size: clamp(0.85rem, 3.4vw, 0.95rem);
+        font-size: clamp(0.88rem, 2.2vw, 1rem);
         line-height: 1.6;
         color: #a8a6a2;
         margin: 0;
+        max-width: 620px;
       }
     }
 
@@ -2807,51 +2853,70 @@
         </div>
       </div>
 
-      <!-- Project 01 Card (Clickable Component) -->
-      <a href="severna.html" class="works__project-container works__project-container--1" id="project-card-1" data-project="1" aria-label="Open Project 01: SEVERNA: BLOOD &amp; BETRAYAL">
-        <div class="works__project-placeholder works__project-placeholder--1">
-          <img src="severna-cover.jpg" alt="Severna: Blood &amp; Betrayal" class="works__project-img" loading="lazy" />
-        </div>
-        <div class="works__project-overlay">
-          <span class="works__project-category">GAME UI</span>
-          <h3 class="works__project-title">SEVERNA: BLOOD &amp; BETRAYAL</h3>
-          <p class="works__project-desc">Designing in-game UI widgets and interface elements that support gameplay interactions and help create a smoother player experience.</p>
-          <div class="works__project-tags">
-            <span class="works__project-tag">GAME UI WIDGETS</span>
-            <span class="works__project-tag">PC</span>
-          </div>
-        </div>
-      </a>
+      <!-- 2x2 Project Showcase Grid (1 Row = 2 Projects) -->
+      <div class="works__track" id="works-track">
 
-      <!-- Project 02 Card (Clickable Component) -->
-      <a href="professional-work.html" class="works__project-container works__project-container--2" id="project-card-2" data-project="2" aria-label="Open Project 02: DIGITAL EXPERIENCES, BUILT FOR REAL-WORLD USE.">
-        <div class="works__project-placeholder works__project-placeholder--2"></div>
-        <div class="works__project-overlay">
-          <span class="works__project-category">PROFESSIONAL WORK</span>
-          <h3 class="works__project-title">DIGITAL EXPERIENCES,<br>BUILT FOR REAL-WORLD USE.</h3>
-          <p class="works__project-desc">A collection of web experiences created as part of professional projects.</p>
-          <div class="works__project-tags">
-            <span class="works__project-tag">RESPONSIVE WEB</span>
-            <span class="works__project-tag">WEB</span>
+        <!-- Project 01 Card: SEVERNA -->
+        <a href="severna.html" class="works__project-container works__project-container--1" id="project-card-1" data-project="1" aria-label="Open Project 01: SEVERNA: BLOOD &amp; BETRAYAL">
+          <div class="works__project-placeholder works__project-placeholder--1">
+            <img src="severna-cover.jpg" alt="Severna: Blood &amp; Betrayal" class="works__project-img" loading="lazy" />
           </div>
-        </div>
-      </a>
+          <div class="works__project-overlay">
+            <span class="works__project-category">GAME UI</span>
+            <h3 class="works__project-title">SEVERNA: BLOOD &amp; BETRAYAL</h3>
+            <p class="works__project-desc">Designing in-game UI widgets and interface elements that support gameplay interactions.</p>
+            <div class="works__project-tags">
+              <span class="works__project-tag">GAME UI WIDGETS</span>
+              <span class="works__project-tag">PC</span>
+            </div>
+          </div>
+        </a>
 
-      <!-- Project 03 Card (Clickable Component) -->
-      <a href="personal-exploration.html" class="works__project-container works__project-container--3" id="project-card-3" data-project="3" aria-label="Open Project 03: EXPLORING IDEAS BEYOND THE BRIEF.">
-        <div class="works__project-placeholder works__project-placeholder--3">
-          <img src="personal-exploration.jpg" alt="Personal Exploration — Exploring Ideas Beyond the Brief" class="works__project-img" loading="lazy" />
-        </div>
-        <div class="works__project-overlay">
-          <span class="works__project-category">PERSONAL EXPLORATION</span>
-          <h3 class="works__project-title">EXPLORING IDEAS<br>BEYOND THE BRIEF.</h3>
-          <p class="works__project-desc">Self-initiated projects exploring different visual directions, interactions, and experiences.</p>
-          <div class="works__project-tags">
-            <span class="works__project-tag">WEB EXPLORATION</span>
-            <span class="works__project-tag">PERSONAL</span>
+        <!-- Project 02 Card: NYT WOLF GAMES -->
+        <a href="professional-work.html#panel-nyt" class="works__project-container works__project-container--2" id="project-card-2" data-project="2" aria-label="Open Project 02: NYT WOLF GAMES">
+          <div class="works__project-placeholder works__project-placeholder--2"></div>
+          <div class="works__project-overlay">
+            <span class="works__project-category">PROFESSIONAL WORK</span>
+            <h3 class="works__project-title">NYT WOLF GAMES</h3>
+            <p class="works__project-desc">Company website design for a game studio, featuring a clean, responsive layout and engaging studio showcase.</p>
+            <div class="works__project-tags">
+              <span class="works__project-tag">RESPONSIVE WEB</span>
+              <span class="works__project-tag">STUDIO SITE</span>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+
+        <!-- Project 03 Card: TEQBALL TAMILNADU -->
+        <a href="professional-work.html#panel-teqball" class="works__project-container works__project-container--3" id="project-card-3" data-project="3" aria-label="Open Project 03: TEQBALL TAMILNADU">
+          <div class="works__project-placeholder works__project-placeholder--3"></div>
+          <div class="works__project-overlay">
+            <span class="works__project-category">PROFESSIONAL WORK</span>
+            <h3 class="works__project-title">TEQBALL TAMILNADU</h3>
+            <p class="works__project-desc">Multi-page digital sports platform providing dynamic tournament schedules, rankings, and athlete profiles.</p>
+            <div class="works__project-tags">
+              <span class="works__project-tag">WEB DESIGN</span>
+              <span class="works__project-tag">SPORTS TECH</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Project 04 Card: PERSONAL EXPLORATION -->
+        <a href="personal-exploration.html" class="works__project-container works__project-container--4" id="project-card-4" data-project="4" aria-label="Open Project 04: EXPLORING IDEAS BEYOND THE BRIEF.">
+          <div class="works__project-placeholder works__project-placeholder--4">
+            <img src="personal-exploration.jpg" alt="Personal Exploration — Exploring Ideas Beyond the Brief" class="works__project-img" loading="lazy" />
+          </div>
+          <div class="works__project-overlay">
+            <span class="works__project-category">PERSONAL EXPLORATION</span>
+            <h3 class="works__project-title">EXPLORING IDEAS<br>BEYOND THE BRIEF.</h3>
+            <p class="works__project-desc">Self-initiated projects exploring different visual directions, interactions, and experimental interfaces.</p>
+            <div class="works__project-tags">
+              <span class="works__project-tag">WEB EXPLORATION</span>
+              <span class="works__project-tag">PERSONAL</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
 
     </div>
   </section>
@@ -2869,53 +2934,53 @@
       <div class="experience__stage">
 
         <!-- Responsive SVG holding curved timeline and vertical connector lines -->
-        <svg class="experience__svg" viewBox="0 0 1440 800" preserveAspectRatio="none">
+        <svg class="experience__svg" viewBox="0 0 1440 800">
           <!-- ONE single continuous smooth curved path spanning beyond both viewport edges -->
           <path id="experience-curve-path" class="timeline-curve"
-                d="M -80,398 C 0,398 70,390 140,390 C 332,390 428,350 620,350 C 812,350 908,385 1100,385 C 1240,385 1380,385 1520,385" />
+                d="M -40,398 C 60,398 138,390 216,390 C 400,390 460,350 648,350 C 836,350 892,385 1080,385 C 1220,385 1360,385 1520,385" />
 
           <!-- Vertical connector line 1 (Node 1 down to content) -->
           <line id="exp-line-1" class="timeline-vertical-line is-active"
-                x1="140" y1="390" x2="140" y2="640" />
+                x1="216" y1="390" x2="216" y2="640" />
 
           <!-- Vertical connector line 2 (Node 2 down to content) -->
           <line id="exp-line-2" class="timeline-vertical-line"
-                x1="620" y1="350" x2="620" y2="600" />
+                x1="648" y1="350" x2="648" y2="600" />
 
           <!-- Vertical connector line 3 (Node 3 down to content) -->
           <line id="exp-line-3" class="timeline-vertical-line"
-                x1="1100" y1="385" x2="1100" y2="635" />
+                x1="1080" y1="385" x2="1080" y2="635" />
 
-          <!-- Fixed Milestone Marker 01: Oct 2025 - Present (center: 140, 390) -->
+          <!-- Fixed Milestone Marker 01: Oct 2025 - Present (center: 216, 390) -->
           <g class="timeline-node-group timeline-node-group--1 is-active" data-node="1">
-            <text class="timeline-node-time" x="140" y="356">OCT 2025 — PRESENT</text>
-            <circle class="timeline-node-base" cx="140" cy="390" r="4.5"></circle>
-            <circle class="timeline-node-inner" cx="140" cy="390" r="1.8"></circle>
+            <text class="timeline-node-time" x="216" y="356">OCT 2025 — PRESENT</text>
+            <circle class="timeline-node-base" cx="216" cy="390" r="4.5"></circle>
+            <circle class="timeline-node-inner" cx="216" cy="390" r="1.8"></circle>
           </g>
 
-          <!-- Fixed Milestone Marker 02: Apr 2025 - Sep 2025 (center: 620, 350) -->
+          <!-- Fixed Milestone Marker 02: Apr 2025 - Sep 2025 (center: 648, 350) -->
           <g class="timeline-node-group timeline-node-group--2" data-node="2">
-            <text class="timeline-node-time" x="620" y="316">APR 2025 — SEP 2025</text>
-            <circle class="timeline-node-base" cx="620" cy="350" r="4.5"></circle>
-            <circle class="timeline-node-inner" cx="620" cy="350" r="1.8"></circle>
+            <text class="timeline-node-time" x="648" y="316">APR 2025 — SEP 2025</text>
+            <circle class="timeline-node-base" cx="648" cy="350" r="4.5"></circle>
+            <circle class="timeline-node-inner" cx="648" cy="350" r="1.8"></circle>
           </g>
 
-          <!-- Fixed Milestone Marker 03: Mar 2024 - Mar 2025 (center: 1100, 385) -->
+          <!-- Fixed Milestone Marker 03: Mar 2024 - Mar 2025 (center: 1080, 385) -->
           <g class="timeline-node-group timeline-node-group--3" data-node="3">
-            <text class="timeline-node-time" x="1100" y="351">MAR 2024 — MAR 2025</text>
-            <circle class="timeline-node-base" cx="1100" cy="385" r="4.5"></circle>
-            <circle class="timeline-node-inner" cx="1100" cy="385" r="1.8"></circle>
+            <text class="timeline-node-time" x="1080" y="351">MAR 2024 — MAR 2025</text>
+            <circle class="timeline-node-base" cx="1080" cy="385" r="4.5"></circle>
+            <circle class="timeline-node-inner" cx="1080" cy="385" r="1.8"></circle>
           </g>
 
           <!-- Single Traveling Glowing Active Dot centered precisely on the line -->
-          <g id="timeline-traveling-dot" class="timeline-traveling-dot" transform="translate(140, 390)">
+          <g id="timeline-traveling-dot" class="timeline-traveling-dot" transform="translate(216, 390)">
             <circle class="traveling-dot-glow" cx="0" cy="0" r="18"></circle>
             <circle class="traveling-dot-outer" cx="0" cy="0" r="8"></circle>
             <circle class="traveling-dot-core" cx="0" cy="0" r="5"></circle>
           </g>
         </svg>
 
-        <!-- Mobile Vertical Timeline Rail & Traveling Dot (<= 768px) -->
+        <!-- Mobile & Tablet Vertical Timeline Rail & Traveling Dot (<= 1024px) -->
         <svg class="experience__mobile-svg" aria-hidden="true">
           <line id="mobile-timeline-line" class="timeline-curve" x1="16" y1="0" x2="16" y2="100" />
           <g id="mobile-traveling-dot" class="timeline-traveling-dot" transform="translate(16, 0)">
@@ -3343,12 +3408,11 @@
     })();
 
     /* ══════════════════════════════════════════════════════
-       SELECTED WORKS — 3-Project Continuous Stacked Scroll
-       Phase 1 (0.00 → 0.30): Text opens apart + Project 01 revealed in center
-       Phase 2 (0.30 → 0.62): Project 01 moves left & scales down → Project 02 stacks over
-       Phase 3 (0.62 → 0.90): Project 02 moves left & scales down → Project 03 stacks over
-       Phase 4 (0.90 → 1.00): Full 3-card progressive stack holds in focus
-       After 1.00: Section unpins, normal vertical page scrolling continues
+       SELECTED WORKS — Phased Scroll & Dynamic Sizing
+       - Phase 1 (0.00 → 0.38): Left/Right intro content splits and moves away
+       - Phase 2 (0.32 → 0.50): All project cards appear together centered in view
+       - Phase 3 (0.50 → 1.00): Full interactive showcase held in focus
+       - Automatically adjusts project card size based on total project count
        ══════════════════════════════════════════════════════ */
     (function initWorksScroll() {
       const section = document.querySelector('.works');
@@ -3356,9 +3420,13 @@
 
       const leftText = document.querySelector('.works__left');
       const rightText = document.querySelector('.works__right');
-      const card1 = document.querySelector('.works__project-container--1');
-      const card2 = document.querySelector('.works__project-container--2');
-      const card3 = document.querySelector('.works__project-container--3');
+      const track = document.getElementById('works-track') || document.querySelector('.works__track');
+      const cards = Array.from(document.querySelectorAll('.works__project-container'));
+      if (!track || cards.length === 0) return;
+
+      // Automatically adjust CSS variable based on total projects available
+      const count = cards.length;
+      track.style.setProperty('--project-count', count.toString());
 
       function lerp(a, b, t) {
         return a + (b - a) * t;
@@ -3372,14 +3440,11 @@
         return 1 - Math.pow(1 - t, 3);
       }
 
-      function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      }
-
       function onScroll() {
         const rect = section.getBoundingClientRect();
         const sectionH = section.offsetHeight;
         const vpH = window.innerHeight;
+        const vpW = window.innerWidth;
 
         const scrollableDistance = sectionH - vpH;
         if (scrollableDistance <= 0) return;
@@ -3388,158 +3453,61 @@
         const scrolled = -rect.top;
         const progress = clamp01(scrolled / scrollableDistance);
 
-        // Balanced, natural horizontal shift unit
-        const shiftUnit = Math.min(window.innerWidth * 0.08, 95);
-
         // ════════════════════════════════════════════════════
-        // STAGE 1: Text Opens & Project 01 Reveals
+        // PHASE 1: Introductory content splits and moves away
         // ════════════════════════════════════════════════════
-        const p1Raw = clamp01(progress / 0.18);
-        const p1Ease = easeOutCubic(p1Raw);
+        const introRaw = clamp01(progress / 0.36);
+        const introEase = easeOutCubic(introRaw);
 
-        // Typography moves apart with balanced distance and smooth fade
-        const maxTextShift = Math.min(window.innerWidth * 0.28, 260);
-        const leftX = -p1Ease * maxTextShift;
-        const rightX = p1Ease * maxTextShift;
-        const textOpacity = 1 - clamp01(p1Raw / 0.82);
+        const maxTextShift = Math.min(vpW * 0.42, 450);
+        const leftX = -introEase * maxTextShift;
+        const rightX = introEase * maxTextShift;
+        const textOpacity = clamp01(1 - introRaw * 1.15);
 
         if (leftText) {
-          leftText.style.transform = `translateX(${leftX}px)`;
-          leftText.style.opacity = textOpacity;
+          leftText.style.transform = `translate3d(${leftX}px, 0, 0)`;
+          leftText.style.opacity = textOpacity.toFixed(3);
         }
         if (rightText) {
-          rightText.style.transform = `translateX(${rightX}px)`;
-          rightText.style.opacity = textOpacity;
+          rightText.style.transform = `translate3d(${rightX}px, 0, 0)`;
+          rightText.style.opacity = textOpacity.toFixed(3);
         }
 
         // ════════════════════════════════════════════════════
-        // CARD 1 TRANSFORM
-        // - Reveals smoothly with 16px settle and 0.92 → 1.0 scale
-        // - Stage 2: Moves left to -shiftUnit * 0.72
-        // - Stage 3: Moves to -shiftUnit * 1.42
+        // PHASE 2 & 3: All projects appear together
         // ════════════════════════════════════════════════════
-        let c1_x = 0;
-        let c1_y = lerp(16, 0, p1Ease);
-        let c1_scale = lerp(0.92, 1.0, p1Ease);
-        let c1_opacity = clamp01(p1Raw / 0.55);
+        if (progress < 0.32) {
+          // Hidden before intro transition finishes
+          track.style.opacity = '0';
+          track.style.transform = 'translate(-50%, calc(-50% + 28px)) scale(0.94)';
+          track.style.pointerEvents = 'none';
+        } else {
+          // Smooth entrance for all cards together
+          const appearRaw = clamp01((progress - 0.32) / 0.18);
+          const appearEase = easeOutCubic(appearRaw);
 
-        if (progress > 0.26) {
-          const t12 = easeInOutCubic(clamp01((progress - 0.26) / 0.24));
-          c1_x = lerp(0, -shiftUnit * 0.72, t12);
-          c1_scale = lerp(1.0, 0.93, t12);
-          c1_opacity = lerp(1.0, 0.76, t12);
+          const showcaseOpacity = appearRaw;
+          const translateY = lerp(28, 0, appearEase);
+          const scale = lerp(0.94, 1.0, appearEase);
+
+          track.style.opacity = showcaseOpacity.toFixed(3);
+          track.style.transform = `translate(-50%, calc(-50% + ${translateY}px)) scale(${scale})`;
+          track.style.pointerEvents = (appearRaw > 0.5) ? 'auto' : 'none';
         }
-
-        if (progress > 0.58) {
-          const t13 = easeInOutCubic(clamp01((progress - 0.58) / 0.24));
-          c1_x = lerp(-shiftUnit * 0.72, -shiftUnit * 1.42, t13);
-          c1_scale = lerp(0.93, 0.86, t13);
-          c1_opacity = lerp(0.76, 0.56, t13);
-        }
-
-        if (card1) {
-          card1.style.transform = `translate(calc(-50% + ${c1_x}px), calc(-50% + ${c1_y}px)) scale(${c1_scale})`;
-          card1.style.opacity = c1_opacity;
-        }
-
-        // ════════════════════════════════════════════════════
-        // CARD 2 TRANSFORM
-        // - Enters during 0.24 → 0.50: 16px settle, scale 0.92 → 1.0
-        // - Stage 3: Moves left to -shiftUnit * 0.48
-        // ════════════════════════════════════════════════════
-        let c2_x = shiftUnit * 0.55;
-        let c2_y = 16;
-        let c2_scale = 0.92;
-        let c2_opacity = 0;
-
-        if (progress > 0.24) {
-          const t2Enter = easeInOutCubic(clamp01((progress - 0.26) / 0.24));
-          c2_x = lerp(shiftUnit * 0.55, shiftUnit * 0.12, t2Enter);
-          c2_y = lerp(16, 0, t2Enter);
-          c2_scale = lerp(0.92, 1.0, t2Enter);
-          c2_opacity = clamp01((progress - 0.24) / 0.14);
-        }
-
-        if (progress > 0.58) {
-          const t23 = easeInOutCubic(clamp01((progress - 0.58) / 0.24));
-          c2_x = lerp(shiftUnit * 0.12, -shiftUnit * 0.48, t23);
-          c2_scale = lerp(1.0, 0.93, t23);
-          c2_opacity = lerp(1.0, 0.76, t23);
-        }
-
-        if (card2) {
-          card2.style.transform = `translate(calc(-50% + ${c2_x}px), calc(-50% + ${c2_y}px)) scale(${c2_scale})`;
-          card2.style.opacity = c2_opacity;
-        }
-
-        // ════════════════════════════════════════════════════
-        // CARD 3 TRANSFORM
-        // - Enters during 0.56 → 0.82: 16px settle, scale 0.92 → 1.0
-        // - Holds in primary viewing position through 1.00
-        // ════════════════════════════════════════════════════
-        let c3_x = shiftUnit * 0.85;
-        let c3_y = 16;
-        let c3_scale = 0.92;
-        let c3_opacity = 0;
-
-        if (progress > 0.56) {
-          const t3Enter = easeInOutCubic(clamp01((progress - 0.58) / 0.24));
-          c3_x = lerp(shiftUnit * 0.85, shiftUnit * 0.42, t3Enter);
-          c3_y = lerp(16, 0, t3Enter);
-          c3_scale = lerp(0.92, 1.0, t3Enter);
-          c3_opacity = clamp01((progress - 0.56) / 0.14);
-        }
-
-        if (card3) {
-          card3.style.transform = `translate(calc(-50% + ${c3_x}px), calc(-50% + ${c3_y}px)) scale(${c3_scale})`;
-          card3.style.opacity = c3_opacity;
-        }
-
-        // ════════════════════════════════════════════════════
-        // ACTIVE PROJECT CARD & POINTER-EVENTS MANAGEMENT
-        // ════════════════════════════════════════════════════
-        let activeIdx = 0;
-        if (p1Raw > 0.35 && progress < 0.42) {
-          activeIdx = 1;
-        } else if (progress >= 0.42 && progress < 0.70) {
-          activeIdx = 2;
-        } else if (progress >= 0.70) {
-          activeIdx = 3;
-        }
-
-        const projectCards = [card1, card2, card3];
-        projectCards.forEach((card, i) => {
-          if (!card) return;
-          const num = i + 1;
-          const isActive = (num === activeIdx);
-
-          if (isActive) {
-            card.style.pointerEvents = 'auto';
-            card.classList.add('is-active');
-            card.style.zIndex = '15';
-          } else {
-            card.style.pointerEvents = 'none';
-            card.classList.remove('is-active');
-            card.style.zIndex = (10 + i).toString();
-          }
-        });
       }
 
-      // Prepare project cards for future routing (prevent hash jump until pages are created)
-      [card1, card2, card3].forEach((card) => {
-        if (!card) return;
+      // Allow natural link navigation on cards
+      cards.forEach((card) => {
         card.addEventListener('click', (e) => {
           const href = card.getAttribute('href');
-          // Allow navigation if the card links to an actual page
           if (href && !href.startsWith('#')) return;
           e.preventDefault();
-          const projectId = card.dataset.project;
-          console.log(`Project ${projectId} clicked — ready for case study page`);
         });
       });
 
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll, { passive: true });
+      window.addEventListener('load', onScroll, { passive: true });
       onScroll();
     })();
 
@@ -3585,6 +3553,7 @@
         cards[2] ? cards[2].querySelector('.experience__node-marker') : null
       ];
 
+      let curX1 = 216, curX2 = 648, curX3 = 1080;
       let totalLen = 1603.9;
       let L1 = 220.2, L2 = 702.3, L3 = 1183.9;
 
@@ -3603,11 +3572,120 @@
           return (low + high) / 2;
         }
 
-        L1 = getLengthAtX(140);
-        L2 = getLengthAtX(620);
-        L3 = getLengthAtX(1100);
+        L1 = getLengthAtX(curX1);
+        L2 = getLengthAtX(curX2);
+        L3 = getLengthAtX(curX3);
       }
-      updateLengths();
+
+      function layoutDesktopExperience() {
+        if (window.innerWidth <= 1024) {
+          cards.forEach((c) => {
+            if (c) {
+              c.style.left = '';
+              c.style.top = '';
+            }
+          });
+          return;
+        }
+
+        if (!stage || !path) return;
+
+        const w = stage.clientWidth || window.innerWidth;
+        const h = stage.clientHeight || window.innerHeight;
+        if (w <= 0 || h <= 0) return;
+
+        // Set 1:1 pixel coordinate space on the SVG — eliminating any stretching!
+        const svg = document.querySelector('.experience__svg');
+        if (svg) {
+          svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+          svg.removeAttribute('preserveAspectRatio');
+        }
+
+        // Strict 15% left and right margins across 1025px to 1800px+
+        const leftMargin = w * 0.15;
+        const rightMargin = w * 0.85;
+
+        // Measure Card 3 width to keep it strictly within the 15% right margin
+        const card3Width = cards[2] ? (cards[2].offsetWidth || Math.min(360, Math.max(260, w * 0.22))) : 300;
+
+        // Node 1 aligns with 15% left margin
+        const X1 = Math.round(leftMargin);
+        // Node 3 is positioned so Card 3 cleanly finishes at the 15% right margin (85%)
+        const X3 = Math.round(rightMargin - card3Width);
+        // Node 2 is centered between Node 1 and Node 3
+        const X2 = Math.round((X1 + X3) / 2);
+
+        // Vertical heights: organic, gentle curve across the viewport
+        const Y1 = Math.round(h * 0.49);
+        const Y2 = Math.round(h * 0.43); // Gentle crest
+        const Y3 = Math.round(h * 0.48); // Smooth settle
+
+        curX1 = X1;
+        curX2 = X2;
+        curX3 = X3;
+
+        // Construct smooth cubic Bezier curve passing horizontally through (X1, Y1), (X2, Y2), (X3, Y3)
+        const dx12 = (X2 - X1) * 0.45;
+        const dx23 = (X3 - X2) * 0.45;
+
+        const d = [
+          `M ${-60} ${Y1}`,
+          `C ${X1 - 80} ${Y1}, ${X1 - 40} ${Y1}, ${X1} ${Y1}`,
+          `C ${(X1 + dx12).toFixed(1)} ${Y1}, ${(X2 - dx12).toFixed(1)} ${Y2}, ${X2} ${Y2}`,
+          `C ${(X2 + dx23).toFixed(1)} ${Y2}, ${(X3 - dx23).toFixed(1)} ${Y3}, ${X3} ${Y3}`,
+          `C ${X3 + 60} ${Y3}, ${w + 30} ${Y3}, ${w + 80} ${Y3}`
+        ].join(' ');
+
+        path.setAttribute('d', d);
+
+        // Update fixed milestone marker groups in true 1:1 pixel coords
+        const coords = [
+          { x: X1, y: Y1 },
+          { x: X2, y: Y2 },
+          { x: X3, y: Y3 }
+        ];
+
+        coords.forEach((coord, i) => {
+          const node = nodes[i];
+          if (node) {
+            const base = node.querySelector('.timeline-node-base');
+            const inner = node.querySelector('.timeline-node-inner');
+            const time = node.querySelector('.timeline-node-time');
+
+            if (base) {
+              base.setAttribute('cx', coord.x);
+              base.setAttribute('cy', coord.y);
+            }
+            if (inner) {
+              inner.setAttribute('cx', coord.x);
+              inner.setAttribute('cy', coord.y);
+            }
+            if (time) {
+              time.setAttribute('x', coord.x);
+              time.setAttribute('y', coord.y - 32);
+            }
+          }
+
+          // Update vertical connector line: drops from (x, y) cleanly to bottom of card
+          const line = lines[i];
+          const card = cards[i];
+          if (line) {
+            const cardHeight = card ? (card.offsetHeight || 160) : 160;
+            line.setAttribute('x1', coord.x);
+            line.setAttribute('x2', coord.x);
+            line.setAttribute('y1', coord.y);
+            line.setAttribute('y2', coord.y + cardHeight + 14);
+          }
+
+          // Position HTML card precisely at the milestone spine
+          if (card) {
+            card.style.left = `${coord.x}px`;
+            card.style.top = `${coord.y + 18}px`;
+          }
+        });
+
+        updateLengths();
+      }
 
       function clamp01(v) {
         return Math.max(0, Math.min(1, v));
@@ -3618,7 +3696,7 @@
       let animFrameId = null;
 
       function updateTimeline(prog) {
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = window.innerWidth <= 1024;
 
         if (!isMobile) {
           // ── Desktop Horizontal Timeline Mode ──────────────
@@ -3798,7 +3876,7 @@
       }
 
       function onScroll(instant) {
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = window.innerWidth <= 1024;
 
         if (!isMobile) {
           const rect = section.getBoundingClientRect();
@@ -3853,7 +3931,7 @@
       nodes.forEach((node, i) => {
         if (!node) return;
         node.addEventListener('click', () => {
-          if (window.innerWidth > 768) {
+          if (window.innerWidth > 1024) {
             const sectionTop = section.getBoundingClientRect().top + window.scrollY;
             const scrollableDistance = section.offsetHeight - window.innerHeight;
             const targetDist = (i === 0) ? L1 : (i === 1) ? L2 : L3;
@@ -3870,7 +3948,7 @@
       cards.forEach((card, i) => {
         if (!card) return;
         card.addEventListener('click', () => {
-          if (window.innerWidth <= 768) {
+          if (window.innerWidth <= 1024) {
             const m = markers[i];
             if (!m) return;
             const mRect = m.getBoundingClientRect();
@@ -3885,10 +3963,22 @@
 
       window.addEventListener('scroll', () => onScroll(false), { passive: true });
       window.addEventListener('resize', () => {
-        updateLengths();
+        layoutDesktopExperience();
+        onScroll(true);
+      }, { passive: true });
+      window.addEventListener('load', () => {
+        layoutDesktopExperience();
         onScroll(true);
       }, { passive: true });
 
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          layoutDesktopExperience();
+          onScroll(true);
+        });
+      }
+
+      layoutDesktopExperience();
       onScroll(true);
     })();
 

@@ -24,7 +24,7 @@
       --color-accent: #c4b5a0;
       --font-primary: 'Instrument Sans', 'Inter', -apple-system, sans-serif;
       --header-height: 72px;
-      --page-padding-x: clamp(24px, 5vw, 72px);
+      --page-padding-x: 15vw;
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -187,10 +187,11 @@
     }
 
     .cs-container {
-      max-width: 1040px;
-      margin: 0 auto;
+      max-width: 100%;
+      margin: 0;
       padding: 0 var(--page-padding-x);
       width: 100%;
+      box-sizing: border-box;
     }
 
     /* ── 1. Top Navigation Label ────────────────────────── */
@@ -542,7 +543,6 @@
     @media (max-width: 768px) {
       :root {
         --header-height: 58px;
-        --page-padding-x: clamp(16px, 4.5vw, 24px);
       }
 
       /* Mobile Header */
