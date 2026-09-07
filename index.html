@@ -595,7 +595,8 @@
     html.skip-intro .hero__line,
     html.skip-intro .hero__btn-wrap,
     html.skip-intro .info-col,
-    html.skip-intro .works,
+    html.skip-intro .statement-doors,
+    html.skip-intro .projects-section,
     html.skip-intro .experience,
     html.skip-intro .section-contact {
       opacity: 1 !important;
@@ -1625,32 +1626,20 @@
       }
     }
 
-    /* ══════════════════════════════════════════════════════
-       SELECTED WORKS SECTION
-       Pinned sticky scroll interaction with progressive 3-card stack:
-       Outer section: 480vh with horizontal clipping boundary
-       Sticky container: 100vh pinned to top: 0
+        /* ══════════════════════════════════════════════════════
+       STATEMENT DOORS & APERTURE SECTION
+       - Equal-sized, balanced typography on left & right doors before scroll
+       - Double doors part gradually and smoothly on scroll
+       - Thin central rectangular aperture opens to reveal statement quote
+       - No project cards in this section
        ══════════════════════════════════════════════════════ */
-    .works {
+    .statement-doors {
       position: relative;
-      height: 380vh;
+      height: 220vh;
       background: var(--color-bg);
     }
 
-    /* Responsive page margin for Selected Works */
-    @media (max-width: 991px) {
-      .works {
-        --page-padding-x: clamp(24px, 5vw, 48px);
-      }
-    }
-    @media (max-width: 767px) {
-      .works {
-        --page-padding-x: clamp(16px, 5vw, 24px);
-      }
-    }
-
-    /* Sticky viewport that holds the animation */
-    .works__sticky {
+    .statement-doors__sticky {
       position: sticky;
       top: 0;
       left: 0;
@@ -1664,145 +1653,219 @@
       justify-content: center;
     }
 
-    /* Typography composition — Diagonal Door Frame */
-    .works__typography {
+    /* Left & Right Door Panels */
+    .doors-panel {
       position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 25;
-    }
-
-    /* Left text group (Left Door): SELECTED WORKS */
-    .works__left {
-      position: absolute;
-      top: clamp(14%, 16vh, 20%);
-      left: var(--page-padding-x);
+      top: 50%;
+      transform: translateY(-50%);
       will-change: transform, opacity;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
     }
 
-    .works__left-line {
+    .doors-panel--left {
+      left: var(--page-padding-x);
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .doors-panel--right {
+      right: var(--page-padding-x);
+      text-align: right;
+      align-items: flex-end;
+    }
+
+    /* Symmetrical typography with identical sizing, line-height & weight */
+    .doors-line {
       display: block;
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
       text-transform: uppercase;
       color: var(--color-fg);
-      line-height: 0.95;
-      letter-spacing: -0.035em;
-    }
-
-    .works__left-line--selected,
-    .works__left-line--works {
-      font-size: clamp(3.2rem, 7.5vw, 8.5rem);
-    }
-
-    /* Right text group (Right Door): A FEW THINGS I'VE WORKED ON. */
-    .works__right {
-      position: absolute;
-      bottom: clamp(10%, 14vh, 18%);
-      right: var(--page-padding-x);
-      text-align: right;
-      will-change: transform, opacity;
-    }
-
-    .works__right-line {
-      display: block;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: clamp(1.6rem, 3.4vw, 3.8rem);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      color: var(--color-fg);
+      font-size: clamp(2rem, 4.2vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
     }
 
     @media (max-width: 991px) {
-      .works__left-line--selected,
-      .works__left-line--works {
-        font-size: clamp(2.6rem, 6.8vw, 4.2rem);
+      .statement-doors {
+        --page-padding-x: clamp(24px, 5vw, 48px);
       }
-      .works__right-line {
-        font-size: clamp(1.3rem, 3.2vw, 2.2rem);
+      .doors-line {
+        font-size: clamp(1.6rem, 3.8vw, 3rem);
       }
     }
 
     @media (max-width: 767px) {
-      .works__left {
-        top: clamp(12%, 14vh, 18%);
+      .statement-doors {
+        --page-padding-x: clamp(16px, 5vw, 24px);
       }
-      .works__right {
-        bottom: clamp(12%, 14vh, 18%);
-      }
-      .works__left-line--selected,
-      .works__left-line--works {
-        font-size: clamp(2rem, 8.5vw, 3rem);
-      }
-      .works__right-line {
-        font-size: clamp(1.05rem, 4.4vw, 1.5rem);
+      .doors-line {
+        font-size: clamp(1.15rem, 4.8vw, 1.8rem);
+        line-height: 1.12;
       }
     }
 
-    /* ── Proportional Circular Portal & Mask ───────────── */
-    .works__portal {
+    /* Central Thin Rectangular Aperture Door */
+    .statement-aperture {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: var(--aperture-width, 2px);
+      height: clamp(250px, 42vh, 390px);
+      border: 1.5px solid rgba(226, 109, 92, 0.45);
+      border-radius: 12px;
+      background: rgba(14, 14, 14, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 0 40px rgba(226, 109, 92, 0.22), 0 20px 60px rgba(0, 0, 0, 0.75);
+      overflow: hidden;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: width;
+    }
+
+    .statement-aperture__glow {
       position: absolute;
       inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 65% 50% at 50% 50%, rgba(226, 109, 92, 0.12) 0%, transparent 80%);
+    }
+
+    .statement-aperture__content {
+      position: relative;
+      z-index: 2;
       width: 100%;
-      height: 100%;
+      padding: clamp(20px, 3.5vw, 44px);
+      text-align: center;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      clip-path: circle(var(--portal-radius, 0px) at 50% 50%);
-      -webkit-clip-path: circle(var(--portal-radius, 0px) at 50% 50%);
-      pointer-events: none;
-      z-index: 20;
-      overflow: hidden;
-      will-change: clip-path;
+      opacity: var(--statement-opacity, 0);
+      transform: scale(var(--statement-scale, 0.94));
+      will-change: opacity, transform;
+      min-width: min(calc(100vw - 48px), 560px);
     }
 
-    /* Proportional Expanding Portal Ring */
-    .works__portal-ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: calc(var(--portal-radius, 0px) * 2);
-      height: calc(var(--portal-radius, 0px) * 2);
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      border: 1.5px solid rgba(226, 109, 92, 0.5);
-      box-shadow: 0 0 35px rgba(226, 109, 92, 0.28), inset 0 0 25px rgba(226, 109, 92, 0.16);
-      pointer-events: none;
-      opacity: var(--portal-ring-opacity, 0);
-      z-index: 22;
-      will-change: width, height, opacity;
+    .statement-badge {
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.64rem, 0.76vw, 0.74rem);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-fg-hover);
+      margin-bottom: clamp(10px, 1.6vh, 16px);
     }
 
-    html[data-theme="light"] .works__portal-ring {
-      border-color: rgba(226, 109, 92, 0.65);
-      box-shadow: 0 0 35px rgba(226, 109, 92, 0.32), inset 0 0 20px rgba(226, 109, 92, 0.16);
+    .statement-quote {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.1vw, 1.85rem);
+      line-height: 1.38;
+      color: var(--color-fg);
+      margin: 0 0 clamp(14px, 2.2vh, 20px) 0;
+      max-width: 540px;
     }
 
-    /* Project Track Container */
-    .works__track {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: 100%;
+    .statement-author {
       display: flex;
       align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      z-index: 21;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.66rem, 0.78vw, 0.76rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    /* Individual Project Card */
-    .works__project-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: clamp(540px, 46vw, 720px);
-      aspect-ratio: 16 / 9.6;
-      max-height: clamp(280px, 50vh, 430px);
+    .statement-author__name {
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .statement-author__role {
+      color: var(--color-fg-muted);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       PROJECTS SECTION (2×2 Showcase Grid)
+       - Strict 15% horizontal margins (--page-padding-x: 15vw)
+       - 2 columns in row 1, 2 columns in row 2
+       - Identical card sizing and consistent spacing
+       - Preserves all visual styles, tags, overlays, and hover states
+       ══════════════════════════════════════════════════════ */
+    .projects-section {
+      position: relative;
+      width: 100%;
+      background: var(--color-bg);
+      padding: clamp(80px, 12vh, 140px) var(--page-padding-x);
+      scroll-margin-top: var(--header-height, 72px);
+      z-index: 30;
+    }
+
+    .projects-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .projects-header {
+      margin-bottom: clamp(36px, 5vw, 56px);
+    }
+
+    .projects-header__eyebrow {
+      display: flex;
+      align-items: baseline;
+      gap: clamp(16px, 2vw, 24px);
+      margin-bottom: 12px;
+    }
+
+    .projects-header__tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.72rem, 0.85vw, 0.82rem);
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: var(--color-accent);
+    }
+
+    .projects-header__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--color-fg);
+      line-height: 1;
+    }
+
+    .projects-header__subtitle {
+      font-family: var(--font-primary);
+      font-size: clamp(0.88rem, 1.05vw, 1.05rem);
+      color: var(--color-fg-muted);
+      max-width: 580px;
+      line-height: 1.5;
+    }
+
+    /* 2x2 Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(24px, 2.8vw, 44px);
+      width: 100%;
+    }
+
+    /* Individual Project Card in Grid */
+    .project-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.75);
@@ -1811,145 +1874,46 @@
       color: inherit;
       display: block;
       cursor: pointer;
-      will-change: transform, opacity;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      background: #141414;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.35s ease,
+                  box-shadow 0.35s ease;
     }
 
-    .works__project-container.is-active {
-      pointer-events: auto;
-      z-index: 26;
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(226, 109, 92, 0.45);
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.9), 0 0 24px rgba(226, 109, 92, 0.08);
     }
 
-    .works__project-container.is-active:hover {
-      border-color: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 24px rgba(255, 255, 255, 0.04);
-    }
-
-    /* Responsive Card Sizing */
-    @media (max-width: 1199px) {
-      .works__project-container {
-        width: clamp(480px, 52vw, 620px);
-        aspect-ratio: 16 / 9.8;
-        max-height: clamp(260px, 48vh, 380px);
-      }
-    }
-
-    @media (max-width: 991px) {
-      .works__project-container {
-        width: clamp(400px, 68vw, 520px);
-        aspect-ratio: 16 / 10;
-        max-height: clamp(240px, 46vh, 340px);
-      }
-    }
-
-    @media (max-width: 767px) {
-      .works__project-container {
-        width: min(calc(100vw - 36px), 360px);
-        aspect-ratio: 16 / 11;
-        max-height: clamp(230px, 46vh, 290px);
-        border-radius: 10px;
-      }
-      .works__project-overlay {
-        padding: 14px 16px;
-      }
-      .works__project-title {
-        font-size: clamp(1.02rem, 4.5vw, 1.25rem);
-        margin-bottom: 4px;
-      }
-      .works__project-desc {
-        font-size: clamp(0.72rem, 3.2vw, 0.82rem);
-        line-height: 1.4;
-        margin-bottom: 6px;
-        -webkit-line-clamp: 2;
-      }
-      .works__project-tags {
-        gap: 5px;
-        margin-top: 6px;
-      }
-      .works__project-tag {
-        font-size: 0.62rem;
-        padding: 2px 7px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .works__project-container {
-        width: calc(100vw - 28px);
-        aspect-ratio: 16 / 11.5;
-      }
-    }
-
-    /* Project Counter Indicator */
-    .works__counter {
-      position: absolute;
-      bottom: clamp(20px, 3.5vh, 36px);
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.72rem, 0.85vw, 0.82rem);
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      color: var(--color-accent);
-      background: rgba(14, 14, 14, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 4px 14px;
-      border-radius: 20px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.35s ease;
-      z-index: 28;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    }
-
-    html[data-theme="light"] .works__counter {
-      background: rgba(255, 255, 255, 0.88);
-      border-color: rgba(20, 20, 19, 0.12);
-      color: #8a7864;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-    }
-
-    .works__counter-divider {
-      opacity: 0.4;
-    }
-
-    .works__counter-total {
-      opacity: 0.6;
-    }
-
-    /* Placeholder visual variations for each project */
-    .works__project-placeholder {
+    .project-card__placeholder {
       position: absolute;
       inset: 0;
     }
 
-    .works__project-placeholder--1 {
+    .project-card__placeholder--1 {
       background: #141414;
       overflow: hidden;
     }
 
-    .works__project-placeholder--2 {
+    .project-card__placeholder--2 {
       background:
         radial-gradient(ellipse 50% 60% at 50% 40%, rgba(88, 130, 180, 0.12) 0%, transparent 70%),
         linear-gradient(160deg, #161a22 0%, #0d1117 100%);
     }
 
-    .works__project-placeholder--3 {
+    .project-card__placeholder--3 {
       background:
         radial-gradient(ellipse 50% 60% at 50% 40%, rgba(226, 109, 92, 0.12) 0%, transparent 70%),
         linear-gradient(160deg, #1e1514 0%, #100c0c 100%);
     }
 
-    .works__project-placeholder--4 {
+    .project-card__placeholder--4 {
       background: #111413;
       overflow: hidden;
     }
 
-    .works__project-img {
+    .project-card__img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -1958,16 +1922,15 @@
       transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .works__project-placeholder--1 .works__project-img {
+    .project-card__placeholder--1 .project-card__img {
       object-position: center 36%;
     }
 
-    .works__project-container:hover .works__project-img {
+    .project-card:hover .project-card__img {
       transform: scale(1.04);
     }
 
-    /* Faint grid pattern inside placeholder */
-    .works__project-placeholder::after {
+    .project-card__placeholder::after {
       content: '';
       position: absolute;
       inset: 0;
@@ -1980,13 +1943,12 @@
       z-index: 1;
     }
 
-    /* Dark gradient overlay at the bottom of project card */
-    .works__project-overlay {
+    .project-card__overlay {
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
-      padding: clamp(14px, 2vw, 32px) clamp(16px, 2.2vw, 28px);
+      padding: clamp(16px, 2.2vw, 32px) clamp(18px, 2.4vw, 30px);
       background: linear-gradient(
         to top,
         rgba(10, 10, 10, 0.96) 0%,
@@ -1996,7 +1958,7 @@
       z-index: 2;
     }
 
-    .works__project-category {
+    .project-card__category {
       display: block;
       font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(0.62rem, 0.75vw, 0.74rem);
@@ -2007,10 +1969,10 @@
       margin-bottom: 6px;
     }
 
-    .works__project-title {
+    .project-card__title {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: clamp(0.95rem, 1.35vw, 1.45rem);
+      font-size: clamp(1rem, 1.4vw, 1.45rem);
       line-height: 1.15;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -2018,7 +1980,7 @@
       margin-bottom: 6px;
     }
 
-    .works__project-desc {
+    .project-card__desc {
       font-family: var(--font-primary);
       font-weight: 400;
       font-size: clamp(0.74rem, 0.88vw, 0.9rem);
@@ -2031,7 +1993,7 @@
       overflow: hidden;
     }
 
-    .works__project-tags {
+    .project-card__tags {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -2039,7 +2001,7 @@
       margin-top: 10px;
     }
 
-    .works__project-tag {
+    .project-card__tag {
       display: inline-flex;
       align-items: center;
       padding: 3px 8px;
@@ -2059,34 +2021,50 @@
       transition: border-color 0.25s ease, color 0.25s ease;
     }
 
-    .works__project-container:hover .works__project-tag {
-      border-color: rgba(232, 230, 227, 0.26);
-      color: rgba(232, 230, 227, 0.85);
+    .project-card:hover .project-card__tag {
+      border-color: rgba(226, 109, 92, 0.35);
+      color: var(--color-fg-hover);
     }
 
-    /* Responsive: Selected Works */
-    @media (max-width: 768px) {
-      .works__left {
-        top: clamp(14%, 18vh, 22%);
-        left: var(--page-padding-x);
-      }
-
-      .works__right {
-        bottom: clamp(10%, 14vh, 18%);
-        right: var(--page-padding-x);
-      }
-
-      .works__right-line {
-        font-size: clamp(1.4rem, 5vw, 2.2rem);
-      }
-
-      .works__project-container {
-        width: 100%;
-        aspect-ratio: 16 / 10;
+    /* Responsive Breakpoints for Projects */
+    @media (max-width: 991px) {
+      .projects-section {
+        --page-padding-x: clamp(24px, 5vw, 48px);
+        padding: clamp(60px, 8vh, 100px) var(--page-padding-x);
       }
     }
 
-    /* ══════════════════════════════════════════════════════
+    @media (max-width: 767px) {
+      .projects-section {
+        --page-padding-x: clamp(16px, 5vw, 24px);
+        padding: clamp(72px, 10vh, 96px) var(--page-padding-x) clamp(48px, 7vh, 80px);
+        scroll-margin-top: var(--header-height, 72px);
+      }
+      .projects-header {
+        margin-bottom: 24px;
+      }
+      .projects-header__title {
+        font-size: clamp(1.6rem, 7.5vw, 2.4rem);
+        line-height: 1.1;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .project-card {
+        aspect-ratio: 16 / 11;
+      }
+      .project-card__overlay {
+        padding: 14px 16px;
+      }
+      .project-card__title {
+        font-size: clamp(1.02rem, 4.5vw, 1.25rem);
+      }
+      .project-card__desc {
+        font-size: clamp(0.72rem, 3.2vw, 0.82rem);
+      }
+    }
+/* ══════════════════════════════════════════════════════
        EXPERIENCE SECTION — Inspired by Reference Image
        - Large serif italic "Experience" heading (replacing "Pre-Event")
        - Continuous organic curved timeline traversing horizontal center
@@ -2869,27 +2847,61 @@
       border-top: 1px solid rgba(20, 20, 19, 0.08);
     }
 
-    /* Selected Works Light Mode */
-    html[data-theme="light"] .works {
+        /* Statement Doors & Projects Section Light Mode */
+    html[data-theme="light"] .statement-doors {
       background: #f7f6f2;
     }
 
-    html[data-theme="light"] .works__left-line,
-    html[data-theme="light"] .works__right-line {
+    html[data-theme="light"] .doors-line {
       color: #141413;
     }
 
-    html[data-theme="light"] .works__project-container {
+    html[data-theme="light"] .statement-aperture {
+      background: rgba(255, 255, 255, 0.94);
+      border-color: rgba(226, 109, 92, 0.65);
+      box-shadow: 0 0 40px rgba(226, 109, 92, 0.25), 0 20px 60px rgba(0, 0, 0, 0.08);
+    }
+
+    html[data-theme="light"] .statement-quote {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .statement-author__name {
+      color: #8a7864;
+    }
+
+    html[data-theme="light"] .statement-author__role {
+      color: #6b6b6b;
+    }
+
+    html[data-theme="light"] .projects-section {
+      background: #f7f6f2;
+    }
+
+    html[data-theme="light"] .projects-header__title {
+      color: #141413;
+    }
+
+    html[data-theme="light"] .projects-header__subtitle {
+      color: #55534e;
+    }
+
+    html[data-theme="light"] .projects-header__tag {
+      color: #8a7864;
+    }
+
+    html[data-theme="light"] .project-card {
+      background: #ffffff;
       border: 1px solid rgba(20, 20, 19, 0.1);
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.07);
     }
 
-    html[data-theme="light"] .works__project-container.is-active:hover {
-      border-color: rgba(20, 20, 19, 0.25);
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.12), 0 0 24px rgba(0, 0, 0, 0.04);
+    html[data-theme="light"] .project-card:hover {
+      border-color: rgba(226, 109, 92, 0.5);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.12), 0 0 24px rgba(226, 109, 92, 0.1);
     }
 
-    html[data-theme="light"] .works__project-overlay {
+    html[data-theme="light"] .project-card__overlay {
       background: linear-gradient(
         to top,
         rgba(247, 246, 242, 0.96) 0%,
@@ -2898,40 +2910,39 @@
       );
     }
 
-    html[data-theme="light"] .works__project-category {
+    html[data-theme="light"] .project-card__category {
       color: #8a7864;
     }
 
-    html[data-theme="light"] .works__project-title {
+    html[data-theme="light"] .project-card__title {
       color: #141413;
     }
 
-    html[data-theme="light"] .works__project-desc {
+    html[data-theme="light"] .project-card__desc {
       color: #55534e;
     }
 
-    html[data-theme="light"] .works__project-tag {
+    html[data-theme="light"] .project-card__tag {
       background: rgba(255, 255, 255, 0.85);
       border-color: rgba(20, 20, 19, 0.12);
       color: #3c3b38;
     }
 
-    html[data-theme="light"] .works__project-container.is-active:hover .works__project-tag {
-      border-color: rgba(20, 20, 19, 0.28);
-      color: #141413;
+    html[data-theme="light"] .project-card:hover .project-card__tag {
+      border-color: rgba(226, 109, 92, 0.35);
+      color: var(--color-fg-hover);
     }
 
-    html[data-theme="light"] .works__project-placeholder--2 {
+    html[data-theme="light"] .project-card__placeholder--2 {
       background:
         radial-gradient(ellipse 50% 60% at 50% 40%, rgba(88, 130, 180, 0.14) 0%, transparent 70%),
         linear-gradient(160deg, #e4e7ec 0%, #d8dce2 100%);
     }
 
-    html[data-theme="light"] .works__project-placeholder--3 {
+    html[data-theme="light"] .project-card__placeholder--3 {
       background: #eae8e3;
     }
-
-    /* Experience Light Mode */
+/* Experience Light Mode */
     html[data-theme="light"] .experience {
       background: #f2f0eb;
     }
@@ -3287,7 +3298,7 @@
 
       <div class="hero__actions">
         <div class="hero__btn-wrap">
-          <a href="#projects" class="hero__btn hero__btn--primary">
+          <a href="#works-intro" class="hero__btn hero__btn--primary">
             <span>VIEW WORK</span>
             <span class="btn__arrow">→</span>
           </a>
@@ -3324,100 +3335,113 @@
     </div>
   </section>
 
-  <!-- ─── Selected Works ──────────────────────────────── -->
-  <section class="works" id="projects">
-    <div class="works__sticky">
+  <!-- ─── Statement Doors / Aperture Section ────────────── -->
+  <section class="statement-doors" id="works-intro">
+    <div class="statement-doors__sticky">
+      <!-- Left Door Content -->
+      <div class="doors-panel doors-panel--left" id="doors-left">
+        <span class="doors-line">SELECTED</span>
+        <span class="doors-line">WORKS</span>
+      </div>
 
-      <!-- Asymmetric Typography Composition -->
-      <div class="works__typography">
-        <div class="works__left">
-          <span class="works__left-line works__left-line--selected">SELECTED</span>
-          <span class="works__left-line works__left-line--works">WORKS</span>
-        </div>
-        <div class="works__right">
-          <span class="works__right-line">A FEW THINGS</span>
-          <span class="works__right-line">I'VE WORKED ON.</span>
+      <!-- Center Expanding Aperture -->
+      <div class="statement-aperture" id="statement-aperture">
+        <div class="statement-aperture__glow"></div>
+        <div class="statement-aperture__content" id="statement-quote-content">
+          <span class="statement-badge">DESIGN PHILOSOPHY</span>
+          <blockquote class="statement-quote">
+            “Crafting digital experiences where clarity meets character — merging functional interface design with immersive digital storytelling.”
+          </blockquote>
+          <div class="statement-author">
+            <span class="statement-author__name">BALAYOKESH</span>
+            <span class="statement-author__role">UX / UI DESIGNER</span>
+          </div>
         </div>
       </div>
 
-      <!-- Circular Portal & Mask Container -->
-      <div class="works__portal" id="works-portal">
-        <div class="works__portal-ring" id="works-portal-ring"></div>
+      <!-- Right Door Content -->
+      <div class="doors-panel doors-panel--right" id="doors-right">
+        <span class="doors-line">A FEW THINGS</span>
+        <span class="doors-line">I'VE WORKED ON.</span>
+      </div>
+    </div>
+  </section>
 
-        <!-- Project Track Container -->
-        <div class="works__track" id="works-track">
-<a href="severna.html" class="works__project-container works__project-container--1" id="project-card-1" data-project="1" aria-label="Open Project 01: SEVERNA: BLOOD &amp; BETRAYAL">
-          <div class="works__project-placeholder works__project-placeholder--1">
-            <img src="severna-cover.jpg" alt="Severna: Blood &amp; Betrayal" class="works__project-img" loading="lazy" />
+  <!-- ─── Dedicated Projects Section (2x2 Grid) ────────── -->
+  <section class="projects-section" id="projects">
+    <div class="projects-container">
+      <div class="projects-header">
+        <div class="projects-header__eyebrow">
+          <span class="projects-header__tag">INDEX / 04</span>
+          <h2 class="projects-header__title">SELECTED PROJECTS</h2>
+        </div>
+        <p class="projects-header__subtitle">A curated selection of game UI, sports platforms, studio websites, and experimental interfaces.</p>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Project 01 Card: SEVERNA: BLOOD & BETRAYAL -->
+        <a href="severna.html" class="project-card project-card--1" id="project-card-1" aria-label="Open Project 01: SEVERNA: BLOOD &amp; BETRAYAL">
+          <div class="project-card__placeholder project-card__placeholder--1">
+            <img src="severna-cover.jpg" alt="Severna: Blood &amp; Betrayal" class="project-card__img" loading="lazy" />
           </div>
-          <div class="works__project-overlay">
-            <span class="works__project-category">GAME UI</span>
-            <h3 class="works__project-title">SEVERNA: BLOOD &amp; BETRAYAL</h3>
-            <p class="works__project-desc">Designing in-game UI widgets and interface elements that support gameplay interactions.</p>
-            <div class="works__project-tags">
-              <span class="works__project-tag">GAME UI WIDGETS</span>
-              <span class="works__project-tag">PC</span>
+          <div class="project-card__overlay">
+            <span class="project-card__category">GAME UI</span>
+            <h3 class="project-card__title">SEVERNA: BLOOD &amp; BETRAYAL</h3>
+            <p class="project-card__desc">Designing in-game UI widgets and interface elements that support gameplay interactions.</p>
+            <div class="project-card__tags">
+              <span class="project-card__tag">GAME UI WIDGETS</span>
+              <span class="project-card__tag">PC</span>
             </div>
           </div>
         </a>
 
         <!-- Project 02 Card: NYT WOLF GAMES -->
-        <a href="professional-work.html#panel-nyt" class="works__project-container works__project-container--2" id="project-card-2" data-project="2" aria-label="Open Project 02: NYT WOLF GAMES">
-          <div class="works__project-placeholder works__project-placeholder--2"></div>
-          <div class="works__project-overlay">
-            <span class="works__project-category">PROFESSIONAL WORK</span>
-            <h3 class="works__project-title">NYT WOLF GAMES</h3>
-            <p class="works__project-desc">Company website design for a game studio, featuring a clean, responsive layout and engaging studio showcase.</p>
-            <div class="works__project-tags">
-              <span class="works__project-tag">RESPONSIVE WEB</span>
-              <span class="works__project-tag">STUDIO SITE</span>
+        <a href="professional-work.html#panel-nyt" class="project-card project-card--2" id="project-card-2" aria-label="Open Project 02: NYT WOLF GAMES">
+          <div class="project-card__placeholder project-card__placeholder--2"></div>
+          <div class="project-card__overlay">
+            <span class="project-card__category">PROFESSIONAL WORK</span>
+            <h3 class="project-card__title">NYT WOLF GAMES</h3>
+            <p class="project-card__desc">Company website design for a game studio, featuring a clean, responsive layout and engaging studio showcase.</p>
+            <div class="project-card__tags">
+              <span class="project-card__tag">RESPONSIVE WEB</span>
+              <span class="project-card__tag">STUDIO SITE</span>
             </div>
           </div>
         </a>
 
         <!-- Project 03 Card: TEQBALL TAMILNADU -->
-        <a href="professional-work.html#panel-teqball" class="works__project-container works__project-container--3" id="project-card-3" data-project="3" aria-label="Open Project 03: TEQBALL TAMILNADU">
-          <div class="works__project-placeholder works__project-placeholder--3"></div>
-          <div class="works__project-overlay">
-            <span class="works__project-category">PROFESSIONAL WORK</span>
-            <h3 class="works__project-title">TEQBALL TAMILNADU</h3>
-            <p class="works__project-desc">Multi-page digital sports platform providing dynamic tournament schedules, rankings, and athlete profiles.</p>
-            <div class="works__project-tags">
-              <span class="works__project-tag">WEB DESIGN</span>
-              <span class="works__project-tag">SPORTS TECH</span>
+        <a href="professional-work.html#panel-teqball" class="project-card project-card--3" id="project-card-3" aria-label="Open Project 03: TEQBALL TAMILNADU">
+          <div class="project-card__placeholder project-card__placeholder--3"></div>
+          <div class="project-card__overlay">
+            <span class="project-card__category">PROFESSIONAL WORK</span>
+            <h3 class="project-card__title">TEQBALL TAMILNADU</h3>
+            <p class="project-card__desc">Multi-page digital sports platform providing dynamic tournament schedules, rankings, and athlete profiles.</p>
+            <div class="project-card__tags">
+              <span class="project-card__tag">WEB DESIGN</span>
+              <span class="project-card__tag">SPORTS TECH</span>
             </div>
           </div>
         </a>
 
         <!-- Project 04 Card: PERSONAL EXPLORATION -->
-        <a href="personal-exploration.html" class="works__project-container works__project-container--4" id="project-card-4" data-project="4" aria-label="Open Project 04: EXPLORING IDEAS BEYOND THE BRIEF.">
-          <div class="works__project-placeholder works__project-placeholder--4">
-            <img src="personal-exploration.jpg" alt="Personal Exploration — Exploring Ideas Beyond the Brief" class="works__project-img" loading="lazy" />
+        <a href="personal-exploration.html" class="project-card project-card--4" id="project-card-4" aria-label="Open Project 04: EXPLORING IDEAS BEYOND THE BRIEF.">
+          <div class="project-card__placeholder project-card__placeholder--4">
+            <img src="personal-exploration.jpg" alt="Personal Exploration — Exploring Ideas Beyond the Brief" class="project-card__img" loading="lazy" />
           </div>
-          <div class="works__project-overlay">
-            <span class="works__project-category">PERSONAL EXPLORATION</span>
-            <h3 class="works__project-title">EXPLORING IDEAS<br>BEYOND THE BRIEF.</h3>
-            <p class="works__project-desc">Self-initiated projects exploring different visual directions, interactions, and experimental interfaces.</p>
-            <div class="works__project-tags">
-              <span class="works__project-tag">WEB EXPLORATION</span>
-              <span class="works__project-tag">PERSONAL</span>
+          <div class="project-card__overlay">
+            <span class="project-card__category">PERSONAL EXPLORATION</span>
+            <h3 class="project-card__title">EXPLORING IDEAS<br>BEYOND THE BRIEF.</h3>
+            <p class="project-card__desc">Self-initiated projects exploring different visual directions, interactions, and experimental interfaces.</p>
+            <div class="project-card__tags">
+              <span class="project-card__tag">WEB EXPLORATION</span>
+              <span class="project-card__tag">PERSONAL</span>
             </div>
           </div>
         </a>
-        </div>
-
-        <!-- Sleek Project Counter Indicator -->
-        <div class="works__counter" id="works-counter" aria-hidden="true">
-          <span class="works__counter-current">01</span>
-          <span class="works__counter-divider">/</span>
-          <span class="works__counter-total">04</span>
-        </div>
       </div>
-
     </div>
   </section>
-
-  <!-- ─── Experience Section (Inspired by Reference) ──────── -->
+<!-- ─── Experience Section (Inspired by Reference) ──────── -->
   <section class="experience" id="experience">
     <div class="experience__sticky">
 
@@ -3903,38 +3927,24 @@
       requestAnimationFrame(updateParallax);
     })();
 
-    /* ══════════════════════════════════════════════════════
-       SELECTED WORKS — Phased Scroll & Dynamic Sizing
-       - Phase 1 (0.00 → 0.38): Left/Right intro content splits and moves away
-       - Phase 2 (0.32 → 0.50): All project cards appear together centered in view
-       - Phase 3 (0.50 → 1.00): Full interactive showcase held in focus
-       - Automatically adjusts project card size based on total project count
+        /* ══════════════════════════════════════════════════════
+       STATEMENT DOORS & APERTURE SCROLL ENGINE
+       - Left & Right doors slide apart smoothly on scroll
+       - Thin central rectangular aperture widens gradually
+       - Personal statement revealed inside center frame
+       - Zero sudden jumps or jarring snap points
        ══════════════════════════════════════════════════════ */
-    (function initWorksScroll() {
-      const section = document.querySelector('.works');
+    (function initStatementDoors() {
+      const section = document.querySelector('.statement-doors');
       if (!section) return;
 
-      const leftText = document.querySelector('.works__left');
-      const rightText = document.querySelector('.works__right');
-      const portal = document.getElementById('works-portal');
-      const portalRing = document.getElementById('works-portal-ring');
-      const counterEl = document.getElementById('works-counter');
-      const counterCurrent = document.querySelector('.works__counter-current');
-      const cards = [
-        document.getElementById('project-card-1'),
-        document.getElementById('project-card-2'),
-        document.getElementById('project-card-3'),
-        document.getElementById('project-card-4')
-      ].filter(Boolean);
-
-      if (cards.length === 0) return;
+      const leftPanel = document.getElementById('doors-left');
+      const rightPanel = document.getElementById('doors-right');
+      const aperture = document.getElementById('statement-aperture');
+      const quoteContent = document.getElementById('statement-quote-content');
 
       function clamp01(v) {
         return Math.max(0, Math.min(1, v));
-      }
-
-      function lerp(a, b, t) {
-        return a + (b - a) * t;
       }
 
       function easeOutCubic(t) {
@@ -3956,134 +3966,60 @@
         const scrolled = -rect.top;
         const progress = clamp01(scrolled / scrollable);
 
-        // ════════════════════════════════════════════════════
-        // PHASE 1: Doors Part & Proportional Circular Portal Expands
-        // Progress: 0.00 → 0.20
-        // ════════════════════════════════════════════════════
-        const p1Raw = clamp01(progress / 0.20);
-        const p1Ease = easeOutCubic(p1Raw);
-
-        // Doors movement (proportional to viewport width)
-        const maxTextShift = Math.min(vpW * 0.38, 420);
-        const leftX = -p1Ease * maxTextShift;
-        const rightX = p1Ease * maxTextShift;
-        const textOpacity = clamp01(1 - p1Raw * 1.25);
-
-        if (leftText) {
-          leftText.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
-          leftText.style.opacity = textOpacity.toFixed(3);
-        }
-        if (rightText) {
-          rightText.style.transform = `translate3d(${rightX.toFixed(1)}px, 0, 0)`;
-          rightText.style.opacity = textOpacity.toFixed(3);
-        }
-
-        // Circular portal expansion:
-        // Calculates true hypotenuse to ensure 100% viewport coverage
-        const maxPortalRadius = Math.hypot(vpW, vpH) * 0.72;
-        // Portal expands from 0 to full radius during 0.03 → 0.21
-        const portalExpansionRaw = clamp01((progress - 0.03) / 0.18);
-        const portalRadius = easeInOutCubic(portalExpansionRaw) * maxPortalRadius;
-
-        if (portal) {
-          portal.style.setProperty('--portal-radius', `${portalRadius.toFixed(1)}px`);
-        }
-        if (portalRing) {
-          portalRing.style.setProperty('--portal-radius', `${portalRadius.toFixed(1)}px`);
-          // Ring glows while expanding, then softly fades as cards take center focus
-          const ringOpacity = (portalExpansionRaw > 0 && portalExpansionRaw < 0.98)
-            ? (portalExpansionRaw < 0.5 ? portalExpansionRaw * 2 : (1 - portalExpansionRaw) * 2)
-            : 0;
-          portalRing.style.setProperty('--portal-ring-opacity', ringOpacity.toFixed(3));
-        }
-
-        // Counter pill visibility
-        if (counterEl) {
-          const counterOpacity = clamp01((progress - 0.16) / 0.08);
-          counterEl.style.opacity = counterOpacity.toFixed(3);
-        }
-
-        // ════════════════════════════════════════════════════
-        // PHASE 2: Left / Right Project Card Glide & Active Focus
-        // Progress: 0.18 → 1.00
-        // ════════════════════════════════════════════════════
-        if (progress < 0.14) {
-          // Hide cards before portal opens
-          cards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.pointerEvents = 'none';
-            card.classList.remove('is-active');
-          });
-          return;
-        }
-
-        // Responsive horizontal shift distance
+        // Calculate maximum text displacement based on viewport width
         const isMobile = vpW < 768;
-        const cardShift = isMobile ? (vpW * 0.96) : Math.min(vpW * 0.62, 680);
+        const maxShift = isMobile ? (vpW * 0.44) : Math.min(vpW * 0.45, 580);
 
-        // Map scroll progress (0.18 → 1.00) into continuous card stage value (0 → 3)
-        const cardProgressRaw = clamp01((progress - 0.18) / 0.78);
-        const stageVal = cardProgressRaw * 3; // 0 = Card 1, 1 = Card 2, 2 = Card 3, 3 = Card 4
+        // Phase 1: Doors move outward smoothly (0.00 → 0.65)
+        const doorProgress = clamp01(progress / 0.65);
+        const doorEase = easeOutCubic(doorProgress);
 
-        let activeIndex = 0;
-        if (stageVal < 0.5) activeIndex = 0;
-        else if (stageVal < 1.5) activeIndex = 1;
-        else if (stageVal < 2.5) activeIndex = 2;
-        else activeIndex = 3;
+        const leftX = -doorEase * maxShift;
+        const rightX = doorEase * maxShift;
 
-        if (counterCurrent) {
-          counterCurrent.textContent = `0${activeIndex + 1}`;
+        // Opacity fades smoothly between 0.10 and 0.58
+        const textOpacity = clamp01(1 - (progress - 0.10) / 0.48);
+
+        if (leftPanel) {
+          leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, -50%, 0)`;
+          leftPanel.style.opacity = textOpacity.toFixed(3);
+        }
+        if (rightPanel) {
+          rightPanel.style.transform = `translate3d(${rightX.toFixed(1)}px, -50%, 0)`;
+          rightPanel.style.opacity = textOpacity.toFixed(3);
         }
 
-        cards.forEach((card, index) => {
-          // Relative offset from current active focal position
-          const dist = index - stageVal; // negative = passed to the left; positive = upcoming on the right
+        // Phase 2: Rectangular aperture expands from 2px to full target width (0.04 → 0.72)
+        const targetWidth = isMobile
+          ? Math.min(vpW - 32, 360)
+          : Math.min(Math.max(vpW * 0.50, 380), 720);
 
-          // Smooth cubic curve for gliding
-          const absDist = Math.abs(dist);
-          const sign = dist < 0 ? -1 : 1;
-          
-          // Interpolate X position
-          const xOffset = sign * Math.pow(absDist, 0.95) * cardShift;
-          
-          // Scale: 1.0 at center, drops to 0.88 when offset
-          const scale = lerp(1.0, 0.88, clamp01(absDist));
+        const apertureProgress = clamp01((progress - 0.04) / 0.68);
+        const apertureEase = easeInOutCubic(apertureProgress);
+        const currentWidth = 2 + apertureEase * (targetWidth - 2);
 
-          // Opacity: 1.0 at center, fades smoothly beyond 1.2 distance
-          let opacity = 0;
-          if (absDist <= 1.25) {
-            opacity = clamp01(1 - Math.pow(absDist / 1.15, 2));
-          }
+        if (aperture) {
+          aperture.style.setProperty('--aperture-width', `${currentWidth.toFixed(1)}px`);
+        }
 
-          // Active card state
-          const isCardActive = (index === activeIndex) && (progress >= 0.18);
+        // Phase 3: Quote reveal inside the opening aperture (0.26 → 0.82)
+        const quoteProgress = clamp01((progress - 0.26) / 0.52);
+        const quoteEase = easeOutCubic(quoteProgress);
+        const quoteOpacity = quoteEase;
+        const quoteScale = 0.94 + quoteEase * 0.06;
 
-          card.style.transform = `translate(calc(-50% + ${xOffset.toFixed(1)}px), -50%) scale(${scale.toFixed(3)})`;
-          card.style.opacity = opacity.toFixed(3);
-          card.style.zIndex = isCardActive ? '28' : (20 - Math.round(absDist * 5)).toString();
-          card.style.pointerEvents = (isCardActive && opacity > 0.6) ? 'auto' : 'none';
-          card.classList.toggle('is-active', isCardActive);
-        });
+        if (quoteContent) {
+          quoteContent.style.setProperty('--statement-opacity', quoteOpacity.toFixed(3));
+          quoteContent.style.setProperty('--statement-scale', quoteScale.toFixed(3));
+        }
       }
-
-      // Ensure card links navigate cleanly
-      cards.forEach(card => {
-        card.addEventListener('click', e => {
-          const href = card.getAttribute('href');
-          if (href && !href.startsWith('#')) {
-            // Natural navigation
-            return;
-          }
-        });
-      });
 
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll, { passive: true });
       window.addEventListener('load', onScroll, { passive: true });
       onScroll();
     })();
-
-    /* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════
        EXPERIENCE SECTION — Single Continuous Path & Traveling Dot
        - One single continuous smooth curved path across viewport
        - Glowing active dot travels along exact SVG path
