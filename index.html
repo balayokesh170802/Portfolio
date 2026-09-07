@@ -1629,13 +1629,15 @@
     /* ══════════════════════════════════════════════════════
        STATEMENT DOORS & SCALING CARD SECTION (Bhhavesh Style)
        - Top-left & Bottom-right balanced editorial typography
-       - Smooth proportional center card scaling up to fill 100% viewport (100vw × 100vh)
+       - Zero rectangle at start (pure typography and clean space)
+       - Smooth proportional center card emerges and scales from small to big (100vw × 100vh)
+       - Silky smooth rAF lerp transition
        - Left & right phrases glide outward off-screen as card expands
        - Statement & signature hand-drawn squiggle revealed in center
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
-      height: 240vh;
+      height: 250vh;
       background: var(--color-bg);
     }
 
@@ -1741,16 +1743,17 @@
       width: 100%;
       height: 100%;
       background: #0e0e0e;
-      border: 1.5px solid rgba(226, 109, 92, var(--card-border-opacity, 0.45));
-      border-radius: var(--card-radius, 20px);
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.85), 0 0 45px rgba(226, 109, 92, 0.18);
-      transform: scale(var(--card-scale, 0.22));
+      border: 1.5px solid rgba(226, 109, 92, var(--card-border-opacity, 0));
+      border-radius: var(--card-radius, 24px);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, var(--card-shadow-opacity, 0)), 0 0 45px rgba(226, 109, 92, var(--card-glow-opacity, 0));
+      transform: scale(var(--card-scale, 0));
+      opacity: var(--card-opacity, 0);
       transform-origin: center center;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      will-change: transform, border-radius;
+      will-change: transform, border-radius, opacity;
     }
 
     .statement-card__glow {
@@ -1772,7 +1775,7 @@
       align-items: center;
       justify-content: center;
       opacity: var(--statement-opacity, 0);
-      transform: scale(var(--statement-scale, 0.92));
+      transform: scale(var(--statement-scale, 0.90));
       will-change: opacity, transform;
     }
 
@@ -2892,7 +2895,7 @@
       border-top: 1px solid rgba(20, 20, 19, 0.08);
     }
 
-            /* Statement Doors & Scaling Card Light Mode */
+    /* Statement Doors & Scaling Card Light Mode */
     html[data-theme="light"] .statement-doors {
       background: #f7f6f2;
     }
@@ -2903,8 +2906,8 @@
 
     html[data-theme="light"] .statement-card {
       background: #ffffff;
-      border-color: rgba(226, 109, 92, var(--card-border-opacity, 0.55));
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.09), 0 0 45px rgba(226, 109, 92, 0.15);
+      border-color: rgba(226, 109, 92, var(--card-border-opacity, 0));
+      box-shadow: 0 20px 80px rgba(0, 0, 0, var(--card-light-shadow, 0)), 0 0 45px rgba(226, 109, 92, var(--card-light-glow, 0));
     }
 
     html[data-theme="light"] .statement-card__glow {
@@ -3992,12 +3995,13 @@
 
             /* ══════════════════════════════════════════════════════
        STATEMENT DOORS & SCALING CARD ENGINE (Bhhavesh Style)
-       - Pinned sticky container
-       - Card scales up from center (scale: 0.22 → 1.00)
-       - Left & Right doors pushed outward off-screen (horizontal only)
-       - Border-radius interpolates from 20px down to 0px
+       - Starting stage: ZERO rectangle visible (pure clean typography)
+       - After scroll begins: Card emerges from center and smoothly opens from small to big
+       - Silky smooth rAF lerp loop eliminating jitter/stutter
+       - Left & Right doors pushed outward horizontally off-screen
+       - Border-radius smoothly interpolates from 24px down to 0px
        - Statement & hand-drawn SVG squiggle revealed inside
-       - Seamless transition into projects section
+       - Seamless full-viewport transition into projects section
        ══════════════════════════════════════════════════════ */
     (function initStatementDoors() {
       const section = document.querySelector('.statement-doors');
@@ -4020,50 +4024,67 @@
         return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       }
 
-      function onScroll() {
-        const rect = section.getBoundingClientRect();
-        const sectionH = section.offsetHeight;
-        const vpH = window.innerHeight;
+      let currentProgress = 0;
+      let targetProgress = 0;
+      let rafId = null;
+
+      function applyProgress(progress) {
         const vpW = window.innerWidth;
-        const scrollable = sectionH - vpH;
-        if (scrollable <= 0) return;
-
-        const scrolled = -rect.top;
-        const progress = clamp01(scrolled / scrollable);
-
         const isMobile = vpW < 768;
 
-        // Phase 1: Card scaling from center (0.02 → 0.72)
-        const scaleProgress = clamp01((progress - 0.02) / 0.70);
-        const scaleEase = easeInOutCubic(scaleProgress);
+        // ── Phase 1: Card Appearance & Proportional Scaling ──
+        // At start (progress <= 0.02): absolutely NO rectangle visible
+        if (progress <= 0.02) {
+          if (card) {
+            card.style.setProperty('--card-scale', '0');
+            card.style.setProperty('--card-opacity', '0');
+            card.style.setProperty('--card-border-opacity', '0');
+            card.style.setProperty('--card-shadow-opacity', '0');
+            card.style.setProperty('--card-glow-opacity', '0');
+            card.style.setProperty('--card-light-shadow', '0');
+            card.style.setProperty('--card-light-glow', '0');
+            card.style.setProperty('--card-radius', '24px');
+          }
+        } else {
+          // After scroll starts: opens from small (~0.05) to full screen (1.00)
+          const scaleProgress = clamp01((progress - 0.02) / 0.72);
+          const scaleEase = easeInOutCubic(scaleProgress);
+          const currentScale = 0.05 + scaleEase * 0.95;
 
-        // Initial scale: desktop ~0.22 (card ~316x198px), mobile ~0.38
-        const minScale = isMobile ? 0.38 : 0.22;
-        const currentScale = minScale + scaleEase * (1.0 - minScale);
+          // Fade card in smoothly as it emerges from center
+          const cardOpacity = clamp01((progress - 0.02) / 0.06);
 
-        // Border radius: starts at 20px, interpolates to 0px at full screen
-        const currentRadius = Math.max(0, Math.round(20 * (1 - scaleEase)));
+          // Interpolate border radius down to 0px at full screen
+          const currentRadius = Math.max(0, Math.round(24 * (1 - scaleEase)));
 
-        // Border opacity: softens as card covers full screen
-        const borderOpacity = Math.max(0, 0.45 * (1 - clamp01((progress - 0.55) / 0.25)));
+          // Soften border and shadow as card reaches full viewport coverage
+          const borderFade = 1 - clamp01((progress - 0.65) / 0.20);
+          const borderOpacity = 0.45 * cardOpacity * borderFade;
+          const shadowOpacity = 0.85 * cardOpacity * borderFade;
+          const glowOpacity = 0.18 * cardOpacity * borderFade;
+          const lightShadow = 0.09 * cardOpacity * borderFade;
+          const lightGlow = 0.15 * cardOpacity * borderFade;
 
-        if (card) {
-          card.style.setProperty('--card-scale', currentScale.toFixed(4));
-          card.style.setProperty('--card-radius', `${currentRadius}px`);
-          card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
+          if (card) {
+            card.style.setProperty('--card-scale', currentScale.toFixed(4));
+            card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
+            card.style.setProperty('--card-radius', `${currentRadius}px`);
+            card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
+            card.style.setProperty('--card-shadow-opacity', shadowOpacity.toFixed(3));
+            card.style.setProperty('--card-glow-opacity', glowOpacity.toFixed(3));
+            card.style.setProperty('--card-light-shadow', lightShadow.toFixed(3));
+            card.style.setProperty('--card-light-glow', lightGlow.toFixed(3));
+          }
         }
 
-        // Phase 2: Left & Right doors pushed outward off-screen (0.00 → 0.60)
-        const doorProgress = clamp01(progress / 0.60);
+        // ── Phase 2: Left & Right Doors Glide Outward Off-Screen ──
+        const doorProgress = clamp01(progress / 0.55);
         const doorEase = easeOutCubic(doorProgress);
-
-        // Displace text all the way off the viewport edges without vertical shift
         const maxShift = isMobile ? (vpW * 0.58) : Math.min(vpW * 0.60, 850);
         const leftX = -doorEase * maxShift;
         const rightX = doorEase * maxShift;
 
-        // Text opacity fades as it moves out
-        const textOpacity = clamp01(1 - (progress - 0.12) / 0.45);
+        const textOpacity = clamp01(1 - (progress - 0.08) / 0.40);
 
         if (leftPanel) {
           leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
@@ -4074,11 +4095,11 @@
           rightPanel.style.opacity = textOpacity.toFixed(3);
         }
 
-        // Phase 3: Statement reveal inside the expanding card (0.28 → 0.85)
-        const statementProgress = clamp01((progress - 0.28) / 0.45);
+        // ── Phase 3: Statement & Squiggle Reveal Inside Card ──
+        const statementProgress = clamp01((progress - 0.25) / 0.45);
         const statementEase = easeOutCubic(statementProgress);
         const statementOpacity = statementEase;
-        const statementScale = 0.92 + statementEase * 0.08;
+        const statementScale = 0.90 + statementEase * 0.10;
 
         if (cardInner) {
           cardInner.style.setProperty('--statement-opacity', statementOpacity.toFixed(3));
@@ -4086,10 +4107,41 @@
         }
       }
 
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
-      window.addEventListener('load', onScroll, { passive: true });
-      onScroll();
+      function renderLoop() {
+        const diff = targetProgress - currentProgress;
+        if (Math.abs(diff) > 0.0003) {
+          currentProgress += diff * 0.16;
+          applyProgress(currentProgress);
+          rafId = requestAnimationFrame(renderLoop);
+        } else {
+          currentProgress = targetProgress;
+          applyProgress(currentProgress);
+          rafId = null;
+        }
+      }
+
+      function onScroll(instant) {
+        const rect = section.getBoundingClientRect();
+        const sectionH = section.offsetHeight;
+        const vpH = window.innerHeight;
+        const scrollable = sectionH - vpH;
+        if (scrollable <= 0) return;
+
+        const scrolled = -rect.top;
+        targetProgress = clamp01(scrolled / scrollable);
+
+        if (instant === true) {
+          currentProgress = targetProgress;
+          applyProgress(currentProgress);
+        } else if (!rafId) {
+          rafId = requestAnimationFrame(renderLoop);
+        }
+      }
+
+      window.addEventListener('scroll', () => onScroll(false), { passive: true });
+      window.addEventListener('resize', () => onScroll(true), { passive: true });
+      window.addEventListener('load', () => onScroll(true), { passive: true });
+      onScroll(true);
     })();
 /* ══════════════════════════════════════════════════════
        EXPERIENCE SECTION — Single Continuous Path & Traveling Dot
