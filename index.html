@@ -1628,16 +1628,14 @@
 
     /* ══════════════════════════════════════════════════════
        STATEMENT DOORS & SCALING CARD SECTION (Bhhavesh Style)
-       - Instrument Sans & Inter typography (exact match to bhhaveshmd.framer.website)
-       - Zero rectangle at start: 0% scroll -> 0.0000 scale
-       - Opening: 70% scroll -> 0.7000 scale
-       - Full Viewport: 90% scroll -> 1.0000 scale (100% fully open)
-       - Quote/text remains completely hidden during opening
-       - Only after rectangle is 100% open, text reveals with subtle fade-in
+       - Left Top: "Every interface begins"
+       - Right Top: "with a human need."
+       - Inside Full-Open Rectangle: "Design makes the complex feel effortless."
+       - Scroll Progress: start 0% -> 0.0000, opening in 0.8000, full open 1.0000
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
-      height: 190vh;
+      height: 200vh;
       background: var(--color-bg);
     }
 
@@ -1655,7 +1653,7 @@
       justify-content: center;
     }
 
-    /* Left & Right Door Panels (Diagonal Editorial Framing) */
+    /* Left & Right Door Panels (Upper Framing) */
     .doors-panel {
       position: absolute;
       will-change: transform, opacity;
@@ -1673,7 +1671,7 @@
     }
 
     .doors-panel--right {
-      bottom: clamp(14%, 18vh, 22%);
+      top: clamp(14%, 18vh, 22%);
       right: var(--page-padding-x);
       text-align: right;
       align-items: flex-end;
@@ -1685,40 +1683,40 @@
       font-family: 'Instrument Sans', sans-serif;
       font-weight: 500;
       color: #f7edd8;
-      font-size: clamp(2.4rem, 5.2vw, 4.8rem);
-      line-height: 1.1;
+      font-size: clamp(2.2rem, 4.8vw, 4.4rem);
+      line-height: 1.12;
       letter-spacing: -0.025em;
       white-space: nowrap;
     }
 
     @media (max-width: 991px) {
       .statement-doors {
-        --page-padding-x: clamp(24px, 5vw, 48px);
+        --page-padding-x: clamp(20px, 4vw, 40px);
       }
       .doors-panel--left {
         top: clamp(10%, 14vh, 18%);
       }
       .doors-panel--right {
-        bottom: clamp(10%, 14vh, 18%);
+        top: clamp(10%, 14vh, 18%);
       }
       .doors-line {
-        font-size: clamp(1.8rem, 4.2vw, 3.2rem);
+        font-size: clamp(1.6rem, 3.8vw, 2.8rem);
       }
     }
 
     @media (max-width: 767px) {
       .statement-doors {
-        height: 175vh;
-        --page-padding-x: clamp(16px, 5vw, 24px);
+        height: 180vh;
+        --page-padding-x: clamp(14px, 4vw, 20px);
       }
       .doors-panel--left {
-        top: clamp(8%, 12vh, 15%);
+        top: clamp(8%, 10vh, 12%);
       }
       .doors-panel--right {
-        bottom: clamp(8%, 12vh, 15%);
+        top: clamp(8%, 10vh, 12%);
       }
       .doors-line {
-        font-size: clamp(1.35rem, 5.5vw, 2rem);
+        font-size: clamp(1.1rem, 4.2vw, 1.45rem);
         line-height: 1.15;
       }
     }
@@ -1772,8 +1770,8 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 780px;
-      padding: clamp(24px, 4vw, 56px);
+      max-width: 900px;
+      padding: clamp(24px, 5vw, 64px);
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -1793,68 +1791,15 @@
       pointer-events: auto;
     }
 
-    .statement-card__badge {
-      display: inline-block;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: clamp(0.66rem, 0.8vw, 0.78rem);
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--color-fg-hover);
-      margin-bottom: clamp(14px, 2vh, 20px);
-    }
-
     .statement-card__headline {
       font-family: 'Instrument Sans', sans-serif;
       font-weight: 500;
-      font-size: clamp(1.8rem, 3.8vw, 3.4rem);
-      line-height: 1.2;
+      font-size: clamp(1.8rem, 4.2vw, 3.8rem);
+      line-height: 1.16;
       letter-spacing: -0.025em;
       color: #f7edd8;
       margin: 0;
-    }
-
-    .statement-card__subtitle {
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(0.92rem, 1.25vw, 1.2rem);
-      line-height: 1.5;
-      color: var(--color-fg-muted);
-      margin: 0 0 clamp(16px, 2.4vh, 24px) 0;
-    }
-
-    .statement-card__squiggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: clamp(16px, 2.4vh, 24px);
-    }
-
-    .statement-card__squiggle svg {
-      width: clamp(130px, 16vw, 190px);
-      height: auto;
-    }
-
-    .statement-card__author {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: clamp(0.7rem, 0.82vw, 0.8rem);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .statement-card__author .author-name {
-      font-weight: 600;
-      color: var(--color-accent);
-    }
-
-    .statement-card__author .author-sep {
-      color: rgba(232, 230, 227, 0.25);
-    }
-
-    .statement-card__author .author-role {
-      color: var(--color-fg-muted);
+      text-align: center;
     }
 /* ══════════════════════════════════════════════════════
        PROJECTS SECTION (2×2 Showcase Grid)
@@ -2932,22 +2877,6 @@
       color: #141413;
     }
 
-    html[data-theme="light"] .statement-card__subtitle {
-      color: #55534e;
-    }
-
-    html[data-theme="light"] .statement-card__author .author-name {
-      color: #8a7864;
-    }
-
-    html[data-theme="light"] .statement-card__author .author-sep {
-      color: rgba(20, 20, 19, 0.2);
-    }
-
-    html[data-theme="light"] .statement-card__author .author-role {
-      color: #706e68;
-    }
-
     html[data-theme="light"] .projects-section {
       background: #f7f6f2;
     }
@@ -3414,8 +3343,8 @@
     <div class="statement-doors__sticky">
       <!-- Left Door Content (Upper Left) -->
       <div class="doors-panel doors-panel--left" id="doors-left">
-        <span class="doors-line">Every interface begins</span>
-        <span class="doors-line">with a human need.</span>
+        <span class="doors-line">Every interface</span>
+        <span class="doors-line">begins</span>
       </div>
 
       <!-- Center Expanding Viewport Card -->
@@ -3428,10 +3357,10 @@
         </div>
       </div>
 
-      <!-- Right Door Content (Lower Right) -->
+      <!-- Right Door Content (Upper Right) -->
       <div class="doors-panel doors-panel--right" id="doors-right">
-        <span class="doors-line">Design makes the complex</span>
-        <span class="doors-line">feel effortless.</span>
+        <span class="doors-line">with a human</span>
+        <span class="doors-line">need.</span>
       </div>
     </div>
   </section>
@@ -3997,15 +3926,10 @@
 
             /* ══════════════════════════════════════════════════════
        STATEMENT DOORS & SCALING CARD ENGINE
-       - scroll state specification:
-           start (0%) -> 0.0000
-           opening (70%) -> 0.7000
-           full viewport (90%) -> 1.0000
+       - Scroll Progress: start 0% -> 0.0000, opening in 0.8000, full open 1.0000
        - Text inside remains 100% COMPLETELY HIDDEN while opening
-       - Only after rectangle reaches 100% full open (at 90% scroll),
-         text reveals with subtle fade-in animation
+       - Only after rectangle reaches 100% full open, text reveals with subtle fade-in
        - Doors glide outward smoothly off-screen as card expands
-       - Direct 120fps hardware ticking for buttery responsiveness
        ══════════════════════════════════════════════════════ */
     (function initStatementDoors() {
       const section = document.querySelector('.statement-doors');
@@ -4020,23 +3944,22 @@
         return Math.max(0, Math.min(1, v));
       }
 
-      // Exact scroll state curve:
-      // start (0%) -> 0.0000
-      // opening (70%) -> 0.7000
-      // full viewport (90%) -> 1.0000
-      // holds 1.0000 for progress >= 0.90
+      // Scroll progress mapping:
+      // start with 0% -> 0.0000
+      // opening in 0.8000 -> 0.8000
+      // full open -> 1.0000 (reached smoothly and held through 1.0000)
       function getRectangleScale(progress) {
         const p = clamp01(progress);
         if (p <= 0.001) return 0;
-        if (p >= 0.90) return 1;
-        if (p <= 0.70) {
-          const u = p / 0.70;
-          // Hermite curve: s(0)=0, s(1)=0.70, matching slope at 0.70 of 1.25
-          return 0.70 * (-0.75 * Math.pow(u, 3) + 1.75 * Math.pow(u, 2));
+        if (p >= 0.92) return 1;
+        if (p <= 0.80) {
+          const u = p / 0.80;
+          // Hermite curve on [0, 0.80]: s(0)=0, s(0.80)=0.8000
+          return 0.80 * (-0.60 * Math.pow(u, 3) + 1.60 * Math.pow(u, 2));
         } else {
-          const v = (p - 0.70) / 0.20;
-          // Hermite curve: s(0)=0.70, s(1)=1.00, matching slope at 0.70 of 1.25, zero slope at 0.90
-          return 0.70 + 0.25 * v + 0.40 * Math.pow(v, 2) - 0.35 * Math.pow(v, 3);
+          const v = (p - 0.80) / 0.12;
+          // Hermite curve on [0.80, 0.92]: s(0.80)=0.8000, s(0.92)=1.0000, zero slope at 0.92
+          return 0.80 + 0.168 * v + 0.264 * Math.pow(v, 2) - 0.232 * Math.pow(v, 3);
         }
       }
 
@@ -4047,7 +3970,6 @@
         const isMobile = vpW < 768;
 
         // ── Phase 1: Clean Start State (0% Scroll) ──
-        // Zero rectangle at start, doors in natural resting position
         if (progress <= 0.001) {
           if (card) {
             card.style.setProperty('--card-scale', '0');
@@ -4071,10 +3993,10 @@
           return;
         }
 
-        // ── Phase 2: Rectangle Aperture Scaling (0% -> 0.0000, 70% -> 0.7000, 90% -> 1.0000) ──
+        // ── Phase 2: Rectangle Aperture Scaling ──
         const currentScale = getRectangleScale(progress);
         const cardOpacity = clamp01(progress / 0.05);
-        const borderFade = 1 - clamp01((progress - 0.70) / 0.20);
+        const borderFade = 1 - clamp01((progress - 0.75) / 0.17);
         const borderOpacity = 0.08 * cardOpacity * borderFade;
 
         if (card) {
@@ -4101,11 +4023,10 @@
         }
 
         // ── Phase 3: Quote / Text Reveal ──
-        // Strict requirement: The quote/text inside MUST remain completely hidden while opening.
-        // Only after rectangle reaches 100% full open (at 90% scroll) and opening is completely finished,
+        // Text inside MUST remain completely hidden while opening.
+        // Only after rectangle reaches 100% full open (scale = 1.0000),
         // reveal the text inside with a subtle fade-in animation.
-        // Do not show, fade, or reveal any part of the text before rectangle is fully open.
-        if (progress >= 0.90) {
+        if (progress >= 0.92) {
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '1');
             cardInner.style.setProperty('--statement-translate-y', '0px');
