@@ -1626,16 +1626,16 @@
       }
     }
 
-        /* ══════════════════════════════════════════════════════
-       STATEMENT DOORS & APERTURE SECTION
-       - Equal-sized, balanced typography on left & right doors before scroll
-       - Double doors part gradually and smoothly on scroll
-       - Thin central rectangular aperture opens to reveal statement quote
-       - No project cards in this section
+    /* ══════════════════════════════════════════════════════
+       STATEMENT DOORS & SCALING CARD SECTION (Bhhavesh Style)
+       - Top-left & Bottom-right balanced editorial typography
+       - Smooth proportional center card scaling up to fill 100% viewport (100vw × 100vh)
+       - Left & right phrases glide outward off-screen as card expands
+       - Statement & signature hand-drawn squiggle revealed in center
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
-      height: 220vh;
+      height: 240vh;
       background: var(--color-bg);
     }
 
@@ -1653,11 +1653,9 @@
       justify-content: center;
     }
 
-    /* Left & Right Door Panels */
+    /* Left & Right Door Panels (Staggered Diagonally like Bhhavesh) */
     .doors-panel {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
       will-change: transform, opacity;
       z-index: 10;
       pointer-events: none;
@@ -1666,26 +1664,27 @@
     }
 
     .doors-panel--left {
+      top: clamp(14%, 18vh, 22%);
       left: var(--page-padding-x);
       text-align: left;
       align-items: flex-start;
     }
 
     .doors-panel--right {
+      bottom: clamp(14%, 18vh, 22%);
       right: var(--page-padding-x);
       text-align: right;
       align-items: flex-end;
     }
 
-    /* Symmetrical typography with identical sizing, line-height & weight */
+    /* Symmetrical typography with matching sizing, line-height & weight */
     .doors-line {
       display: block;
       font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      text-transform: uppercase;
+      font-weight: 600;
       color: var(--color-fg);
-      font-size: clamp(2rem, 4.2vw, 4.5rem);
-      line-height: 1.05;
+      font-size: clamp(2.4rem, 5.2vw, 4.8rem);
+      line-height: 1.08;
       letter-spacing: -0.03em;
       white-space: nowrap;
     }
@@ -1694,8 +1693,14 @@
       .statement-doors {
         --page-padding-x: clamp(24px, 5vw, 48px);
       }
+      .doors-panel--left {
+        top: clamp(10%, 14vh, 18%);
+      }
+      .doors-panel--right {
+        bottom: clamp(10%, 14vh, 18%);
+      }
       .doors-line {
-        font-size: clamp(1.6rem, 3.8vw, 3rem);
+        font-size: clamp(1.8rem, 4.2vw, 3.2rem);
       }
     }
 
@@ -1703,98 +1708,138 @@
       .statement-doors {
         --page-padding-x: clamp(16px, 5vw, 24px);
       }
+      .doors-panel--left {
+        top: clamp(8%, 12vh, 15%);
+      }
+      .doors-panel--right {
+        bottom: clamp(8%, 12vh, 15%);
+      }
       .doors-line {
-        font-size: clamp(1.15rem, 4.8vw, 1.8rem);
-        line-height: 1.12;
+        font-size: clamp(1.35rem, 5.5vw, 2rem);
+        line-height: 1.15;
       }
     }
 
-    /* Central Thin Rectangular Aperture Door */
-    .statement-aperture {
+    /* Center Scaling Card Container (Full Viewport Geometry) */
+    .statement-card-wrap {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: var(--aperture-width, 2px);
-      height: clamp(250px, 42vh, 390px);
-      border: 1.5px solid rgba(226, 109, 92, 0.45);
-      border-radius: 12px;
-      background: rgba(14, 14, 14, 0.94);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 0 40px rgba(226, 109, 92, 0.22), 0 20px 60px rgba(0, 0, 0, 0.75);
-      overflow: hidden;
-      z-index: 15;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
-      will-change: width;
+      pointer-events: none;
+      z-index: 15;
     }
 
-    .statement-aperture__glow {
+    .statement-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #0e0e0e;
+      border: 1.5px solid rgba(226, 109, 92, var(--card-border-opacity, 0.45));
+      border-radius: var(--card-radius, 20px);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.85), 0 0 45px rgba(226, 109, 92, 0.18);
+      transform: scale(var(--card-scale, 0.22));
+      transform-origin: center center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      will-change: transform, border-radius;
+    }
+
+    .statement-card__glow {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: radial-gradient(ellipse 65% 50% at 50% 50%, rgba(226, 109, 92, 0.12) 0%, transparent 80%);
+      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.14) 0%, transparent 75%);
     }
 
-    .statement-aperture__content {
+    .statement-card__inner {
       position: relative;
       z-index: 2;
       width: 100%;
-      padding: clamp(20px, 3.5vw, 44px);
+      max-width: 780px;
+      padding: clamp(24px, 4vw, 56px);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       opacity: var(--statement-opacity, 0);
-      transform: scale(var(--statement-scale, 0.94));
+      transform: scale(var(--statement-scale, 0.92));
       will-change: opacity, transform;
-      min-width: min(calc(100vw - 48px), 560px);
     }
 
-    .statement-badge {
+    .statement-card__badge {
       display: inline-block;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.64rem, 0.76vw, 0.74rem);
+      font-size: clamp(0.66rem, 0.8vw, 0.78rem);
       font-weight: 600;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--color-fg-hover);
-      margin-bottom: clamp(10px, 1.6vh, 16px);
+      margin-bottom: clamp(14px, 2vh, 20px);
     }
 
-    .statement-quote {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-style: italic;
-      font-size: clamp(1.2rem, 2.1vw, 1.85rem);
-      line-height: 1.38;
+    .statement-card__headline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.5rem, 3.2vw, 2.75rem);
+      line-height: 1.18;
+      letter-spacing: -0.02em;
       color: var(--color-fg);
-      margin: 0 0 clamp(14px, 2.2vh, 20px) 0;
-      max-width: 540px;
+      margin: 0 0 clamp(12px, 1.8vh, 18px) 0;
     }
 
-    .statement-author {
+    .statement-card__subtitle {
+      font-family: var(--font-primary);
+      font-size: clamp(0.92rem, 1.25vw, 1.2rem);
+      line-height: 1.5;
+      color: var(--color-fg-muted);
+      margin: 0 0 clamp(16px, 2.4vh, 24px) 0;
+    }
+
+    .statement-card__squiggle {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      margin-bottom: clamp(16px, 2.4vh, 24px);
+    }
+
+    .statement-card__squiggle svg {
+      width: clamp(130px, 16vw, 190px);
+      height: auto;
+    }
+
+    .statement-card__author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.66rem, 0.78vw, 0.76rem);
-      letter-spacing: 0.12em;
+      font-size: clamp(0.7rem, 0.82vw, 0.8rem);
+      letter-spacing: 0.14em;
       text-transform: uppercase;
     }
 
-    .statement-author__name {
+    .statement-card__author .author-name {
       font-weight: 700;
       color: var(--color-accent);
     }
 
-    .statement-author__role {
-      color: var(--color-fg-muted);
+    .statement-card__author .author-sep {
+      color: rgba(232, 230, 227, 0.25);
     }
 
-    /* ══════════════════════════════════════════════════════
+    .statement-card__author .author-role {
+      color: var(--color-fg-muted);
+    }
+/* ══════════════════════════════════════════════════════
        PROJECTS SECTION (2×2 Showcase Grid)
        - Strict 15% horizontal margins (--page-padding-x: 15vw)
        - 2 columns in row 1, 2 columns in row 2
@@ -2847,7 +2892,7 @@
       border-top: 1px solid rgba(20, 20, 19, 0.08);
     }
 
-        /* Statement Doors & Projects Section Light Mode */
+            /* Statement Doors & Scaling Card Light Mode */
     html[data-theme="light"] .statement-doors {
       background: #f7f6f2;
     }
@@ -2856,22 +2901,34 @@
       color: #141413;
     }
 
-    html[data-theme="light"] .statement-aperture {
-      background: rgba(255, 255, 255, 0.94);
-      border-color: rgba(226, 109, 92, 0.65);
-      box-shadow: 0 0 40px rgba(226, 109, 92, 0.25), 0 20px 60px rgba(0, 0, 0, 0.08);
+    html[data-theme="light"] .statement-card {
+      background: #ffffff;
+      border-color: rgba(226, 109, 92, var(--card-border-opacity, 0.55));
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.09), 0 0 45px rgba(226, 109, 92, 0.15);
     }
 
-    html[data-theme="light"] .statement-quote {
+    html[data-theme="light"] .statement-card__glow {
+      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.08) 0%, transparent 75%);
+    }
+
+    html[data-theme="light"] .statement-card__headline {
       color: #141413;
     }
 
-    html[data-theme="light"] .statement-author__name {
+    html[data-theme="light"] .statement-card__subtitle {
+      color: #55534e;
+    }
+
+    html[data-theme="light"] .statement-card__author .author-name {
       color: #8a7864;
     }
 
-    html[data-theme="light"] .statement-author__role {
-      color: #6b6b6b;
+    html[data-theme="light"] .statement-card__author .author-sep {
+      color: rgba(20, 20, 19, 0.2);
+    }
+
+    html[data-theme="light"] .statement-card__author .author-role {
+      color: #706e68;
     }
 
     html[data-theme="light"] .projects-section {
@@ -3335,39 +3392,45 @@
     </div>
   </section>
 
-  <!-- ─── Statement Doors / Aperture Section ────────────── -->
+  <!-- ─── Statement Doors & Scaling Card Section (Inspired by Bhhavesh) ── -->
   <section class="statement-doors" id="works-intro">
     <div class="statement-doors__sticky">
-      <!-- Left Door Content -->
+      <!-- Left Door Content (Upper Left) -->
       <div class="doors-panel doors-panel--left" id="doors-left">
-        <span class="doors-line">SELECTED</span>
-        <span class="doors-line">WORKS</span>
+        <span class="doors-line">Designing the</span>
+        <span class="doors-line">interface is</span>
       </div>
 
-      <!-- Center Expanding Aperture -->
-      <div class="statement-aperture" id="statement-aperture">
-        <div class="statement-aperture__glow"></div>
-        <div class="statement-aperture__content" id="statement-quote-content">
-          <span class="statement-badge">DESIGN PHILOSOPHY</span>
-          <blockquote class="statement-quote">
-            “Crafting digital experiences where clarity meets character — merging functional interface design with immersive digital storytelling.”
-          </blockquote>
-          <div class="statement-author">
-            <span class="statement-author__name">BALAYOKESH</span>
-            <span class="statement-author__role">UX / UI DESIGNER</span>
+      <!-- Center Expanding Viewport Card -->
+      <div class="statement-card-wrap">
+        <div class="statement-card" id="statement-card">
+          <div class="statement-card__glow"></div>
+          <div class="statement-card__inner" id="statement-card-inner">
+            <span class="statement-card__badge">DESIGN PHILOSOPHY</span>
+            <h3 class="statement-card__headline">Understanding the problem usually is.</h3>
+            <p class="statement-card__subtitle">Everything below started with that moment.</p>
+            <div class="statement-card__squiggle" aria-hidden="true">
+              <svg width="180" height="28" viewBox="0 0 180 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 14C24 4 44 24 67 14C89 4 111 24 134 14C149 7 164 18 176 14" stroke="#e26d5c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="statement-card__author">
+              <span class="author-name">BALAYOKESH</span>
+              <span class="author-sep">·</span>
+              <span class="author-role">UX / UI DESIGNER</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Door Content -->
+      <!-- Right Door Content (Lower Right) -->
       <div class="doors-panel doors-panel--right" id="doors-right">
-        <span class="doors-line">A FEW THINGS</span>
-        <span class="doors-line">I'VE WORKED ON.</span>
+        <span class="doors-line">rarely the</span>
+        <span class="doors-line">hardest part.</span>
       </div>
     </div>
   </section>
-
-  <!-- ─── Dedicated Projects Section (2x2 Grid) ────────── -->
+<!-- ─── Dedicated Projects Section (2x2 Grid) ────────── -->
   <section class="projects-section" id="projects">
     <div class="projects-container">
       <div class="projects-header">
@@ -3927,12 +3990,14 @@
       requestAnimationFrame(updateParallax);
     })();
 
-        /* ══════════════════════════════════════════════════════
-       STATEMENT DOORS & APERTURE SCROLL ENGINE
-       - Left & Right doors slide apart smoothly on scroll
-       - Thin central rectangular aperture widens gradually
-       - Personal statement revealed inside center frame
-       - Zero sudden jumps or jarring snap points
+            /* ══════════════════════════════════════════════════════
+       STATEMENT DOORS & SCALING CARD ENGINE (Bhhavesh Style)
+       - Pinned sticky container
+       - Card scales up from center (scale: 0.22 → 1.00)
+       - Left & Right doors pushed outward off-screen (horizontal only)
+       - Border-radius interpolates from 20px down to 0px
+       - Statement & hand-drawn SVG squiggle revealed inside
+       - Seamless transition into projects section
        ══════════════════════════════════════════════════════ */
     (function initStatementDoors() {
       const section = document.querySelector('.statement-doors');
@@ -3940,8 +4005,8 @@
 
       const leftPanel = document.getElementById('doors-left');
       const rightPanel = document.getElementById('doors-right');
-      const aperture = document.getElementById('statement-aperture');
-      const quoteContent = document.getElementById('statement-quote-content');
+      const card = document.getElementById('statement-card');
+      const cardInner = document.getElementById('statement-card-inner');
 
       function clamp01(v) {
         return Math.max(0, Math.min(1, v));
@@ -3966,51 +4031,58 @@
         const scrolled = -rect.top;
         const progress = clamp01(scrolled / scrollable);
 
-        // Calculate maximum text displacement based on viewport width
         const isMobile = vpW < 768;
-        const maxShift = isMobile ? (vpW * 0.44) : Math.min(vpW * 0.45, 580);
 
-        // Phase 1: Doors move outward smoothly (0.00 → 0.65)
-        const doorProgress = clamp01(progress / 0.65);
+        // Phase 1: Card scaling from center (0.02 → 0.72)
+        const scaleProgress = clamp01((progress - 0.02) / 0.70);
+        const scaleEase = easeInOutCubic(scaleProgress);
+
+        // Initial scale: desktop ~0.22 (card ~316x198px), mobile ~0.38
+        const minScale = isMobile ? 0.38 : 0.22;
+        const currentScale = minScale + scaleEase * (1.0 - minScale);
+
+        // Border radius: starts at 20px, interpolates to 0px at full screen
+        const currentRadius = Math.max(0, Math.round(20 * (1 - scaleEase)));
+
+        // Border opacity: softens as card covers full screen
+        const borderOpacity = Math.max(0, 0.45 * (1 - clamp01((progress - 0.55) / 0.25)));
+
+        if (card) {
+          card.style.setProperty('--card-scale', currentScale.toFixed(4));
+          card.style.setProperty('--card-radius', `${currentRadius}px`);
+          card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
+        }
+
+        // Phase 2: Left & Right doors pushed outward off-screen (0.00 → 0.60)
+        const doorProgress = clamp01(progress / 0.60);
         const doorEase = easeOutCubic(doorProgress);
 
+        // Displace text all the way off the viewport edges without vertical shift
+        const maxShift = isMobile ? (vpW * 0.58) : Math.min(vpW * 0.60, 850);
         const leftX = -doorEase * maxShift;
         const rightX = doorEase * maxShift;
 
-        // Opacity fades smoothly between 0.10 and 0.58
-        const textOpacity = clamp01(1 - (progress - 0.10) / 0.48);
+        // Text opacity fades as it moves out
+        const textOpacity = clamp01(1 - (progress - 0.12) / 0.45);
 
         if (leftPanel) {
-          leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, -50%, 0)`;
+          leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
           leftPanel.style.opacity = textOpacity.toFixed(3);
         }
         if (rightPanel) {
-          rightPanel.style.transform = `translate3d(${rightX.toFixed(1)}px, -50%, 0)`;
+          rightPanel.style.transform = `translate3d(${rightX.toFixed(1)}px, 0, 0)`;
           rightPanel.style.opacity = textOpacity.toFixed(3);
         }
 
-        // Phase 2: Rectangular aperture expands from 2px to full target width (0.04 → 0.72)
-        const targetWidth = isMobile
-          ? Math.min(vpW - 32, 360)
-          : Math.min(Math.max(vpW * 0.50, 380), 720);
+        // Phase 3: Statement reveal inside the expanding card (0.28 → 0.85)
+        const statementProgress = clamp01((progress - 0.28) / 0.45);
+        const statementEase = easeOutCubic(statementProgress);
+        const statementOpacity = statementEase;
+        const statementScale = 0.92 + statementEase * 0.08;
 
-        const apertureProgress = clamp01((progress - 0.04) / 0.68);
-        const apertureEase = easeInOutCubic(apertureProgress);
-        const currentWidth = 2 + apertureEase * (targetWidth - 2);
-
-        if (aperture) {
-          aperture.style.setProperty('--aperture-width', `${currentWidth.toFixed(1)}px`);
-        }
-
-        // Phase 3: Quote reveal inside the opening aperture (0.26 → 0.82)
-        const quoteProgress = clamp01((progress - 0.26) / 0.52);
-        const quoteEase = easeOutCubic(quoteProgress);
-        const quoteOpacity = quoteEase;
-        const quoteScale = 0.94 + quoteEase * 0.06;
-
-        if (quoteContent) {
-          quoteContent.style.setProperty('--statement-opacity', quoteOpacity.toFixed(3));
-          quoteContent.style.setProperty('--statement-scale', quoteScale.toFixed(3));
+        if (cardInner) {
+          cardInner.style.setProperty('--statement-opacity', statementOpacity.toFixed(3));
+          cardInner.style.setProperty('--statement-scale', statementScale.toFixed(3));
         }
       }
 
