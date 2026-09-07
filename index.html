@@ -1630,10 +1630,10 @@
        STATEMENT DOORS & SCALING CARD SECTION (Bhhavesh Style)
        - Top-left & Bottom-right balanced editorial typography
        - Zero rectangle at start (pure typography and clean space)
-       - Smooth proportional center card emerges and scales from small to big (100vw × 100vh)
-       - Silky smooth rAF lerp transition
-       - Left & right phrases glide outward off-screen as card expands
-       - Statement & signature hand-drawn squiggle revealed in center
+       - Sharp, un-distorted 16:9 widescreen aperture (0px border-radius)
+       - Smooth proportional scaling without squishing/stretching
+       - Philosophy statement reveals ONLY when card is wide and spacious
+       - Silky smooth rAF lerp physics
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
@@ -1722,7 +1722,7 @@
       }
     }
 
-    /* Center Scaling Card Container (Full Viewport Geometry) */
+    /* Center Scaling Card Container (Widescreen 16:9 Viewport Canvas) */
     .statement-card-wrap {
       position: absolute;
       top: 50%;
@@ -1740,12 +1740,13 @@
 
     .statement-card {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
       background: #0e0e0e;
-      border: 1.5px solid rgba(226, 109, 92, var(--card-border-opacity, 0));
-      border-radius: var(--card-radius, 24px);
-      box-shadow: 0 20px 80px rgba(0, 0, 0, var(--card-shadow-opacity, 0)), 0 0 45px rgba(226, 109, 92, var(--card-glow-opacity, 0));
+      border: 1px solid rgba(255, 255, 255, var(--card-border-opacity, 0));
+      border-radius: 0px;
+      box-shadow: none;
       transform: scale(var(--card-scale, 0));
       opacity: var(--card-opacity, 0);
       transform-origin: center center;
@@ -1753,14 +1754,16 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      will-change: transform, border-radius, opacity;
+      will-change: transform, opacity;
     }
 
     .statement-card__glow {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.14) 0%, transparent 75%);
+      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.08) 0%, transparent 75%);
+      opacity: var(--statement-opacity, 0);
+      transition: opacity 0.3s ease;
     }
 
     .statement-card__inner {
@@ -1775,8 +1778,9 @@
       align-items: center;
       justify-content: center;
       opacity: var(--statement-opacity, 0);
-      transform: scale(var(--statement-scale, 0.90));
+      transform: scale(var(--statement-scale, 0.94));
       will-change: opacity, transform;
+      pointer-events: none;
     }
 
     .statement-card__badge {
@@ -2906,12 +2910,12 @@
 
     html[data-theme="light"] .statement-card {
       background: #ffffff;
-      border-color: rgba(226, 109, 92, var(--card-border-opacity, 0));
-      box-shadow: 0 20px 80px rgba(0, 0, 0, var(--card-light-shadow, 0)), 0 0 45px rgba(226, 109, 92, var(--card-light-glow, 0));
+      border-color: rgba(20, 20, 19, var(--card-border-opacity, 0));
+      box-shadow: none;
     }
 
     html[data-theme="light"] .statement-card__glow {
-      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.08) 0%, transparent 75%);
+      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.06) 0%, transparent 75%);
     }
 
     html[data-theme="light"] .statement-card__headline {
@@ -3994,14 +3998,14 @@
     })();
 
             /* ══════════════════════════════════════════════════════
-       STATEMENT DOORS & SCALING CARD ENGINE (Bhhavesh Style)
-       - Starting stage: ZERO rectangle visible (pure clean typography)
-       - After scroll begins: Card emerges from center and smoothly opens from small to big
-       - Silky smooth rAF lerp loop eliminating jitter/stutter
-       - Left & Right doors pushed outward horizontally off-screen
-       - Border-radius smoothly interpolates from 24px down to 0px
-       - Statement & hand-drawn SVG squiggle revealed inside
-       - Seamless full-viewport transition into projects section
+       STATEMENT DOORS & SCALING CARD ENGINE (Authentic Bhhavesh Model)
+       - Zero rectangle at start (pure clean editorial typography)
+       - On initial scroll: blooms swiftly into a 16:9 aperture (never stays stretched small)
+       - Main scroll: majestically and smoothly expands from aperture to full viewport (100vw × 100vh)
+       - Sharp 0px border-radius without distortion or pill rounding
+       - Doors glide outward off-screen as card expands
+       - Statement reveals inside ONLY when card has expanded large enough
+       - Silky smooth rAF lerp loop for fluid, physical scroll damping
        ══════════════════════════════════════════════════════ */
     (function initStatementDoors() {
       const section = document.querySelector('.statement-doors');
@@ -4031,60 +4035,58 @@
       function applyProgress(progress) {
         const vpW = window.innerWidth;
         const isMobile = vpW < 768;
+        const baseScale = isMobile ? 0.36 : 0.22;
 
-        // ── Phase 1: Card Appearance & Proportional Scaling ──
-        // At start (progress <= 0.02): absolutely NO rectangle visible
-        if (progress <= 0.02) {
+        // ── Phase 1: Card Appearance & Scaling ──
+        // At start (progress <= 0.04): absolutely NO rectangle visible
+        if (progress <= 0.04) {
           if (card) {
             card.style.setProperty('--card-scale', '0');
             card.style.setProperty('--card-opacity', '0');
             card.style.setProperty('--card-border-opacity', '0');
-            card.style.setProperty('--card-shadow-opacity', '0');
-            card.style.setProperty('--card-glow-opacity', '0');
-            card.style.setProperty('--card-light-shadow', '0');
-            card.style.setProperty('--card-light-glow', '0');
-            card.style.setProperty('--card-radius', '24px');
           }
-        } else {
-          // After scroll starts: opens from small (~0.05) to full screen (1.00)
-          const scaleProgress = clamp01((progress - 0.02) / 0.72);
-          const scaleEase = easeInOutCubic(scaleProgress);
-          const currentScale = 0.05 + scaleEase * 0.95;
-
-          // Fade card in smoothly as it emerges from center
-          const cardOpacity = clamp01((progress - 0.02) / 0.06);
-
-          // Interpolate border radius down to 0px at full screen
-          const currentRadius = Math.max(0, Math.round(24 * (1 - scaleEase)));
-
-          // Soften border and shadow as card reaches full viewport coverage
-          const borderFade = 1 - clamp01((progress - 0.65) / 0.20);
-          const borderOpacity = 0.45 * cardOpacity * borderFade;
-          const shadowOpacity = 0.85 * cardOpacity * borderFade;
-          const glowOpacity = 0.18 * cardOpacity * borderFade;
-          const lightShadow = 0.09 * cardOpacity * borderFade;
-          const lightGlow = 0.15 * cardOpacity * borderFade;
+          if (cardInner) {
+            cardInner.style.setProperty('--statement-opacity', '0');
+            cardInner.style.setProperty('--statement-scale', '0.94');
+          }
+        } else if (progress <= 0.14) {
+          // Swift bloom: rapidly forms a handsome 16:9 aperture (never lingers stretched small)
+          const t = (progress - 0.04) / 0.10;
+          const bloomEase = easeOutCubic(t);
+          const currentScale = bloomEase * baseScale;
+          const cardOpacity = bloomEase;
+          const borderOpacity = 0.08 * cardOpacity;
 
           if (card) {
             card.style.setProperty('--card-scale', currentScale.toFixed(4));
             card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
-            card.style.setProperty('--card-radius', `${currentRadius}px`);
             card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
-            card.style.setProperty('--card-shadow-opacity', shadowOpacity.toFixed(3));
-            card.style.setProperty('--card-glow-opacity', glowOpacity.toFixed(3));
-            card.style.setProperty('--card-light-shadow', lightShadow.toFixed(3));
-            card.style.setProperty('--card-light-glow', lightGlow.toFixed(3));
+          }
+          if (cardInner) {
+            cardInner.style.setProperty('--statement-opacity', '0');
+          }
+        } else {
+          // Main expansion: smoothly scales from baseline aperture to full viewport (100vw × 100vh)
+          const t = clamp01((progress - 0.14) / 0.66);
+          const scaleEase = easeInOutCubic(t);
+          const currentScale = baseScale + scaleEase * (1.0 - baseScale);
+          const borderFade = 1 - clamp01((progress - 0.65) / 0.15);
+          const borderOpacity = 0.08 * borderFade;
+
+          if (card) {
+            card.style.setProperty('--card-scale', currentScale.toFixed(4));
+            card.style.setProperty('--card-opacity', '1');
+            card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
           }
         }
 
-        // ── Phase 2: Left & Right Doors Glide Outward Off-Screen ──
-        const doorProgress = clamp01(progress / 0.55);
+        // ── Phase 2: Left & Right Doors Outward Displacement ──
+        const doorProgress = clamp01((progress - 0.06) / 0.50);
         const doorEase = easeOutCubic(doorProgress);
         const maxShift = isMobile ? (vpW * 0.58) : Math.min(vpW * 0.60, 850);
         const leftX = -doorEase * maxShift;
         const rightX = doorEase * maxShift;
-
-        const textOpacity = clamp01(1 - (progress - 0.08) / 0.40);
+        const textOpacity = clamp01(1 - (progress - 0.12) / 0.42);
 
         if (leftPanel) {
           leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
@@ -4095,22 +4097,30 @@
           rightPanel.style.opacity = textOpacity.toFixed(3);
         }
 
-        // ── Phase 3: Statement & Squiggle Reveal Inside Card ──
-        const statementProgress = clamp01((progress - 0.25) / 0.45);
-        const statementEase = easeOutCubic(statementProgress);
-        const statementOpacity = statementEase;
-        const statementScale = 0.90 + statementEase * 0.10;
+        // ── Phase 3: Statement Reveal Inside Card (Delayed until Card is Large) ──
+        // In Bhhavesh, statement reveals ONLY when card is wide and spacious (progress > 0.36)
+        if (progress > 0.36) {
+          const statementProgress = clamp01((progress - 0.36) / 0.38);
+          const statementEase = easeOutCubic(statementProgress);
+          const statementOpacity = statementEase;
+          const statementScale = 0.94 + statementEase * 0.06;
 
-        if (cardInner) {
-          cardInner.style.setProperty('--statement-opacity', statementOpacity.toFixed(3));
-          cardInner.style.setProperty('--statement-scale', statementScale.toFixed(3));
+          if (cardInner) {
+            cardInner.style.setProperty('--statement-opacity', statementOpacity.toFixed(3));
+            cardInner.style.setProperty('--statement-scale', statementScale.toFixed(3));
+          }
+        } else {
+          if (cardInner) {
+            cardInner.style.setProperty('--statement-opacity', '0');
+            cardInner.style.setProperty('--statement-scale', '0.94');
+          }
         }
       }
 
       function renderLoop() {
         const diff = targetProgress - currentProgress;
         if (Math.abs(diff) > 0.0003) {
-          currentProgress += diff * 0.16;
+          currentProgress += diff * 0.14;
           applyProgress(currentProgress);
           rafId = requestAnimationFrame(renderLoop);
         } else {
