@@ -1671,7 +1671,7 @@
     }
 
     .doors-panel--right {
-      top: clamp(14%, 18vh, 22%);
+      bottom: clamp(14%, 18vh, 22%);
       right: var(--page-padding-x);
       text-align: right;
       align-items: flex-end;
@@ -1683,40 +1683,40 @@
       font-family: 'Instrument Sans', sans-serif;
       font-weight: 500;
       color: #f7edd8;
-      font-size: clamp(2.2rem, 4.8vw, 4.4rem);
-      line-height: 1.12;
+      font-size: clamp(2.4rem, 5.2vw, 4.8rem);
+      line-height: 1.1;
       letter-spacing: -0.025em;
       white-space: nowrap;
     }
 
     @media (max-width: 991px) {
       .statement-doors {
-        --page-padding-x: clamp(20px, 4vw, 40px);
+        --page-padding-x: clamp(24px, 5vw, 48px);
       }
       .doors-panel--left {
         top: clamp(10%, 14vh, 18%);
       }
       .doors-panel--right {
-        top: clamp(10%, 14vh, 18%);
+        bottom: clamp(10%, 14vh, 18%);
       }
       .doors-line {
-        font-size: clamp(1.6rem, 3.8vw, 2.8rem);
+        font-size: clamp(1.8rem, 4.2vw, 3.2rem);
       }
     }
 
     @media (max-width: 767px) {
       .statement-doors {
         height: 180vh;
-        --page-padding-x: clamp(14px, 4vw, 20px);
+        --page-padding-x: clamp(16px, 5vw, 24px);
       }
       .doors-panel--left {
-        top: clamp(8%, 10vh, 12%);
+        top: clamp(8%, 12vh, 15%);
       }
       .doors-panel--right {
-        top: clamp(8%, 10vh, 12%);
+        bottom: clamp(8%, 12vh, 15%);
       }
       .doors-line {
-        font-size: clamp(1.1rem, 4.2vw, 1.45rem);
+        font-size: clamp(1.35rem, 5.5vw, 2rem);
         line-height: 1.15;
       }
     }
@@ -3357,7 +3357,7 @@
         </div>
       </div>
 
-      <!-- Right Door Content (Upper Right) -->
+      <!-- Right Door Content (Lower Right) -->
       <div class="doors-panel doors-panel--right" id="doors-right">
         <span class="doors-line">with a human</span>
         <span class="doors-line">need.</span>
