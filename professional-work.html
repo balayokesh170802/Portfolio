@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Pre-render theme check to prevent flash of wrong theme -->
+  <!-- Enforce permanent dark mode -->
   <script>
     (function() {
       try {
-        var savedTheme = localStorage.getItem('portfolio_theme');
-        if (savedTheme === 'light') {
-          document.documentElement.setAttribute('data-theme', 'light');
-        } else {
-          document.documentElement.setAttribute('data-theme', 'dark');
-        }
+        localStorage.setItem('portfolio_theme', 'dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
       } catch (e) {}
 
       // Redirect legacy links to individual pages
@@ -1169,13 +1165,14 @@
               <section class="narrative-block">
                 <h4 class="narrative-heading">ABOUT THE PROJECT</h4>
                 <p class="narrative-text">NYTWOLF Games is a game-focused studio, and the website was designed to create a digital space that introduces the studio and presents its work in a clear and visually engaging way.</p>
-                <p class="narrative-text">The focus was on building a responsive layout, maintaining visual consistency, and creating a browsing experience that works smoothly across different screen sizes.</p>
               </section>
 
               <!-- My Contribution -->
               <section class="narrative-block">
                 <h4 class="narrative-heading">MY CONTRIBUTION</h4>
                 <p class="narrative-text">My contribution focused on the website's UX/UI design, including structuring page layouts, designing interface elements, and adapting the experience across different screen sizes.</p>
+                <p class="narrative-text">I translated the studio's bold gaming brand into a dark-mode-first aesthetic with custom game showcase cards, refined micro-interactions, and high-contrast typography.</p>
+                <p class="narrative-text">I developed reusable design components and structured content hierarchies in Figma, ensuring visual balance from mobile screens to ultrawide viewports.</p>
               </section>
             </div>
 
@@ -1229,81 +1226,20 @@
               </div>
             </div>
 
-            <!-- Right Column: Narrative Blocks + 5 Individual Page Direct Links -->
+            <!-- Right Column: Narrative Blocks -->
             <div class="pe-col-right">
               <!-- About The Project -->
               <section class="narrative-block">
                 <h4 class="narrative-heading">ABOUT THE PROJECT</h4>
                 <p class="narrative-text">The Teqball Tamilnadu website involved designing five individual pages, each created to present different content and support a specific part of the overall website experience.</p>
-                <p class="narrative-text">The challenge was to create consistency across all pages while adapting the layout, content hierarchy, and user flow to suit the purpose of each page.</p>
               </section>
 
               <!-- My Contribution -->
               <section class="narrative-block">
                 <h4 class="narrative-heading">MY CONTRIBUTION</h4>
                 <p class="narrative-text">I worked on the UX/UI design across all five pages, defining page structures, organising content, creating layouts, and maintaining a consistent visual system throughout the website.</p>
-              </section>
-
-              <!-- 5 Individual Pages Link Section -->
-              <section class="project-pages-links-section">
-                <span class="pages-links-label">PROJECT PAGES &amp; DIRECT LINKS</span>
-                <div class="pages-links-grid">
-                  <a href="https://www.teqballtamilnadu.com/" target="_blank" rel="noopener noreferrer" class="page-link-row">
-                    <span class="page-link-num">01</span>
-                    <span class="page-link-name">HOME PAGE</span>
-                    <span class="page-link-action">
-                      VISIT PAGE
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </a>
-                  <a href="https://www.teqballtamilnadu.com/pages/about-game.html" target="_blank" rel="noopener noreferrer" class="page-link-row">
-                    <span class="page-link-num">02</span>
-                    <span class="page-link-name">ABOUT &amp; RULES</span>
-                    <span class="page-link-action">
-                      VISIT PAGE
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </a>
-                  <a href="https://www.teqballtamilnadu.com/pages/events.html" target="_blank" rel="noopener noreferrer" class="page-link-row">
-                    <span class="page-link-num">03</span>
-                    <span class="page-link-name">TOURNAMENT &amp; EVENTS</span>
-                    <span class="page-link-action">
-                      VISIT PAGE
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </a>
-                  <a href="https://www.teqballtamilnadu.com/pages/about.html" target="_blank" rel="noopener noreferrer" class="page-link-row">
-                    <span class="page-link-num">04</span>
-                    <span class="page-link-name">ABOUT THE ASSOCIATION</span>
-                    <span class="page-link-action">
-                      VISIT PAGE
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </a>
-                  <a href="https://www.teqballtamilnadu.com/pages/contact.html" target="_blank" rel="noopener noreferrer" class="page-link-row">
-                    <span class="page-link-num">05</span>
-                    <span class="page-link-name">CONTACT &amp; ENQUIRY</span>
-                    <span class="page-link-action">
-                      VISIT PAGE
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </a>
-                </div>
+                <p class="narrative-text">I mapped out information architectures and responsive layouts tailored to tournament schedules, rulebooks, association updates, and registration flows.</p>
+                <p class="narrative-text">I established a cohesive typography hierarchy, athletic color palette, and reusable UI components that ensure seamless legibility across mobile and desktop screens.</p>
               </section>
             </div>
 
@@ -1441,62 +1377,6 @@
   </script>
 
 
-
-  <!-- ─── Floating Theme Switcher Button (Bottom-Right) ─── -->
-  <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle light and dark mode" title="Toggle theme">
-    <svg class="theme-icon theme-icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-    <svg class="theme-icon theme-icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-  </button>
-
-
-  <!-- ─── Theme Switcher JavaScript ─── -->
-  <script>
-    (function() {
-      const toggleBtn = document.getElementById('theme-toggle-btn');
-      if (!toggleBtn) return;
-
-      function getEffectiveTheme() {
-        return document.documentElement.getAttribute('data-theme') || 'dark';
-      }
-
-      function updateButtonState(theme) {
-        const isLight = theme === 'light';
-        toggleBtn.setAttribute('aria-label', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
-        toggleBtn.setAttribute('title', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
-      }
-
-      toggleBtn.addEventListener('click', function() {
-        const currentTheme = getEffectiveTheme();
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        try {
-          localStorage.setItem('portfolio_theme', newTheme);
-        } catch (e) {}
-
-        updateButtonState(newTheme);
-
-        if (typeof window.__redrawGrid === 'function') {
-          window.__redrawGrid();
-        }
-      });
-
-      // Initialize button title/aria
-      updateButtonState(getEffectiveTheme());
-    })();
-  </script>
 
 </body>
 </html>
