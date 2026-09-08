@@ -1874,16 +1874,17 @@
     .project-card {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 10;
-      border-radius: 12px;
+      border-radius: 22px;
       overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
       border: 1px solid rgba(255, 255, 255, 0.08);
       text-decoration: none;
       color: inherit;
-      display: block;
+      display: flex;
+      flex-direction: column;
       cursor: pointer;
-      background: #141414;
+      background: #121213;
+      padding: clamp(16px, 1.6vw, 22px);
       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                   border-color 0.35s ease,
                   box-shadow 0.35s ease;
@@ -1892,112 +1893,66 @@
     .project-card:hover {
       transform: translateY(-6px);
       border-color: rgba(226, 109, 92, 0.45);
-      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.9), 0 0 24px rgba(226, 109, 92, 0.08);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65), 0 0 24px rgba(226, 109, 92, 0.08);
     }
 
-    .project-card__placeholder {
-      position: absolute;
-      inset: 0;
-    }
-
-    .project-card__placeholder--1 {
-      background: #141414;
+    .project-card__media {
+      width: 100%;
+      aspect-ratio: 16 / 10.5;
+      border-radius: 14px;
       overflow: hidden;
-    }
-
-    .project-card__placeholder--2 {
-      background:
-        radial-gradient(ellipse 50% 60% at 50% 40%, rgba(88, 130, 180, 0.12) 0%, transparent 70%),
-        linear-gradient(160deg, #161a22 0%, #0d1117 100%);
-    }
-
-    .project-card__placeholder--3 {
-      background:
-        radial-gradient(ellipse 50% 60% at 50% 40%, rgba(226, 109, 92, 0.12) 0%, transparent 70%),
-        linear-gradient(160deg, #1e1514 0%, #100c0c 100%);
-    }
-
-    .project-card__placeholder--4 {
-      background: #111413;
-      overflow: hidden;
+      background: #0a0a0a;
+      position: relative;
     }
 
     .project-card__img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      object-position: center top;
       display: block;
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .project-card__placeholder--1 .project-card__img {
-      object-position: center 36%;
+    .project-card--1 .project-card__img {
+      object-position: center 25%;
     }
 
     .project-card:hover .project-card__img {
       transform: scale(1.04);
     }
 
-    .project-card__placeholder::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(232, 230, 227, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(232, 230, 227, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.4;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .project-card__overlay {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: clamp(16px, 2.2vw, 32px) clamp(18px, 2.4vw, 30px);
-      background: linear-gradient(
-        to top,
-        rgba(10, 10, 10, 0.96) 0%,
-        rgba(10, 10, 10, 0.72) 60%,
-        transparent 100%
-      );
-      z-index: 2;
-    }
-
-    .project-card__category {
-      display: block;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.62rem, 0.75vw, 0.74rem);
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #8e8c88;
-      margin-bottom: 6px;
+    .project-card__body {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      padding: clamp(18px, 1.8vw, 24px) 4px 4px 4px;
     }
 
     .project-card__title {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: clamp(1rem, 1.4vw, 1.45rem);
-      line-height: 1.15;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-size: clamp(1.3rem, 1.65vw, 1.75rem);
+      line-height: 1.22;
+      letter-spacing: -0.02em;
       color: var(--color-fg);
-      margin-bottom: 6px;
+      margin: 0 0 10px 0;
+      transition: color 0.3s ease;
+    }
+
+    .project-card:hover .project-card__title {
+      color: var(--color-fg-hover);
     }
 
     .project-card__desc {
       font-family: var(--font-primary);
       font-weight: 400;
-      font-size: clamp(0.74rem, 0.88vw, 0.9rem);
-      line-height: 1.48;
+      font-size: clamp(0.86rem, 0.96vw, 0.98rem);
+      line-height: 1.55;
       color: var(--color-fg-muted);
-      max-width: 520px;
+      margin: 0 0 20px 0;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -2006,33 +1961,31 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 6px;
-      margin-top: 10px;
+      gap: 8px;
+      margin-top: auto;
     }
 
     .project-card__tag {
       display: inline-flex;
       align-items: center;
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid rgba(232, 230, 227, 0.14);
-      background: rgba(14, 14, 14, 0.65);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(247, 237, 216, 0.14);
+      background: rgba(255, 255, 255, 0.05);
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.58rem, 0.68vw, 0.66rem);
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(247, 237, 216, 0.65);
-      line-height: 1;
+      font-size: clamp(0.72rem, 0.78vw, 0.78rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--color-fg);
+      line-height: 1.2;
       white-space: nowrap;
-      transition: border-color 0.25s ease, color 0.25s ease;
+      transition: all 0.25s ease;
     }
 
     .project-card:hover .project-card__tag {
-      border-color: rgba(226, 109, 92, 0.35);
+      border-color: rgba(226, 109, 92, 0.4);
       color: var(--color-fg-hover);
+      background: rgba(226, 109, 92, 0.08);
     }
 
     /* Responsive Breakpoints for Projects */
@@ -2064,16 +2017,26 @@
         gap: 20px;
       }
       .project-card {
-        aspect-ratio: 16 / 11;
+        padding: 14px;
+        border-radius: 18px;
       }
-      .project-card__overlay {
-        padding: 14px 16px;
+      .project-card__media {
+        border-radius: 12px;
+      }
+      .project-card__body {
+        padding: 16px 2px 2px 2px;
       }
       .project-card__title {
-        font-size: clamp(1.02rem, 4.5vw, 1.25rem);
+        font-size: clamp(1.18rem, 4.8vw, 1.35rem);
+        margin-bottom: 8px;
       }
       .project-card__desc {
-        font-size: clamp(0.72rem, 3.2vw, 0.82rem);
+        font-size: clamp(0.82rem, 3.4vw, 0.9rem);
+        margin-bottom: 16px;
+      }
+      .project-card__tag {
+        padding: 5px 12px;
+        font-size: 0.72rem;
       }
     }
 /* ══════════════════════════════════════════════════════
@@ -2908,30 +2871,25 @@
 
     html[data-theme="light"] .project-card {
       background: #ffffff;
-      border: 1px solid rgba(20, 20, 19, 0.1);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.07);
+      border: 1px solid rgba(20, 20, 19, 0.08);
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.06);
     }
 
     html[data-theme="light"] .project-card:hover {
       border-color: rgba(226, 109, 92, 0.5);
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.12), 0 0 24px rgba(226, 109, 92, 0.1);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.1), 0 0 24px rgba(226, 109, 92, 0.08);
     }
 
-    html[data-theme="light"] .project-card__overlay {
-      background: linear-gradient(
-        to top,
-        rgba(247, 246, 242, 0.96) 0%,
-        rgba(247, 246, 242, 0.78) 55%,
-        transparent 100%
-      );
-    }
-
-    html[data-theme="light"] .project-card__category {
-      color: #8a7864;
+    html[data-theme="light"] .project-card__media {
+      background: #f4f5f7;
     }
 
     html[data-theme="light"] .project-card__title {
       color: #141413;
+    }
+
+    html[data-theme="light"] .project-card:hover .project-card__title {
+      color: var(--color-fg-hover);
     }
 
     html[data-theme="light"] .project-card__desc {
@@ -2939,24 +2897,15 @@
     }
 
     html[data-theme="light"] .project-card__tag {
-      background: rgba(255, 255, 255, 0.85);
-      border-color: rgba(20, 20, 19, 0.12);
-      color: #3c3b38;
+      background: #1e2227;
+      border-color: #1e2227;
+      color: #ffffff;
     }
 
     html[data-theme="light"] .project-card:hover .project-card__tag {
-      border-color: rgba(226, 109, 92, 0.35);
-      color: var(--color-fg-hover);
-    }
-
-    html[data-theme="light"] .project-card__placeholder--2 {
-      background:
-        radial-gradient(ellipse 50% 60% at 50% 40%, rgba(88, 130, 180, 0.14) 0%, transparent 70%),
-        linear-gradient(160deg, #e4e7ec 0%, #d8dce2 100%);
-    }
-
-    html[data-theme="light"] .project-card__placeholder--3 {
-      background: #eae8e3;
+      background: #e26d5c;
+      border-color: #e26d5c;
+      color: #ffffff;
     }
 /* Experience Light Mode */
     html[data-theme="light"] .experience {
@@ -3387,61 +3336,61 @@
 
       <div class="projects-grid">
         <!-- Project 01 Card: SEVERNA: BLOOD & BETRAYAL -->
-        <a href="severna.html" class="project-card project-card--1" id="project-card-1" aria-label="Open Project 01: SEVERNA: BLOOD &amp; BETRAYAL">
-          <div class="project-card__placeholder project-card__placeholder--1">
+        <a href="severna.html" class="project-card project-card--1" id="project-card-1" aria-label="Open Project: Severna: Blood &amp; Betrayal">
+          <div class="project-card__media">
             <img src="severna-cover.jpg" alt="Severna: Blood &amp; Betrayal" class="project-card__img" loading="lazy" />
           </div>
-          <div class="project-card__overlay">
-            <span class="project-card__category">GAME UI</span>
-            <h3 class="project-card__title">SEVERNA: BLOOD &amp; BETRAYAL</h3>
-            <p class="project-card__desc">Designing in-game UI widgets and interface elements that support gameplay interactions.</p>
+          <div class="project-card__body">
+            <h3 class="project-card__title">Severna: Blood &amp; Betrayal</h3>
+            <p class="project-card__desc">Designing immersive in-game UI widgets, tactical HUD components, and interactive interfaces for PC gameplay.</p>
             <div class="project-card__tags">
-              <span class="project-card__tag">GAME UI WIDGETS</span>
-              <span class="project-card__tag">PC</span>
+              <span class="project-card__tag">UI &amp; UX</span>
+              <span class="project-card__tag">Game UI</span>
             </div>
           </div>
         </a>
 
         <!-- Project 02 Card: NYT WOLF GAMES -->
-        <a href="professional-work.html#panel-nyt" class="project-card project-card--2" id="project-card-2" aria-label="Open Project 02: NYT WOLF GAMES">
-          <div class="project-card__placeholder project-card__placeholder--2"></div>
-          <div class="project-card__overlay">
-            <span class="project-card__category">PROFESSIONAL WORK</span>
-            <h3 class="project-card__title">NYT WOLF GAMES</h3>
-            <p class="project-card__desc">Company website design for a game studio, featuring a clean, responsive layout and engaging studio showcase.</p>
+        <a href="professional-work.html#panel-nyt" class="project-card project-card--2" id="project-card-2" aria-label="Open Project: NYT Wolf Games">
+          <div class="project-card__media">
+            <img src="nyt-cover.jpg" alt="NYT Wolf Games Studio" class="project-card__img" loading="lazy" />
+          </div>
+          <div class="project-card__body">
+            <h3 class="project-card__title">NYT Wolf Games</h3>
+            <p class="project-card__desc">Company website design for an independent game studio, featuring responsive layout and studio game showcases.</p>
             <div class="project-card__tags">
-              <span class="project-card__tag">RESPONSIVE WEB</span>
-              <span class="project-card__tag">STUDIO SITE</span>
+              <span class="project-card__tag">UI &amp; UX</span>
+              <span class="project-card__tag">Web Design</span>
             </div>
           </div>
         </a>
 
         <!-- Project 03 Card: TEQBALL TAMILNADU -->
-        <a href="professional-work.html#panel-teqball" class="project-card project-card--3" id="project-card-3" aria-label="Open Project 03: TEQBALL TAMILNADU">
-          <div class="project-card__placeholder project-card__placeholder--3"></div>
-          <div class="project-card__overlay">
-            <span class="project-card__category">PROFESSIONAL WORK</span>
-            <h3 class="project-card__title">TEQBALL TAMILNADU</h3>
-            <p class="project-card__desc">Multi-page digital sports platform providing dynamic tournament schedules, rankings, and athlete profiles.</p>
+        <a href="professional-work.html#panel-teqball" class="project-card project-card--3" id="project-card-3" aria-label="Open Project: Teqball Tamilnadu">
+          <div class="project-card__media">
+            <img src="teqball-cover.jpg" alt="Teqball Tamilnadu Digital Platform" class="project-card__img" loading="lazy" />
+          </div>
+          <div class="project-card__body">
+            <h3 class="project-card__title">Teqball Tamilnadu</h3>
+            <p class="project-card__desc">Digital sports platform providing dynamic tournament schedules, live rankings, and athlete profile experiences.</p>
             <div class="project-card__tags">
-              <span class="project-card__tag">WEB DESIGN</span>
-              <span class="project-card__tag">SPORTS TECH</span>
+              <span class="project-card__tag">UI &amp; UX</span>
+              <span class="project-card__tag">Sports Tech</span>
             </div>
           </div>
         </a>
 
         <!-- Project 04 Card: PERSONAL EXPLORATION -->
-        <a href="personal-exploration.html" class="project-card project-card--4" id="project-card-4" aria-label="Open Project 04: EXPLORING IDEAS BEYOND THE BRIEF.">
-          <div class="project-card__placeholder project-card__placeholder--4">
+        <a href="personal-exploration.html" class="project-card project-card--4" id="project-card-4" aria-label="Open Project: Personal Exploration">
+          <div class="project-card__media">
             <img src="personal-exploration.jpg" alt="Personal Exploration — Exploring Ideas Beyond the Brief" class="project-card__img" loading="lazy" />
           </div>
-          <div class="project-card__overlay">
-            <span class="project-card__category">PERSONAL EXPLORATION</span>
-            <h3 class="project-card__title">EXPLORING IDEAS<br>BEYOND THE BRIEF.</h3>
-            <p class="project-card__desc">Self-initiated projects exploring different visual directions, interactions, and experimental interfaces.</p>
+          <div class="project-card__body">
+            <h3 class="project-card__title">Personal Exploration</h3>
+            <p class="project-card__desc">Self-initiated design concepts exploring futuristic typography, dark-mode dashboards, and micro-interactions.</p>
             <div class="project-card__tags">
-              <span class="project-card__tag">WEB EXPLORATION</span>
-              <span class="project-card__tag">PERSONAL</span>
+              <span class="project-card__tag">UI &amp; UX</span>
+              <span class="project-card__tag">Concept</span>
             </div>
           </div>
         </a>
