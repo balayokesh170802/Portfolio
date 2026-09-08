@@ -1772,18 +1772,18 @@
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      background: #0a0a0a;
-      border: 1px solid rgba(255, 255, 255, var(--card-border-opacity, 0));
-      border-radius: 0px;
-      box-shadow: none;
-      transform: scale(var(--card-scale, 0));
-      opacity: var(--card-opacity, 0);
+      background: #141417;
+      border: 1.5px solid rgba(247, 237, 216, var(--card-border-opacity, 0.35));
+      border-radius: var(--card-radius, 18px);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(226, 109, 92, 0.14);
+      transform: scale(var(--card-scale, 0.22));
+      opacity: var(--card-opacity, 1);
       transform-origin: center center;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      will-change: transform, opacity;
+      will-change: transform, opacity, border-radius;
     }
 
     .statement-card__glow {
@@ -1877,15 +1877,15 @@
 
     /* Tailored aspect ratios preserving full clarity and original photo compositions */
     .sec2-tile--cat .sec2-tile__inner,
+    .sec2-tile--alumni .sec2-tile__inner,
+    .sec2-tile--tea .sec2-tile__inner {
+      aspect-ratio: 1 / 1;
+    }
+
     .sec2-tile--snacker .sec2-tile__inner,
     .sec2-tile--camera .sec2-tile__inner,
     .sec2-tile--clock .sec2-tile__inner {
       aspect-ratio: 3 / 4;
-    }
-
-    .sec2-tile--alumni .sec2-tile__inner,
-    .sec2-tile--tea .sec2-tile__inner {
-      aspect-ratio: 1 / 1;
     }
 
     .sec2-tile--ride .sec2-tile__inner {
@@ -2980,8 +2980,8 @@
 
     html[data-theme="light"] .statement-card {
       background: #ffffff;
-      border-color: rgba(20, 20, 19, var(--card-border-opacity, 0));
-      box-shadow: none;
+      border-color: rgba(20, 20, 19, var(--card-border-opacity, 0.22));
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 0 30px rgba(226, 109, 92, 0.08);
     }
 
     html[data-theme="light"] .statement-card__glow {
@@ -4100,14 +4100,14 @@
       const tileElements = section.querySelectorAll('.sec2-tile');
 
       const TILES = [
-        { el: tileElements[0], dx: -9.3,  dy: -29.6, startRot: 360,  endRot: 0 }, // Cat
-        { el: tileElements[1], dx: 11.2,  dy: -27.4, startRot: -360, endRot: 0 }, // Alumni
-        { el: tileElements[2], dx: -29.1, dy: -14.3, startRot: -360, endRot: 0 }, // Snacker
-        { el: tileElements[3], dx: 28.9,  dy: -14.3, startRot: 360,  endRot: 0 }, // Ride
-        { el: tileElements[4], dx: -25.7, dy: 15.7,  startRot: 270,  endRot: 0 }, // Camera
-        { el: tileElements[5], dx: 22.2,  dy: 12.7,  startRot: -270, endRot: 0 }, // Clock
-        { el: tileElements[6], dx: -9.3,  dy: 30.7,  startRot: -360, endRot: 0 }, // Tea
-        { el: tileElements[7], dx: 7.3,   dy: 24.6,  startRot: 360,  endRot: 0 }  // Door
+        { el: tileElements[0], dx: -9.3,  dy: -29.6, startRot: 360,  endRot: -2 }, // Cat
+        { el: tileElements[1], dx: 11.2,  dy: -27.4, startRot: -360, endRot: 2 },  // Alumni
+        { el: tileElements[2], dx: -29.1, dy: -14.3, startRot: -360, endRot: 1 },  // Snacker
+        { el: tileElements[3], dx: 28.9,  dy: -14.3, startRot: 360,  endRot: -3 }, // Ride
+        { el: tileElements[4], dx: -25.7, dy: 15.7,  startRot: 270,  endRot: -3 }, // Camera
+        { el: tileElements[5], dx: 22.2,  dy: 12.7,  startRot: -270, endRot: 2 },  // Clock
+        { el: tileElements[6], dx: -9.3,  dy: 30.7,  startRot: -360, endRot: 2 },  // Tea
+        { el: tileElements[7], dx: 7.3,   dy: 24.6,  startRot: 360,  endRot: -1 }  // Door
       ];
 
       function clamp01(v) {
@@ -4118,13 +4118,16 @@
         const vpW = window.innerWidth;
         const vpH = window.innerHeight;
         const isMobile = vpW < 768;
+        const isSmallMobile = vpW < 480;
+        const minScale = isMobile ? (isSmallMobile ? 0.40 : 0.36) : 0.22;
 
-        // ── Phase 0: Initial Reset (0% Scroll) ──
+        // ── Phase 0: Initial Rest State (0% Scroll) ──
         if (progress <= 0.001) {
           if (card) {
-            card.style.setProperty('--card-scale', '0');
-            card.style.setProperty('--card-opacity', '0');
-            card.style.setProperty('--card-border-opacity', '0');
+            card.style.setProperty('--card-scale', minScale.toFixed(4));
+            card.style.setProperty('--card-radius', '18px');
+            card.style.setProperty('--card-border-opacity', '0.35');
+            card.style.setProperty('--card-opacity', '1');
           }
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
@@ -4151,21 +4154,25 @@
         }
 
         // ── Phase 1: Aperture Scaling & Doors (0.00 -> 0.34) ──
-        const openProgress = clamp01(progress / 0.32);
-        const cardScale = openProgress * openProgress * (3 - 2 * openProgress);
-        const cardOpacity = clamp01(progress / 0.04);
-        const borderFade = 1 - clamp01((progress - 0.24) / 0.10);
-        const borderOpacity = 0.08 * cardOpacity * borderFade;
+        const openProgress = clamp01(progress / 0.34);
+        const scaleEase = openProgress < 0.5
+          ? 4 * openProgress * openProgress * openProgress
+          : 1 - Math.pow(-2 * openProgress + 2, 3) / 2; // easeInOutCubic
+        const cardScale = minScale + scaleEase * (1.0 - minScale);
+        const cardRadius = Math.max(0, Math.round(18 * (1 - scaleEase)));
+        const borderFade = 1 - clamp01((progress - 0.26) / 0.08);
+        const borderOpacity = 0.35 * borderFade;
 
         if (card) {
           card.style.setProperty('--card-scale', cardScale.toFixed(4));
-          card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
+          card.style.setProperty('--card-radius', `${cardRadius}px`);
+          card.style.setProperty('--card-opacity', '1');
           card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
         }
 
         const maxShift = isMobile ? (vpW * 0.65) : Math.min(vpW * 0.65, 900);
-        const leftX = -cardScale * maxShift;
-        const rightX = cardScale * maxShift;
+        const leftX = -scaleEase * maxShift;
+        const rightX = scaleEase * maxShift;
         const doorOpacity = clamp01(1 - progress / 0.26);
 
         if (leftPanel) {
@@ -4177,32 +4184,31 @@
           rightPanel.style.opacity = doorOpacity.toFixed(3);
         }
 
-        // ── Phase 2: Headline Text Reveal (0.28 -> 0.44) ──
-        const textT = clamp01((progress - 0.28) / 0.16);
+        // ── Phase 2: Headline Text Reveal (0.34 -> 0.48) ──
+        const textT = clamp01((progress - 0.34) / 0.14);
         const textEase = 1 - Math.pow(1 - textT, 3);
 
         if (cardInner) {
           cardInner.style.setProperty('--statement-opacity', textEase.toFixed(3));
           cardInner.style.setProperty('--statement-translate-y', `${((1 - textEase) * 20).toFixed(1)}px`);
           cardInner.style.setProperty('--statement-scale', `${(0.96 + 0.04 * textEase).toFixed(3)}`);
-          if (textT >= 0.9) {
+          if (textT >= 0.85) {
             cardInner.classList.add('is-revealed');
           } else {
             cardInner.classList.remove('is-revealed');
           }
         }
 
-        // ── Phase 3: Orbiting Images Constellation Dispersal (0.44 -> 0.82) ──
+        // ── Phase 3: Orbiting Images Constellation Dispersal (0.48 -> 0.84) ──
         // "animation should after the text. it'll came from center and rotate image and go for the actual place like in 1st image."
-        const flightStart = 0.44;
+        const flightStart = 0.48;
         const tileDuration = 0.24;
-        const isSmallMobile = vpW < 480;
         const xFactor = isMobile ? (isSmallMobile ? 0.90 : 0.80) : (vpW < 1200 ? 0.90 : 1.0);
         const yFactor = isMobile ? (isSmallMobile ? 0.95 : 0.85) : (vpH < 800 ? 0.90 : 1.0);
 
         TILES.forEach((tile, i) => {
           if (!tile.el) return;
-          const tStart = flightStart + i * 0.022;
+          const tStart = flightStart + i * 0.020;
           const rawT = clamp01((progress - tStart) / tileDuration);
           const ease = 1 - Math.pow(1 - rawT, 3); // Smooth cubic ease-out
 
@@ -4211,7 +4217,7 @@
 
           const curX = targetX * ease;
           const curY = targetY * ease;
-          const curRot = tile.startRot * (1 - ease) + tile.endRot * ease;
+          const curRot = tile.startRot * (1 - ease) + (tile.endRot || 0) * ease;
           const curScale = ease;
           const curOpacity = Math.min(1, ease * 3.0);
 
