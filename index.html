@@ -1740,13 +1740,23 @@
         --page-padding-x: clamp(16px, 5vw, 24px);
       }
       .doors-panel--left {
-        top: clamp(8%, 12vh, 15%);
+        top: max(calc(var(--header-height, 58px) + 16px), clamp(8%, 12vh, 15%));
       }
       .doors-panel--right {
-        bottom: clamp(8%, 12vh, 15%);
+        bottom: max(72px, clamp(8%, 12vh, 15%));
       }
       .doors-line {
         font-size: clamp(1.35rem, 5.5vw, 2rem);
+        line-height: 1.15;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .statement-doors {
+        --page-padding-x: 14px;
+      }
+      .doors-line {
+        font-size: clamp(1.15rem, 5.2vw, 1.32rem);
         line-height: 1.15;
       }
     }
@@ -1773,11 +1783,11 @@
       height: 100vh;
       height: 100dvh;
       background: #141417;
-      border: 1.5px solid rgba(247, 237, 216, var(--card-border-opacity, 0.35));
+      border: 1.5px solid rgba(247, 237, 216, var(--card-border-opacity, 0));
       border-radius: var(--card-radius, 18px);
       box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(226, 109, 92, 0.14);
-      transform: scale(var(--card-scale, 0.22));
-      opacity: var(--card-opacity, 1);
+      transform: scale(var(--card-scale, 0));
+      opacity: var(--card-opacity, 0);
       transform-origin: center center;
       display: flex;
       align-items: center;
@@ -1832,9 +1842,21 @@
       text-align: center;
     }
 
+    @media (max-width: 767px) {
+      .statement-card__headline {
+        font-size: clamp(1.35rem, 5.2vw, 1.75rem);
+      }
+    }
+
     @media (max-width: 480px) {
       .statement-card__headline {
-        font-size: clamp(1.28rem, 5.8vw, 1.55rem);
+        font-size: clamp(1.24rem, 5vw, 1.5rem);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .statement-card__headline {
+        font-size: clamp(1.12rem, 4.8vw, 1.25rem);
       }
     }
 
@@ -1926,19 +1948,25 @@
 
     @media (max-width: 991px) {
       .sec2-tile {
-        width: clamp(66px, 9.4vw, 92px);
+        width: clamp(70px, 9.2vw, 88px);
       }
     }
 
     @media (max-width: 767px) {
       .sec2-tile {
-        width: clamp(50px, 13.5vw, 70px);
+        width: clamp(56px, 14vw, 68px);
       }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 400px) {
       .sec2-tile {
-        width: 46px;
+        width: clamp(48px, 13vw, 56px);
+      }
+    }
+
+    @media (max-width: 340px) {
+      .sec2-tile {
+        width: 44px;
       }
     }
 /* ══════════════════════════════════════════════════════
@@ -3504,8 +3532,8 @@
 
       <!-- Right Door Content (Lower Right) -->
       <div class="doors-panel doors-panel--right" id="doors-right">
-        <span class="doors-line">WITH A HUMAN</span>
-        <span class="doors-line">NEED.</span>
+        <span class="doors-line">WITH A</span>
+        <span class="doors-line">HUMAN TOUCH.</span>
       </div>
     </div>
   </section>
@@ -4119,15 +4147,18 @@
         const vpH = window.innerHeight;
         const isMobile = vpW < 768;
         const isSmallMobile = vpW < 480;
-        const minScale = isMobile ? (isSmallMobile ? 0.40 : 0.36) : 0.22;
+        const isNarrowMobile = vpW < 360;
+        const isShortScreen = vpH < 720;
+        const minScale = isMobile ? (isNarrowMobile ? 0.30 : (isSmallMobile ? 0.28 : 0.25)) : 0.18;
 
         // ── Phase 0: Initial Rest State (0% Scroll) ──
+        // When 0% - rectangle is NOT visible at all
         if (progress <= 0.001) {
           if (card) {
-            card.style.setProperty('--card-scale', minScale.toFixed(4));
+            card.style.setProperty('--card-scale', '0');
             card.style.setProperty('--card-radius', '18px');
-            card.style.setProperty('--card-border-opacity', '0.35');
-            card.style.setProperty('--card-opacity', '1');
+            card.style.setProperty('--card-border-opacity', '0');
+            card.style.setProperty('--card-opacity', '0');
           }
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
@@ -4158,15 +4189,21 @@
         const scaleEase = openProgress < 0.5
           ? 4 * openProgress * openProgress * openProgress
           : 1 - Math.pow(-2 * openProgress + 2, 3) / 2; // easeInOutCubic
-        const cardScale = minScale + scaleEase * (1.0 - minScale);
+
+        // Card emerges only after scroll begins
+        const cardOpacity = clamp01(progress / 0.035);
+        const emergeT = clamp01(progress / 0.04);
+        const emergeEase = 1 - Math.pow(1 - emergeT, 2);
+        const cardScale = emergeEase * minScale + scaleEase * (1.0 - minScale);
+
         const cardRadius = Math.max(0, Math.round(18 * (1 - scaleEase)));
         const borderFade = 1 - clamp01((progress - 0.26) / 0.08);
-        const borderOpacity = 0.35 * borderFade;
+        const borderOpacity = 0.35 * cardOpacity * borderFade;
 
         if (card) {
           card.style.setProperty('--card-scale', cardScale.toFixed(4));
           card.style.setProperty('--card-radius', `${cardRadius}px`);
-          card.style.setProperty('--card-opacity', '1');
+          card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
           card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
         }
 
@@ -4203,8 +4240,27 @@
         // "animation should after the text. it'll came from center and rotate image and go for the actual place like in 1st image."
         const flightStart = 0.48;
         const tileDuration = 0.24;
-        const xFactor = isMobile ? (isSmallMobile ? 0.90 : 0.80) : (vpW < 1200 ? 0.90 : 1.0);
-        const yFactor = isMobile ? (isSmallMobile ? 0.95 : 0.85) : (vpH < 800 ? 0.90 : 1.0);
+
+        // Individualized mobile spread scaling
+        let xFactor = 1.0;
+        let yFactor = 1.0;
+
+        if (isNarrowMobile) {
+          xFactor = 0.76;
+          yFactor = isShortScreen ? 0.68 : 0.74;
+        } else if (isSmallMobile) {
+          xFactor = 0.82;
+          yFactor = isShortScreen ? 0.72 : 0.78;
+        } else if (isMobile) {
+          xFactor = 0.86;
+          yFactor = isShortScreen ? 0.76 : 0.82;
+        } else if (vpW < 1200) {
+          xFactor = 0.92;
+          yFactor = vpH < 800 ? 0.90 : 1.0;
+        } else {
+          xFactor = 1.0;
+          yFactor = vpH < 800 ? 0.92 : 1.0;
+        }
 
         TILES.forEach((tile, i) => {
           if (!tile.el) return;
@@ -4233,8 +4289,14 @@
 
       function renderLoop() {
         const diff = targetProgress - currentProgress;
+        if (targetProgress <= 0.001 && currentProgress < 0.08) {
+          currentProgress = 0;
+          applyProgress(0);
+          isLoopRunning = false;
+          return;
+        }
         if (Math.abs(diff) > 0.0004) {
-          currentProgress += diff * 0.16;
+          currentProgress += diff * 0.22;
           applyProgress(currentProgress);
           requestAnimationFrame(renderLoop);
         } else {
@@ -4252,6 +4314,12 @@
         if (scrollable > 0) {
           const scrolled = -rect.top;
           targetProgress = clamp01(scrolled / scrollable);
+          if (targetProgress <= 0.001) {
+            currentProgress = 0;
+            applyProgress(0);
+            isLoopRunning = false;
+            return;
+          }
           if (!isLoopRunning) {
             isLoopRunning = true;
             requestAnimationFrame(renderLoop);
