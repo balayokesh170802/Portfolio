@@ -637,6 +637,18 @@
         letter-spacing: 0.18em;
       }
 
+      @media (max-width: 360px) {
+        .header {
+          grid-template-columns: 1fr auto;
+        }
+        .header__center {
+          display: none;
+        }
+        .menu-toggle {
+          grid-column: 2;
+        }
+      }
+
       .menu-toggle {
         display: flex;
         grid-column: 3;
@@ -1163,12 +1175,18 @@
     /* ── Mark return navigation to index.html so intro is not re-played on back ── */
     document.querySelectorAll('a[href*="index.html"]').forEach(link => {
       link.addEventListener('click', () => {
-        try { sessionStorage.setItem('skip_intro_return', '1'); } catch (e) {}
+        try {
+          sessionStorage.setItem('skip_intro_return', '1');
+          sessionStorage.setItem('jump_to_projects', '1');
+        } catch (e) {}
       });
     });
 
     window.addEventListener('pagehide', () => {
-      try { sessionStorage.setItem('skip_intro_return', '1'); } catch (e) {}
+      try {
+        sessionStorage.setItem('skip_intro_return', '1');
+        sessionStorage.setItem('jump_to_projects', '1');
+      } catch (e) {}
     });
   </script>
 

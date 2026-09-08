@@ -19,41 +19,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BALAYOKESH — Portfolio</title>
   <script>
-    /* Immediate pre-render: reset home page scroll to top and configure manual scroll restoration */
+    /* Immediate pre-render: handle return from project pages or section navigation */
     (function() {
       try {
-        if ('scrollRestoration' in history) {
-          history.scrollRestoration = 'manual';
-        }
-        window.scrollTo(0, 0);
+        var isReturn = sessionStorage.getItem('skip_intro_return') === '1' || sessionStorage.getItem('jump_to_projects') === '1';
+        var hasProjectsHash = window.location.hash === '#projects';
 
-        var nav = (window.performance && performance.getEntriesByType)
-          ? performance.getEntriesByType('navigation')[0]
-          : null;
-        var navType = nav ? nav.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
-        var isReload = navType === 'reload';
-        var isReturn = sessionStorage.getItem('skip_intro_return') === '1';
-
-        // Strip any URL hash immediately so browser does not jump to any section
-        if (window.location.hash) {
-          try {
-            history.replaceState(null, '', window.location.pathname);
-          } catch (err) {}
-        }
-
-        if (isReload) {
-          try {
-            sessionStorage.removeItem('skip_intro_return');
-            sessionStorage.removeItem('portfolio_scroll_y');
-          } catch (e) {}
-          window.scrollTo(0, 0);
-        } else if (isReturn) {
-          // Explicit return from case study page
+        if (isReturn || hasProjectsHash) {
+          // Returning to projects: skip intro completely, disable smooth scroll so positioning is instant
           document.documentElement.classList.add('skip-intro');
+          document.documentElement.style.scrollBehavior = 'auto';
+          window.__jumpToProjects = true;
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+          }
+        } else {
+          var nav = (window.performance && performance.getEntriesByType)
+            ? performance.getEntriesByType('navigation')[0]
+            : null;
+          var navType = nav ? nav.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
+          var isReload = navType === 'reload';
+
+          if (isReload) {
+            try {
+              sessionStorage.removeItem('skip_intro_return');
+              sessionStorage.removeItem('jump_to_projects');
+              sessionStorage.removeItem('portfolio_scroll_y');
+            } catch (e) {}
+            if (window.location.hash) {
+              try { history.replaceState(null, '', window.location.pathname); } catch (err) {}
+            }
+            window.scrollTo(0, 0);
+          } else {
+            window.scrollTo(0, 0);
+          }
         }
 
         window.addEventListener('beforeunload', function() {
-          window.scrollTo(0, 0);
+          if (!sessionStorage.getItem('skip_intro_return') && !sessionStorage.getItem('jump_to_projects')) {
+            window.scrollTo(0, 0);
+          }
         });
       } catch (e) {}
     })();
@@ -1103,6 +1108,18 @@
         letter-spacing: 0.18em;
         white-space: nowrap;
         justify-self: center;
+      }
+
+      @media (max-width: 360px) {
+        .header {
+          grid-template-columns: 1fr auto;
+        }
+        .header__center {
+          display: none;
+        }
+        .menu-toggle {
+          grid-column: 2;
+        }
       }
 
       /* Mobile Menu Toggle Button */
@@ -3328,6 +3345,16 @@
   </section>
 <!-- ─── Dedicated Projects Section (2x2 Grid) ────────── -->
   <section class="projects-section" id="projects">
+    <script>
+      (function() {
+        if (window.__jumpToProjects || sessionStorage.getItem('skip_intro_return') === '1' || sessionStorage.getItem('jump_to_projects') === '1' || window.location.hash === '#projects') {
+          var sec = document.getElementById('projects');
+          if (sec) {
+            sec.scrollIntoView({ behavior: 'instant', block: 'start' });
+          }
+        }
+      })();
+    </script>
     <div class="projects-container">
       <div class="projects-header">
         <h2 class="projects-header__title">CRAFTED EXPERIENCES</h2>
@@ -3695,14 +3722,16 @@
         ? navEntry.type
         : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
       const isReload = navType === 'reload';
-      const isReturn = sessionStorage.getItem('skip_intro_return') === '1';
+      const isReturn = sessionStorage.getItem('skip_intro_return') === '1' || sessionStorage.getItem('jump_to_projects') === '1';
       const isSkipClass = document.documentElement.classList.contains('skip-intro');
+      const isProjectsHash = window.location.hash === '#projects';
 
-      // Skip intro when explicitly returning from a project page
-      const shouldSkipIntro = !isReload && (isReturn || isSkipClass);
+      // Skip intro when explicitly returning from a project page or navigating directly to section
+      const shouldSkipIntro = !isReload && (isReturn || isSkipClass || isProjectsHash || window.__jumpToProjects);
 
       try {
         sessionStorage.removeItem('skip_intro_return');
+        sessionStorage.removeItem('jump_to_projects');
         sessionStorage.removeItem('intro-seen');
         sessionStorage.removeItem('portfolio_scroll_y');
       } catch (e) {}
@@ -3721,14 +3750,22 @@
           introScreen.style.display = 'none';
         }
 
-        if (isReturn && window.location.hash) {
+        if (isReturn || window.__jumpToProjects || isProjectsHash) {
+          const target = document.getElementById('projects');
+          if (target) {
+            target.scrollIntoView({ behavior: 'instant', block: 'start' });
+          }
+          setTimeout(function() {
+            document.documentElement.style.scrollBehavior = '';
+          }, 150);
+        } else if (window.location.hash) {
           const target = document.querySelector(window.location.hash);
           if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({ behavior: 'instant', block: 'start' });
           }
-          try {
-            history.replaceState(null, '', window.location.pathname + window.location.search);
-          } catch (e) {}
+          setTimeout(function() {
+            document.documentElement.style.scrollBehavior = '';
+          }, 150);
         }
       }
 
