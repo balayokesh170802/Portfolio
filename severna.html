@@ -1047,8 +1047,8 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    /* ── Mark return navigation to index.html so intro is not re-played only on back ── */
-    document.querySelectorAll('a[href*="index.html"]').forEach(link => {
+    /* ── Mark return navigation to projects section on back ── */
+    document.querySelectorAll('a[href*="#projects"], .pe-back-link, .pe-nav-btn--prev').forEach(link => {
       link.addEventListener('click', () => {
         try {
           sessionStorage.setItem('skip_intro_return', '1');
@@ -1057,11 +1057,13 @@
       });
     });
 
-    window.addEventListener('pagehide', () => {
-      try {
-        sessionStorage.setItem('skip_intro_return', '1');
-        sessionStorage.setItem('jump_to_projects', '1');
-      } catch (e) {}
+    document.querySelectorAll('.header__logo').forEach(link => {
+      link.addEventListener('click', () => {
+        try {
+          sessionStorage.removeItem('skip_intro_return');
+          sessionStorage.removeItem('jump_to_projects');
+        } catch (e) {}
+      });
     });
   </script>
 

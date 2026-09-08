@@ -22,10 +22,31 @@
     /* Immediate pre-render: handle return from project pages or section navigation */
     (function() {
       try {
-        var isReturn = sessionStorage.getItem('skip_intro_return') === '1' || sessionStorage.getItem('jump_to_projects') === '1';
-        var hasProjectsHash = window.location.hash === '#projects';
+        var nav = (window.performance && performance.getEntriesByType)
+          ? performance.getEntriesByType('navigation')[0]
+          : null;
+        var navType = nav ? nav.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
+        var isReload = navType === 'reload';
 
-        if (isReturn || hasProjectsHash) {
+        // An explicit jump to projects is ONLY valid if returning from a project case study AND not a page reload
+        var isReturn = !isReload && (sessionStorage.getItem('jump_to_projects') === '1' || sessionStorage.getItem('skip_intro_return') === '1');
+
+        if (isReload) {
+          // Clean reload: reset flags and strip any hash so intro plays completely from top
+          try {
+            sessionStorage.removeItem('skip_intro_return');
+            sessionStorage.removeItem('jump_to_projects');
+            sessionStorage.removeItem('portfolio_scroll_y');
+          } catch (e) {}
+          if (window.location.hash) {
+            try { history.replaceState(null, '', window.location.pathname); } catch (err) {}
+          }
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+          }
+          window.scrollTo(0, 0);
+          document.documentElement.classList.remove('skip-intro');
+        } else if (isReturn) {
           // Returning to projects: skip intro completely, disable smooth scroll so positioning is instant
           document.documentElement.classList.add('skip-intro');
           document.documentElement.style.scrollBehavior = 'auto';
@@ -33,26 +54,17 @@
           if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
           }
+          try {
+            sessionStorage.removeItem('skip_intro_return');
+            sessionStorage.removeItem('jump_to_projects');
+          } catch (e) {}
         } else {
-          var nav = (window.performance && performance.getEntriesByType)
-            ? performance.getEntriesByType('navigation')[0]
-            : null;
-          var navType = nav ? nav.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
-          var isReload = navType === 'reload';
-
-          if (isReload) {
-            try {
-              sessionStorage.removeItem('skip_intro_return');
-              sessionStorage.removeItem('jump_to_projects');
-              sessionStorage.removeItem('portfolio_scroll_y');
-            } catch (e) {}
-            if (window.location.hash) {
-              try { history.replaceState(null, '', window.location.pathname); } catch (err) {}
-            }
-            window.scrollTo(0, 0);
-          } else {
-            window.scrollTo(0, 0);
+          // Fresh visit: reset scroll to top so intro begins from top of hero
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
           }
+          window.scrollTo(0, 0);
+          document.documentElement.classList.remove('skip-intro');
         }
 
         window.addEventListener('beforeunload', function() {
@@ -1844,7 +1856,7 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: clamp(76px, 6.4vw, 115px);
+      width: clamp(86px, 7.6vw, 130px);
       pointer-events: auto;
       cursor: pointer;
       transform: translate(-50%, -50%) translate3d(0px, 0px, 0px) scale(0) rotate(0deg);
@@ -1856,25 +1868,32 @@
     .sec2-tile__inner {
       width: 100%;
       height: 100%;
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.1);
-      background: #121212;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.82), 0 0 0 1px rgba(247, 237, 216, 0.16);
+      background: #141416;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
     }
 
+    /* Tailored aspect ratios preserving full clarity and original photo compositions */
+    .sec2-tile--cat .sec2-tile__inner,
     .sec2-tile--snacker .sec2-tile__inner,
-    .sec2-tile--alumni .sec2-tile__inner,
-    .sec2-tile--door .sec2-tile__inner,
+    .sec2-tile--camera .sec2-tile__inner,
     .sec2-tile--clock .sec2-tile__inner {
-      aspect-ratio: 0.88 / 1;
+      aspect-ratio: 3 / 4;
     }
 
-    .sec2-tile--cat .sec2-tile__inner,
-    .sec2-tile--ride .sec2-tile__inner,
-    .sec2-tile--tea .sec2-tile__inner,
-    .sec2-tile--camera .sec2-tile__inner {
-      aspect-ratio: 1.05 / 1;
+    .sec2-tile--alumni .sec2-tile__inner,
+    .sec2-tile--tea .sec2-tile__inner {
+      aspect-ratio: 1 / 1;
+    }
+
+    .sec2-tile--ride .sec2-tile__inner {
+      aspect-ratio: 16 / 10;
+    }
+
+    .sec2-tile--door .sec2-tile__inner {
+      aspect-ratio: 4 / 3;
     }
 
     .sec2-tile__img {
@@ -1884,6 +1903,11 @@
       display: block;
       user-select: none;
       -webkit-user-drag: none;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: high-quality;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
     }
 
@@ -1893,7 +1917,7 @@
 
     .sec2-tile:hover .sec2-tile__inner {
       transform: scale(1.08);
-      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.9), 0 0 0 1.5px rgba(247, 237, 216, 0.5);
+      box-shadow: 0 24px 52px rgba(0, 0, 0, 0.92), 0 0 0 1.5px rgba(247, 237, 216, 0.5);
     }
 
     .sec2-tile:hover .sec2-tile__img {
@@ -1902,19 +1926,19 @@
 
     @media (max-width: 991px) {
       .sec2-tile {
-        width: clamp(58px, 8.8vw, 80px);
+        width: clamp(66px, 9.4vw, 92px);
       }
     }
 
     @media (max-width: 767px) {
       .sec2-tile {
-        width: clamp(46px, 13vw, 64px);
+        width: clamp(50px, 13.5vw, 70px);
       }
     }
 
     @media (max-width: 360px) {
       .sec2-tile {
-        width: 44px;
+        width: 46px;
       }
     }
 /* ══════════════════════════════════════════════════════
@@ -3489,7 +3513,7 @@
   <section class="projects-section" id="projects">
     <script>
       (function() {
-        if (window.__jumpToProjects || sessionStorage.getItem('skip_intro_return') === '1' || sessionStorage.getItem('jump_to_projects') === '1' || window.location.hash === '#projects') {
+        if (window.__jumpToProjects || sessionStorage.getItem('jump_to_projects') === '1' || sessionStorage.getItem('skip_intro_return') === '1') {
           var sec = document.getElementById('projects');
           if (sec) {
             sec.scrollIntoView({ behavior: 'instant', block: 'start' });
@@ -3864,12 +3888,8 @@
         ? navEntry.type
         : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
       const isReload = navType === 'reload';
-      const isReturn = sessionStorage.getItem('skip_intro_return') === '1' || sessionStorage.getItem('jump_to_projects') === '1';
-      const isSkipClass = document.documentElement.classList.contains('skip-intro');
-      const isProjectsHash = window.location.hash === '#projects';
-
-      // Skip intro when explicitly returning from a project page or navigating directly to section
-      const shouldSkipIntro = !isReload && (isReturn || isSkipClass || isProjectsHash || window.__jumpToProjects);
+      const isReturn = !isReload && (window.__jumpToProjects || sessionStorage.getItem('jump_to_projects') === '1' || sessionStorage.getItem('skip_intro_return') === '1');
+      const isSkipClass = !isReload && document.documentElement.classList.contains('skip-intro');
 
       try {
         sessionStorage.removeItem('skip_intro_return');
@@ -3892,11 +3912,16 @@
           introScreen.style.display = 'none';
         }
 
-        if (isReturn || window.__jumpToProjects || isProjectsHash) {
+        if (isReturn || window.__jumpToProjects) {
           const target = document.getElementById('projects');
           if (target) {
             target.scrollIntoView({ behavior: 'instant', block: 'start' });
           }
+          try {
+            if (window.location.hash) {
+              history.replaceState(null, '', window.location.pathname);
+            }
+          } catch (e) {}
           setTimeout(function() {
             document.documentElement.style.scrollBehavior = '';
           }, 150);
@@ -3911,14 +3936,20 @@
         }
       }
 
-      if (shouldSkipIntro) {
+      if (!isReload && (isReturn || isSkipClass)) {
         completeImmediately();
         return;
       }
 
-      // Fresh visit or reload: reset scroll position to top
+      // Fresh visit or reload: ensure intro screen is visible and ready
       window.scrollTo(0, 0);
       document.body.classList.add('intro');
+      document.body.classList.remove('intro-complete');
+      document.documentElement.classList.remove('skip-intro');
+      if (introScreen) {
+        introScreen.classList.remove('is-dismissed');
+        introScreen.style.display = 'flex';
+      }
 
       let started = false;
       function start() {
@@ -3927,13 +3958,13 @@
         window.scrollTo(0, 0);
 
         let progress = 0;
-        const duration = 2200; // 2.2s cinematic animation duration
+        const duration = 2000; // 2.0s cinematic animation duration
         const startTime = performance.now();
 
         function update(now) {
           const elapsed = now - startTime;
           progress = Math.min(1, elapsed / duration);
-          // Cubic ease-out for smooth natural deceleration
+          // Smooth cubic ease-out
           const easeVal = 1 - Math.pow(1 - progress, 3);
           const percent = Math.floor(easeVal * 100);
 
@@ -3943,7 +3974,7 @@
           if (progress < 1) {
             requestAnimationFrame(update);
           } else {
-            // 1. Loading animation finishes: quick 100ms beat
+            // 1. Loading animation reaches 100%: brief 80ms beat
             setTimeout(() => {
               // 2. Play the 4-panel black screen exit animation from left to right
               if (introScreen) {
@@ -3963,7 +3994,7 @@
                   introScreen.style.display = 'none';
                 }
 
-                // 4. Only then start the existing Hero section animation
+                // 4. Reveal hero section
                 document.body.classList.remove('intro');
                 document.body.classList.add('intro-complete');
               }
@@ -3979,28 +4010,17 @@
 
               // Fallback timer matching panel 4 delay (180ms) + duration (550ms) + 50ms safety = 780ms
               setTimeout(startHero, 780);
-            }, 100);
+            }, 80);
           }
         }
 
         requestAnimationFrame(update);
       }
 
-      // Safety timeout in case fonts or assets delay
-      const safetyTimer = setTimeout(() => {
-        if (document.body.classList.contains('intro')) {
-          completeImmediately();
-        }
-      }, 5500);
-
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(() => {
-          clearTimeout(safetyTimer);
-          start();
-        });
-      } else {
-        setTimeout(start, 250);
-      }
+      // Start immediately on next animation frame
+      requestAnimationFrame(() => {
+        start();
+      });
     })();
 
     /* ── Interactive Parallax & Coordinate Tracker ───────── */
