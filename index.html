@@ -785,6 +785,7 @@
       justify-content: space-between;
       padding-top: var(--header-height);
       overflow-x: hidden;
+      cursor: pointer;
     }
 
     /* Subtle radial ambient glow — starts strictly below header boundary */
@@ -1899,7 +1900,8 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: clamp(86px, 7.6vw, 130px);
+      --tile-base-w: clamp(86px, 7.6vw, 130px);
+      width: calc(var(--tile-base-w) * var(--tile-scale, 1));
       pointer-events: auto;
       cursor: pointer;
       transform: translate(-50%, -50%) translate3d(0px, 0px, 0px) scale(0) rotate(0deg);
@@ -1907,6 +1909,16 @@
       will-change: transform, opacity;
       user-select: none;
     }
+
+    /* Individualized Dynamic Sizing across the constellation */
+    .sec2-tile--snacker { --tile-scale: 1.24; }
+    .sec2-tile--cat     { --tile-scale: 1.16; }
+    .sec2-tile--ride    { --tile-scale: 1.15; }
+    .sec2-tile--door    { --tile-scale: 1.08; }
+    .sec2-tile--camera  { --tile-scale: 1.02; }
+    .sec2-tile--alumni  { --tile-scale: 0.94; }
+    .sec2-tile--clock   { --tile-scale: 0.88; }
+    .sec2-tile--tea     { --tile-scale: 0.80; }
 
     .sec2-tile__float {
       display: block;
@@ -1928,9 +1940,9 @@
     }
 
     /* Tailored aspect ratios preserving full clarity and original photo compositions */
-    .sec2-tile--cat .sec2-tile__inner,
     .sec2-tile--alumni .sec2-tile__inner,
-    .sec2-tile--tea .sec2-tile__inner {
+    .sec2-tile--tea .sec2-tile__inner,
+    .sec2-tile--door .sec2-tile__inner {
       aspect-ratio: 1 / 1;
     }
 
@@ -1944,7 +1956,7 @@
       aspect-ratio: 16 / 10;
     }
 
-    .sec2-tile--door .sec2-tile__inner {
+    .sec2-tile--cat .sec2-tile__inner {
       aspect-ratio: 4 / 3;
     }
 
@@ -2068,25 +2080,41 @@
 
     @media (max-width: 991px) {
       .sec2-tile {
-        width: clamp(70px, 9.2vw, 88px);
+        --tile-base-w: clamp(70px, 9.2vw, 88px);
       }
     }
 
     @media (max-width: 767px) {
       .sec2-tile {
-        width: clamp(56px, 14vw, 68px);
+        --tile-base-w: clamp(56px, 14vw, 68px);
       }
+      .sec2-tile--snacker { --tile-scale: 1.18; }
+      .sec2-tile--cat     { --tile-scale: 1.14; }
+      .sec2-tile--ride    { --tile-scale: 1.12; }
+      .sec2-tile--door    { --tile-scale: 1.06; }
+      .sec2-tile--camera  { --tile-scale: 1.00; }
+      .sec2-tile--alumni  { --tile-scale: 0.92; }
+      .sec2-tile--clock   { --tile-scale: 0.86; }
+      .sec2-tile--tea     { --tile-scale: 0.80; }
     }
 
     @media (max-width: 400px) {
       .sec2-tile {
-        width: clamp(48px, 13vw, 56px);
+        --tile-base-w: clamp(48px, 13vw, 56px);
       }
+      .sec2-tile--snacker { --tile-scale: 1.14; }
+      .sec2-tile--cat     { --tile-scale: 1.10; }
+      .sec2-tile--ride    { --tile-scale: 1.08; }
+      .sec2-tile--door    { --tile-scale: 1.04; }
+      .sec2-tile--camera  { --tile-scale: 0.98; }
+      .sec2-tile--alumni  { --tile-scale: 0.90; }
+      .sec2-tile--clock   { --tile-scale: 0.86; }
+      .sec2-tile--tea     { --tile-scale: 0.80; }
     }
 
     @media (max-width: 340px) {
       .sec2-tile {
-        width: 44px;
+        --tile-base-w: 44px;
       }
     }
 /* ══════════════════════════════════════════════════════
@@ -3556,13 +3584,13 @@
 
       <div class="hero__actions">
         <div class="hero__btn-wrap">
-          <a href="#works-intro" class="hero__btn hero__btn--primary">
+          <a href="#projects" class="hero__btn hero__btn--primary">
             <span>VIEW WORK</span>
             <span class="btn__arrow">→</span>
           </a>
         </div>
         <div class="hero__btn-wrap">
-          <a href="https://drive.google.com/file/d/1SQUbkBLW7hvUpSyqCyUIZ28dICbkw_NC/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="hero__btn hero__btn--primary">
+          <a href="https://drive.google.com/file/d/1aliivOgkrI0j7D7CDhL1tatkCFFGDGEA/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="hero__btn hero__btn--primary">
             <span>RESUME</span>
             <span class="btn__arrow">→</span>
           </a>
@@ -4043,6 +4071,20 @@
           }
         });
       });
+
+      // Click on hero section smoothly navigates to projects section
+      const heroSection = document.querySelector('.hero');
+      if (heroSection) {
+        heroSection.addEventListener('click', (e) => {
+          if (e.target.closest('a, button, input, textarea, select, [role="button"]')) return;
+          const sel = window.getSelection();
+          if (sel && sel.toString().trim().length > 0) return;
+          const projectsEl = document.getElementById('projects');
+          if (projectsEl) {
+            projectsEl.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
     })();
 
     /* ══════════════════════════════════════════════════════
