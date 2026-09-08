@@ -1652,7 +1652,7 @@
        ══════════════════════════════════════════════════════ */
     .statement-doors {
       position: relative;
-      height: 200vh;
+      height: 280vh;
       background: var(--color-bg);
     }
 
@@ -1724,7 +1724,7 @@
 
     @media (max-width: 767px) {
       .statement-doors {
-        height: 180vh;
+        height: 230vh;
         --page-padding-x: clamp(16px, 5vw, 24px);
       }
       .doors-panel--left {
@@ -1760,7 +1760,7 @@
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      background: #0e0e0e;
+      background: #0a0a0a;
       border: 1px solid rgba(255, 255, 255, var(--card-border-opacity, 0));
       border-radius: 0px;
       box-shadow: none;
@@ -1783,12 +1783,12 @@
       transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Statement Text Container — completely hidden during opening, subtle fade-in when 100% open */
+    /* Statement Text Container */
     .statement-card__inner {
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 900px;
+      max-width: 950px;
       padding: clamp(24px, 5vw, 64px);
       text-align: center;
       display: flex;
@@ -1797,7 +1797,7 @@
       justify-content: center;
       opacity: var(--statement-opacity, 0);
       transform: translateY(var(--statement-translate-y, 16px)) scale(var(--statement-scale, 0.98));
-      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: opacity, transform;
       pointer-events: none;
     }
@@ -1812,12 +1812,110 @@
     .statement-card__headline {
       font-family: 'Instrument Sans', sans-serif;
       font-weight: 700;
-      font-size: clamp(1.8rem, 4.2vw, 3.8rem);
-      line-height: 1.16;
+      font-size: clamp(1.8rem, 4.4vw, 4rem);
+      line-height: 1.15;
       letter-spacing: -0.025em;
       color: #f7edd8;
       margin: 0;
       text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .statement-card__headline {
+        font-size: clamp(1.28rem, 5.8vw, 1.55rem);
+      }
+    }
+
+    /* ── Orbiting Images Constellation around Headline ── */
+    .sec2-orbit-wrap {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .sec2-tile {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: clamp(76px, 6.4vw, 115px);
+      pointer-events: auto;
+      cursor: pointer;
+      transform: translate(-50%, -50%) translate3d(0px, 0px, 0px) scale(0) rotate(0deg);
+      opacity: 0;
+      will-change: transform, opacity;
+      user-select: none;
+    }
+
+    .sec2-tile__inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      background: #121212;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+
+    .sec2-tile--snacker .sec2-tile__inner,
+    .sec2-tile--alumni .sec2-tile__inner,
+    .sec2-tile--door .sec2-tile__inner,
+    .sec2-tile--clock .sec2-tile__inner {
+      aspect-ratio: 0.88 / 1;
+    }
+
+    .sec2-tile--cat .sec2-tile__inner,
+    .sec2-tile--ride .sec2-tile__inner,
+    .sec2-tile--tea .sec2-tile__inner,
+    .sec2-tile--camera .sec2-tile__inner {
+      aspect-ratio: 1.05 / 1;
+    }
+
+    .sec2-tile__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    }
+
+    .sec2-tile:hover {
+      z-index: 25;
+    }
+
+    .sec2-tile:hover .sec2-tile__inner {
+      transform: scale(1.08);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.9), 0 0 0 1.5px rgba(247, 237, 216, 0.5);
+    }
+
+    .sec2-tile:hover .sec2-tile__img {
+      transform: scale(1.06);
+    }
+
+    @media (max-width: 991px) {
+      .sec2-tile {
+        width: clamp(58px, 8.8vw, 80px);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .sec2-tile {
+        width: clamp(46px, 13vw, 64px);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .sec2-tile {
+        width: 44px;
+      }
     }
 /* ══════════════════════════════════════════════════════
        PROJECTS SECTION (2×2 Showcase Grid)
@@ -3333,6 +3431,50 @@
           <div class="statement-card__inner" id="statement-card-inner">
             <h3 class="statement-card__headline">Design makes the complex<br>feel effortless.</h3>
           </div>
+
+          <!-- Orbiting Images Constellation -->
+          <div class="sec2-orbit-wrap" id="sec2-orbit" aria-hidden="true">
+            <div class="sec2-tile sec2-tile--cat" data-index="0" data-dx="-9.3" data-dy="-29.6" data-start-rot="360" data-end-rot="-2" data-delay="0.00">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-cat.jpg" alt="Cat" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+            <div class="sec2-tile sec2-tile--alumni" data-index="1" data-dx="11.2" data-dy="-27.4" data-start-rot="-360" data-end-rot="2" data-delay="0.02">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-alumni.jpg" alt="Alumni Meet 2025" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+            <div class="sec2-tile sec2-tile--snacker" data-index="2" data-dx="-29.1" data-dy="-14.3" data-start-rot="-360" data-end-rot="1" data-delay="0.04">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-snacker.jpg" alt="Super Snacker" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+            <div class="sec2-tile sec2-tile--ride" data-index="3" data-dx="28.9" data-dy="-14.3" data-start-rot="360" data-end-rot="-3" data-delay="0.06">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-ride.jpg" alt="Motorcycle Ride" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+            <div class="sec2-tile sec2-tile--camera" data-index="4" data-dx="-25.7" data-dy="15.7" data-start-rot="270" data-end-rot="-3" data-delay="0.08">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-camera.jpg" alt="Camera Selfie" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+            <div class="sec2-tile sec2-tile--clock" data-index="5" data-dx="22.2" data-dy="12.7" data-start-rot="-270" data-end-rot="2" data-delay="0.10">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-clock.jpg" alt="Vintage Clock" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+            <div class="sec2-tile sec2-tile--tea" data-index="6" data-dx="-9.3" data-dy="30.7" data-start-rot="-360" data-end-rot="2" data-delay="0.12">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-tea.jpg" alt="Tea Stall" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+            <div class="sec2-tile sec2-tile--door" data-index="7" data-dx="7.3" data-dy="24.6" data-start-rot="360" data-end-rot="-1" data-delay="0.14">
+              <div class="sec2-tile__inner">
+                <img src="images/sec2-door.jpg" alt="Doorway" class="sec2-tile__img" loading="eager" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3920,12 +4062,12 @@
       requestAnimationFrame(updateParallax);
     })();
 
-            /* ══════════════════════════════════════════════════════
-       STATEMENT DOORS & SCALING CARD ENGINE
-       - Scroll Progress: start 0% -> 0.0000, opening in 0.8000, full open 1.0000
-       - Text inside remains 100% COMPLETELY HIDDEN while opening
-       - Only after rectangle reaches 100% full open, text reveals with subtle fade-in
-       - Doors glide outward smoothly off-screen as card expands
+    /* ══════════════════════════════════════════════════════
+       STATEMENT DOORS, SCALING CARD & ORBITING CONSTELLATION
+       - Phase 1 (0.00 -> 0.32): Aperture scales up to 100%, doors glide outward
+       - Phase 2 (0.28 -> 0.44): Text "Design makes the complex feel effortless." reveals
+       - Phase 3 (0.44 -> 0.82): 8 images emerge from center, rotate dynamically, and settle into orbit
+       - Phase 4 (0.82 -> 1.00): Full constellation showcased and interactive
        ══════════════════════════════════════════════════════ */
     (function initStatementDoors() {
       const section = document.querySelector('.statement-doors');
@@ -3935,37 +4077,29 @@
       const rightPanel = document.getElementById('doors-right');
       const card = document.getElementById('statement-card');
       const cardInner = document.getElementById('statement-card-inner');
+      const tileElements = section.querySelectorAll('.sec2-tile');
+
+      const TILES = [
+        { el: tileElements[0], dx: -9.3,  dy: -29.6, startRot: 360,  endRot: 0 }, // Cat
+        { el: tileElements[1], dx: 11.2,  dy: -27.4, startRot: -360, endRot: 0 }, // Alumni
+        { el: tileElements[2], dx: -29.1, dy: -14.3, startRot: -360, endRot: 0 }, // Snacker
+        { el: tileElements[3], dx: 28.9,  dy: -14.3, startRot: 360,  endRot: 0 }, // Ride
+        { el: tileElements[4], dx: -25.7, dy: 15.7,  startRot: 270,  endRot: 0 }, // Camera
+        { el: tileElements[5], dx: 22.2,  dy: 12.7,  startRot: -270, endRot: 0 }, // Clock
+        { el: tileElements[6], dx: -9.3,  dy: 30.7,  startRot: -360, endRot: 0 }, // Tea
+        { el: tileElements[7], dx: 7.3,   dy: 24.6,  startRot: 360,  endRot: 0 }  // Door
+      ];
 
       function clamp01(v) {
         return Math.max(0, Math.min(1, v));
       }
 
-      // Scroll progress mapping:
-      // start with 0% -> 0.0000
-      // opening in 0.8000 -> 0.8000
-      // full open -> 1.0000 (reached smoothly and held through 1.0000)
-      function getRectangleScale(progress) {
-        const p = clamp01(progress);
-        if (p <= 0.001) return 0;
-        if (p >= 0.92) return 1;
-        if (p <= 0.80) {
-          const u = p / 0.80;
-          // Hermite curve on [0, 0.80]: s(0)=0, s(0.80)=0.8000
-          return 0.80 * (-0.60 * Math.pow(u, 3) + 1.60 * Math.pow(u, 2));
-        } else {
-          const v = (p - 0.80) / 0.12;
-          // Hermite curve on [0.80, 0.92]: s(0.80)=0.8000, s(0.92)=1.0000, zero slope at 0.92
-          return 0.80 + 0.168 * v + 0.264 * Math.pow(v, 2) - 0.232 * Math.pow(v, 3);
-        }
-      }
-
-      let ticking = false;
-
       function applyProgress(progress) {
         const vpW = window.innerWidth;
+        const vpH = window.innerHeight;
         const isMobile = vpW < 768;
 
-        // ── Phase 1: Clean Start State (0% Scroll) ──
+        // ── Phase 0: Initial Reset (0% Scroll) ──
         if (progress <= 0.001) {
           if (card) {
             card.style.setProperty('--card-scale', '0');
@@ -3974,8 +4108,8 @@
           }
           if (cardInner) {
             cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-translate-y', '16px');
-            cardInner.style.setProperty('--statement-scale', '0.98');
+            cardInner.style.setProperty('--statement-translate-y', '20px');
+            cardInner.style.setProperty('--statement-scale', '0.96');
             cardInner.classList.remove('is-revealed');
           }
           if (leftPanel) {
@@ -3986,83 +4120,137 @@
             rightPanel.style.transform = 'translate3d(0px, 0, 0)';
             rightPanel.style.opacity = '1';
           }
+          TILES.forEach(t => {
+            if (t.el) {
+              t.el.style.transform = 'translate(-50%, -50%) translate3d(0px, 0px, 0) scale(0) rotate(0deg)';
+              t.el.style.opacity = '0';
+              t.el.style.pointerEvents = 'none';
+            }
+          });
           return;
         }
 
-        // ── Phase 2: Rectangle Aperture Scaling ──
-        const currentScale = getRectangleScale(progress);
-        const cardOpacity = clamp01(progress / 0.05);
-        const borderFade = 1 - clamp01((progress - 0.75) / 0.17);
+        // ── Phase 1: Aperture Scaling & Doors (0.00 -> 0.34) ──
+        const openProgress = clamp01(progress / 0.32);
+        const cardScale = openProgress * openProgress * (3 - 2 * openProgress);
+        const cardOpacity = clamp01(progress / 0.04);
+        const borderFade = 1 - clamp01((progress - 0.24) / 0.10);
         const borderOpacity = 0.08 * cardOpacity * borderFade;
 
         if (card) {
-          card.style.setProperty('--card-scale', currentScale.toFixed(4));
+          card.style.setProperty('--card-scale', cardScale.toFixed(4));
           card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
           card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
         }
 
-        // Doors glide outward smoothly off-screen as card expands
-        const doorProgress = clamp01(progress / 0.65);
-        const doorEase = doorProgress * doorProgress * (3 - 2 * doorProgress);
-        const maxShift = isMobile ? (vpW * 0.60) : Math.min(vpW * 0.65, 900);
-        const leftX = -doorEase * maxShift;
-        const rightX = doorEase * maxShift;
-        const textOpacity = clamp01(1 - progress / 0.45);
+        const maxShift = isMobile ? (vpW * 0.65) : Math.min(vpW * 0.65, 900);
+        const leftX = -cardScale * maxShift;
+        const rightX = cardScale * maxShift;
+        const doorOpacity = clamp01(1 - progress / 0.26);
 
         if (leftPanel) {
           leftPanel.style.transform = `translate3d(${leftX.toFixed(1)}px, 0, 0)`;
-          leftPanel.style.opacity = textOpacity.toFixed(3);
+          leftPanel.style.opacity = doorOpacity.toFixed(3);
         }
         if (rightPanel) {
           rightPanel.style.transform = `translate3d(${rightX.toFixed(1)}px, 0, 0)`;
-          rightPanel.style.opacity = textOpacity.toFixed(3);
+          rightPanel.style.opacity = doorOpacity.toFixed(3);
         }
 
-        // ── Phase 3: Quote / Text Reveal ──
-        // Text inside MUST remain completely hidden while opening.
-        // Only after rectangle reaches 100% full open (scale = 1.0000),
-        // reveal the text inside with a subtle fade-in animation.
-        if (progress >= 0.92) {
-          if (cardInner) {
-            cardInner.style.setProperty('--statement-opacity', '1');
-            cardInner.style.setProperty('--statement-translate-y', '0px');
-            cardInner.style.setProperty('--statement-scale', '1');
+        // ── Phase 2: Headline Text Reveal (0.28 -> 0.44) ──
+        const textT = clamp01((progress - 0.28) / 0.16);
+        const textEase = 1 - Math.pow(1 - textT, 3);
+
+        if (cardInner) {
+          cardInner.style.setProperty('--statement-opacity', textEase.toFixed(3));
+          cardInner.style.setProperty('--statement-translate-y', `${((1 - textEase) * 20).toFixed(1)}px`);
+          cardInner.style.setProperty('--statement-scale', `${(0.96 + 0.04 * textEase).toFixed(3)}`);
+          if (textT >= 0.9) {
             cardInner.classList.add('is-revealed');
-          }
-        } else {
-          if (cardInner) {
-            cardInner.style.setProperty('--statement-opacity', '0');
-            cardInner.style.setProperty('--statement-translate-y', '16px');
-            cardInner.style.setProperty('--statement-scale', '0.98');
+          } else {
             cardInner.classList.remove('is-revealed');
           }
         }
+
+        // ── Phase 3: Orbiting Images Constellation Dispersal (0.44 -> 0.82) ──
+        // "animation should after the text. it'll came from center and rotate image and go for the actual place like in 1st image."
+        const flightStart = 0.44;
+        const tileDuration = 0.24;
+        const isSmallMobile = vpW < 480;
+        const xFactor = isMobile ? (isSmallMobile ? 0.90 : 0.80) : (vpW < 1200 ? 0.90 : 1.0);
+        const yFactor = isMobile ? (isSmallMobile ? 0.95 : 0.85) : (vpH < 800 ? 0.90 : 1.0);
+
+        TILES.forEach((tile, i) => {
+          if (!tile.el) return;
+          const tStart = flightStart + i * 0.022;
+          const rawT = clamp01((progress - tStart) / tileDuration);
+          const ease = 1 - Math.pow(1 - rawT, 3); // Smooth cubic ease-out
+
+          const targetX = (tile.dx / 100) * vpW * xFactor;
+          const targetY = (tile.dy / 100) * vpH * yFactor;
+
+          const curX = targetX * ease;
+          const curY = targetY * ease;
+          const curRot = tile.startRot * (1 - ease) + tile.endRot * ease;
+          const curScale = ease;
+          const curOpacity = Math.min(1, ease * 3.0);
+
+          tile.el.style.transform = `translate(-50%, -50%) translate3d(${curX.toFixed(1)}px, ${curY.toFixed(1)}px, 0) scale(${curScale.toFixed(3)}) rotate(${curRot.toFixed(1)}deg)`;
+          tile.el.style.opacity = curOpacity.toFixed(3);
+          tile.el.style.pointerEvents = ease > 0.8 ? 'auto' : 'none';
+        });
       }
 
-      function onScroll() {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            const rect = section.getBoundingClientRect();
-            const sectionH = section.offsetHeight;
-            const vpH = window.innerHeight;
-            const scrollable = sectionH - vpH;
-            if (scrollable > 0) {
-              const scrolled = -rect.top;
-              const progress = clamp01(scrolled / scrollable);
-              applyProgress(progress);
-            }
-            ticking = false;
-          });
-          ticking = true;
+      let currentProgress = 0;
+      let targetProgress = 0;
+      let isLoopRunning = false;
+
+      function renderLoop() {
+        const diff = targetProgress - currentProgress;
+        if (Math.abs(diff) > 0.0004) {
+          currentProgress += diff * 0.16;
+          applyProgress(currentProgress);
+          requestAnimationFrame(renderLoop);
+        } else {
+          currentProgress = targetProgress;
+          applyProgress(currentProgress);
+          isLoopRunning = false;
         }
       }
 
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
-      window.addEventListener('load', onScroll, { passive: true });
-      onScroll();
+      function updateTargetProgress() {
+        const rect = section.getBoundingClientRect();
+        const sectionH = section.offsetHeight;
+        const vpH = window.innerHeight;
+        const scrollable = sectionH - vpH;
+        if (scrollable > 0) {
+          const scrolled = -rect.top;
+          targetProgress = clamp01(scrolled / scrollable);
+          if (!isLoopRunning) {
+            isLoopRunning = true;
+            requestAnimationFrame(renderLoop);
+          }
+        }
+      }
+
+      window.addEventListener('scroll', updateTargetProgress, { passive: true });
+      window.addEventListener('resize', () => {
+        updateTargetProgress();
+        currentProgress = targetProgress;
+        applyProgress(currentProgress);
+      }, { passive: true });
+      window.addEventListener('load', () => {
+        updateTargetProgress();
+        currentProgress = targetProgress;
+        applyProgress(currentProgress);
+      }, { passive: true });
+
+      updateTargetProgress();
+      currentProgress = targetProgress;
+      applyProgress(currentProgress);
     })();
-/* ══════════════════════════════════════════════════════
+
+    /* ══════════════════════════════════════════════════════
        EXPERIENCE SECTION — Single Continuous Path & Traveling Dot
        - One single continuous smooth curved path across viewport
        - Glowing active dot travels along exact SVG path
