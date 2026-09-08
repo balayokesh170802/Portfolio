@@ -1796,10 +1796,31 @@
       will-change: transform, opacity, border-radius;
     }
 
+    /* Fixed-proportion grid inside the scaling rectangle (counter-scaled to remain consistent in size) */
+    .statement-card__grid {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      pointer-events: none;
+      z-index: 1;
+      transform: translate(-50%, -50%) scale(var(--card-scale-inv, 1));
+      transform-origin: center center;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 72px 72px;
+      background-position: center center;
+      will-change: transform;
+    }
+
     .statement-card__glow {
       position: absolute;
       inset: 0;
       pointer-events: none;
+      z-index: 1;
       background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.08) 0%, transparent 75%);
       opacity: var(--statement-opacity, 0);
       transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1887,6 +1908,15 @@
       user-select: none;
     }
 
+    .sec2-tile__float {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: translate3d(0, 0, 0) rotate(0deg);
+      will-change: transform;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     .sec2-tile__inner {
       width: 100%;
       height: 100%;
@@ -1944,6 +1974,96 @@
 
     .sec2-tile:hover .sec2-tile__img {
       transform: scale(1.06);
+    }
+
+    /* Subtle organic floating animation (active ONLY after all images have fully settled) */
+    .sec2-orbit-wrap.is-floating .sec2-tile--cat .sec2-tile__float {
+      animation: sec2FloatCat 5.2s ease-in-out infinite;
+    }
+    .sec2-orbit-wrap.is-floating .sec2-tile--alumni .sec2-tile__float {
+      animation: sec2FloatAlumni 5.8s ease-in-out infinite;
+    }
+    .sec2-orbit-wrap.is-floating .sec2-tile--snacker .sec2-tile__float {
+      animation: sec2FloatSnacker 6.4s ease-in-out infinite;
+    }
+    .sec2-orbit-wrap.is-floating .sec2-tile--ride .sec2-tile__float {
+      animation: sec2FloatRide 4.8s ease-in-out infinite;
+    }
+    .sec2-orbit-wrap.is-floating .sec2-tile--camera .sec2-tile__float {
+      animation: sec2FloatCamera 6.0s ease-in-out infinite;
+    }
+    .sec2-orbit-wrap.is-floating .sec2-tile--clock .sec2-tile__float {
+      animation: sec2FloatClock 5.4s ease-in-out infinite;
+    }
+    .sec2-orbit-wrap.is-floating .sec2-tile--tea .sec2-tile__float {
+      animation: sec2FloatTea 6.6s ease-in-out infinite;
+    }
+    .sec2-orbit-wrap.is-floating .sec2-tile--door .sec2-tile__float {
+      animation: sec2FloatDoor 5.0s ease-in-out infinite;
+    }
+
+    @keyframes sec2FloatCat {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      25% { transform: translate3d(-1px, -5px, 0) rotate(0.8deg); }
+      50% { transform: translate3d(0.5px, -8px, 0) rotate(1.3deg); }
+      75% { transform: translate3d(1px, 2px, 0) rotate(-0.6deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes sec2FloatAlumni {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      25% { transform: translate3d(1px, 4px, 0) rotate(-0.7deg); }
+      50% { transform: translate3d(1.5px, 7px, 0) rotate(-1.2deg); }
+      75% { transform: translate3d(-1px, -3px, 0) rotate(0.8deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes sec2FloatSnacker {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      30% { transform: translate3d(-1.5px, -6px, 0) rotate(-1.1deg); }
+      60% { transform: translate3d(1px, 3px, 0) rotate(0.7deg); }
+      80% { transform: translate3d(-0.5px, 5px, 0) rotate(1.2deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes sec2FloatRide {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      25% { transform: translate3d(1.2px, -6px, 0) rotate(1.2deg); }
+      50% { transform: translate3d(1.8px, -2px, 0) rotate(1.5deg); }
+      75% { transform: translate3d(-1px, 4px, 0) rotate(-1.0deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes sec2FloatCamera {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      30% { transform: translate3d(-1px, 6px, 0) rotate(1.0deg); }
+      60% { transform: translate3d(1.5px, -4px, 0) rotate(-0.9deg); }
+      85% { transform: translate3d(-0.8px, -7px, 0) rotate(-1.3deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes sec2FloatClock {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      25% { transform: translate3d(1px, -5px, 0) rotate(-1.1deg); }
+      50% { transform: translate3d(-1.2px, -8px, 0) rotate(-1.4deg); }
+      75% { transform: translate3d(-1.5px, 3px, 0) rotate(0.6deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes sec2FloatTea {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      30% { transform: translate3d(-1.2px, -7px, 0) rotate(1.2deg); }
+      65% { transform: translate3d(1px, 4px, 0) rotate(-1.0deg); }
+      85% { transform: translate3d(1.2px, -2px, 0) rotate(-0.4deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes sec2FloatDoor {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      25% { transform: translate3d(1.5px, 5px, 0) rotate(-0.8deg); }
+      50% { transform: translate3d(-1px, 8px, 0) rotate(1.1deg); }
+      75% { transform: translate3d(-1.5px, -4px, 0) rotate(1.3deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
     }
 
     @media (max-width: 991px) {
@@ -3012,6 +3132,12 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 0 30px rgba(226, 109, 92, 0.08);
     }
 
+    html[data-theme="light"] .statement-card__grid {
+      background-image:
+        linear-gradient(to right, rgba(20, 20, 19, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(20, 20, 19, 0.06) 1px, transparent 1px);
+    }
+
     html[data-theme="light"] .statement-card__glow {
       background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(226, 109, 92, 0.06) 0%, transparent 75%);
     }
@@ -3479,6 +3605,8 @@
       <!-- Center Expanding Viewport Card -->
       <div class="statement-card-wrap">
         <div class="statement-card" id="statement-card">
+          <!-- Fixed-proportion Grid inside Card (counter-scaled to remain consistent in size) -->
+          <div class="statement-card__grid" id="statement-card-grid" aria-hidden="true"></div>
           <div class="statement-card__glow"></div>
           <div class="statement-card__inner" id="statement-card-inner">
             <h3 class="statement-card__headline">Design makes the complex<br>feel effortless.</h3>
@@ -3487,43 +3615,59 @@
           <!-- Orbiting Images Constellation -->
           <div class="sec2-orbit-wrap" id="sec2-orbit" aria-hidden="true">
             <div class="sec2-tile sec2-tile--cat" data-index="0" data-dx="-9.3" data-dy="-29.6" data-start-rot="360" data-end-rot="-2" data-delay="0.00">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-cat.jpg" alt="Cat" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-cat.jpg" alt="Cat" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
             <div class="sec2-tile sec2-tile--alumni" data-index="1" data-dx="11.2" data-dy="-27.4" data-start-rot="-360" data-end-rot="2" data-delay="0.02">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-alumni.jpg" alt="Alumni Meet 2025" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-alumni.jpg" alt="Alumni Meet 2025" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
             <div class="sec2-tile sec2-tile--snacker" data-index="2" data-dx="-29.1" data-dy="-14.3" data-start-rot="-360" data-end-rot="1" data-delay="0.04">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-snacker.jpg" alt="Super Snacker" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-snacker.jpg" alt="Super Snacker" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
             <div class="sec2-tile sec2-tile--ride" data-index="3" data-dx="28.9" data-dy="-14.3" data-start-rot="360" data-end-rot="-3" data-delay="0.06">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-ride.jpg" alt="Motorcycle Ride" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-ride.jpg" alt="Motorcycle Ride" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
             <div class="sec2-tile sec2-tile--camera" data-index="4" data-dx="-25.7" data-dy="15.7" data-start-rot="270" data-end-rot="-3" data-delay="0.08">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-camera.jpg" alt="Camera Selfie" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-camera.jpg" alt="Camera Selfie" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
             <div class="sec2-tile sec2-tile--clock" data-index="5" data-dx="22.2" data-dy="12.7" data-start-rot="-270" data-end-rot="2" data-delay="0.10">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-clock.jpg" alt="Vintage Clock" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-clock.jpg" alt="Vintage Clock" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
             <div class="sec2-tile sec2-tile--tea" data-index="6" data-dx="-9.3" data-dy="30.7" data-start-rot="-360" data-end-rot="2" data-delay="0.12">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-tea.jpg" alt="Tea Stall" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-tea.jpg" alt="Tea Stall" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
             <div class="sec2-tile sec2-tile--door" data-index="7" data-dx="7.3" data-dy="24.6" data-start-rot="360" data-end-rot="-1" data-delay="0.14">
-              <div class="sec2-tile__inner">
-                <img src="images/sec2-door.jpg" alt="Doorway" class="sec2-tile__img" loading="eager" />
+              <div class="sec2-tile__float">
+                <div class="sec2-tile__inner">
+                  <img src="images/sec2-door.jpg" alt="Doorway" class="sec2-tile__img" loading="eager" />
+                </div>
               </div>
             </div>
           </div>
@@ -4125,6 +4269,7 @@
       const rightPanel = document.getElementById('doors-right');
       const card = document.getElementById('statement-card');
       const cardInner = document.getElementById('statement-card-inner');
+      const orbitWrap = document.getElementById('sec2-orbit');
       const tileElements = section.querySelectorAll('.sec2-tile');
 
       const TILES = [
@@ -4156,6 +4301,7 @@
         if (progress <= 0.001) {
           if (card) {
             card.style.setProperty('--card-scale', '0');
+            card.style.setProperty('--card-scale-inv', '1');
             card.style.setProperty('--card-radius', '18px');
             card.style.setProperty('--card-border-opacity', '0');
             card.style.setProperty('--card-opacity', '0');
@@ -4173,6 +4319,9 @@
           if (rightPanel) {
             rightPanel.style.transform = 'translate3d(0px, 0, 0)';
             rightPanel.style.opacity = '1';
+          }
+          if (orbitWrap && orbitWrap.classList.contains('is-floating')) {
+            orbitWrap.classList.remove('is-floating');
           }
           TILES.forEach(t => {
             if (t.el) {
@@ -4201,7 +4350,9 @@
         const borderOpacity = 0.35 * cardOpacity * borderFade;
 
         if (card) {
+          const invScale = cardScale > 0.0001 ? (1 / cardScale).toFixed(4) : '1';
           card.style.setProperty('--card-scale', cardScale.toFixed(4));
+          card.style.setProperty('--card-scale-inv', invScale);
           card.style.setProperty('--card-radius', `${cardRadius}px`);
           card.style.setProperty('--card-opacity', cardOpacity.toFixed(3));
           card.style.setProperty('--card-border-opacity', borderOpacity.toFixed(3));
@@ -4281,6 +4432,18 @@
           tile.el.style.opacity = curOpacity.toFixed(3);
           tile.el.style.pointerEvents = ease > 0.8 ? 'auto' : 'none';
         });
+
+        // ── Phase 4: Continuous Floating Animation (After All Images Settled) ──
+        // Start floating animation ONLY after all images have completely reached and settled into their final positions (progress >= 0.86)
+        const allSettled = progress >= 0.86;
+        if (orbitWrap) {
+          const hasFloating = orbitWrap.classList.contains('is-floating');
+          if (allSettled && !hasFloating) {
+            orbitWrap.classList.add('is-floating');
+          } else if (!allSettled && hasFloating) {
+            orbitWrap.classList.remove('is-floating');
+          }
+        }
       }
 
       let currentProgress = 0;
