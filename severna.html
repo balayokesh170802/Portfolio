@@ -34,7 +34,8 @@
       --color-accent: #c4b5a0;
       --font-primary: 'Instrument Sans', 'Inter', -apple-system, sans-serif;
       --header-height: 72px;
-      --page-padding-x: 15vw;
+      --page-padding-x: clamp(24px, 5.5vw, 84px);
+      --content-max-width: 1380px;
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -43,13 +44,14 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       scroll-behavior: smooth;
+      overflow-x: clip;
     }
 
     body {
       font-family: var(--font-primary);
       background-color: var(--color-bg);
       color: var(--color-fg);
-      overflow-x: hidden;
+      overflow-x: clip;
       line-height: 1.6;
     }
 
@@ -81,6 +83,14 @@
       background-color: var(--color-bg);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       overflow: visible;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .header.is-scrolled {
+      background-color: rgba(10, 10, 10, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
     }
 
     .header__logo {
@@ -161,24 +171,26 @@
       justify-content: center;
       align-items: center;
       gap: 5px;
-      background: none;
+      width: 40px;
+      height: 40px;
+      background: transparent;
       border: none;
       cursor: pointer;
-      padding: 8px;
-      z-index: 200;
+      padding: 0;
+      z-index: 101;
     }
 
     .menu-toggle span {
       display: block;
       width: 22px;
-      height: 1.5px;
-      background: var(--color-fg);
-      transition: transform 0.4s var(--ease-out-expo),
-                  opacity 0.3s ease;
+      height: 2px;
+      background-color: var(--color-fg);
+      transition: transform 0.4s var(--ease-out-expo), opacity 0.3s ease;
+      transform-origin: center;
     }
 
     .menu-toggle.active span:nth-child(1) {
-      transform: translateY(6.5px) rotate(45deg);
+      transform: translateY(7px) rotate(45deg);
     }
 
     .menu-toggle.active span:nth-child(2) {
@@ -186,10 +198,10 @@
     }
 
     .menu-toggle.active span:nth-child(3) {
-      transform: translateY(-6.5px) rotate(-45deg);
+      transform: translateY(-7px) rotate(-45deg);
     }
 
-    /* ── Page Main Container ────────────────────────────── */
+    /* ── Page Layout & Foundation ───────────────────────── */
     .cs-page {
       position: relative;
       z-index: 2;
@@ -197,17 +209,17 @@
     }
 
     .cs-container {
-      max-width: 100%;
-      margin: 0;
+      max-width: var(--content-max-width);
+      margin: 0 auto;
       padding: 0 var(--page-padding-x);
       width: 100%;
       box-sizing: border-box;
     }
 
-    /* ── 1. Top Navigation Label ────────────────────────── */
+    /* Top Back Navigation */
     .cs-top-nav {
-      padding-top: clamp(32px, 5vh, 48px);
-      margin-bottom: clamp(28px, 4vh, 40px);
+      padding-top: clamp(28px, 4.5vh, 44px);
+      margin-bottom: clamp(24px, 3.5vh, 36px);
     }
 
     .cs-back-link {
@@ -236,10 +248,10 @@
       transform: translateX(-4px);
     }
 
-    /* ── 2. Project Title / Header ──────────────────────── */
+    /* Project Intro Block */
     .cs-intro {
-      max-width: 900px;
-      margin-bottom: clamp(56px, 8vh, 80px);
+      max-width: 960px;
+      margin-bottom: clamp(48px, 7vh, 72px);
       padding-bottom: clamp(24px, 3.5vh, 36px);
       border-bottom: 1px solid rgba(232, 230, 227, 0.08);
     }
@@ -247,7 +259,7 @@
     .cs-title {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: clamp(2.4rem, 5.2vw, 4.8rem);
+      font-size: clamp(2.4rem, 5.2vw, 4.6rem);
       line-height: 1.05;
       letter-spacing: -0.025em;
       text-transform: uppercase;
@@ -274,9 +286,148 @@
       line-height: 1;
     }
 
-    /* ── Section Foundation ─────────────────────────────── */
+    /* ── Editorial Two-Column Case Study Grid ──────────── */
+    .cs-layout-grid {
+      display: grid;
+      grid-template-columns: minmax(220px, 24%) minmax(0, 76%);
+      gap: clamp(40px, 5.5vw, 84px);
+      align-items: start;
+      width: 100%;
+      position: relative;
+    }
+
+    /* ── LEFT COLUMN: Sticky Case Study Navigation ───────── */
+    .cs-sidebar {
+      position: -webkit-sticky;
+      position: sticky;
+      top: calc(var(--header-height) + 32px);
+      align-self: start;
+      height: fit-content;
+      width: 100%;
+      z-index: 20;
+    }
+
+    .cs-toc-sticky {
+      display: flex;
+      flex-direction: column;
+      padding-right: 8px;
+    }
+
+    .cs-toc-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(247, 237, 216, 0.42);
+      margin-bottom: 22px;
+      display: block;
+    }
+
+    .cs-toc-nav {
+      width: 100%;
+    }
+
+    .cs-toc-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-left: 1px solid rgba(232, 230, 227, 0.09);
+      padding-left: 16px;
+    }
+
+    .cs-toc-item {
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    .cs-toc-link {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(247, 237, 216, 0.44);
+      transition: color 0.3s var(--ease-out-expo), transform 0.3s var(--ease-out-expo);
+      line-height: 1.45;
+      position: relative;
+    }
+
+    .cs-toc-num {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: rgba(247, 237, 216, 0.32);
+      transition: color 0.3s var(--ease-out-expo);
+      flex-shrink: 0;
+    }
+
+    .cs-toc-dash {
+      color: rgba(247, 237, 216, 0.2);
+      font-size: 0.68rem;
+      transition: color 0.3s var(--ease-out-expo);
+      flex-shrink: 0;
+    }
+
+    .cs-toc-label {
+      color: inherit;
+      transition: color 0.3s var(--ease-out-expo);
+    }
+
+    .cs-toc-link:hover {
+      color: var(--color-fg);
+      transform: translateX(2px);
+    }
+
+    .cs-toc-link:hover .cs-toc-num,
+    .cs-toc-link:hover .cs-toc-dash {
+      color: var(--color-fg-hover);
+    }
+
+    /* Active State (ScrollSpy) */
+    .cs-toc-link.active {
+      color: var(--color-fg);
+      font-weight: 600;
+    }
+
+    .cs-toc-link.active .cs-toc-num {
+      color: #e26d5c;
+      font-weight: 700;
+    }
+
+    .cs-toc-link.active .cs-toc-dash {
+      color: #e26d5c;
+    }
+
+    /* Subtle 2px active rail indicator */
+    .cs-toc-link.active::before {
+      content: '';
+      position: absolute;
+      left: -17px;
+      top: 2px;
+      bottom: 2px;
+      width: 2px;
+      background: #e26d5c;
+      border-radius: 1px;
+    }
+
+    /* ── RIGHT COLUMN: Case Study Main Content ──────────── */
+    .cs-main-content {
+      width: 100%;
+      min-width: 0; /* Prevents overflow in CSS grid */
+    }
+
+    /* Section Foundation */
     .cs-section {
       margin-bottom: clamp(64px, 9vh, 96px);
+      scroll-margin-top: calc(var(--header-height) + 32px);
     }
 
     .cs-heading {
@@ -291,39 +442,29 @@
 
     .cs-body-text {
       font-family: var(--font-primary);
-      font-size: clamp(1rem, 1.12vw, 1.12rem);
+      font-size: clamp(1rem, 1.1vw, 1.12rem);
       line-height: 1.75;
       color: #b0ada8;
-      max-width: 760px;
+      max-width: 780px;
     }
 
     .cs-body-text + .cs-body-text {
       margin-top: 18px;
     }
 
-    /* ── 03. UI Showcase Components ─────────────────────── */
-    .cs-section-intro-block {
-      margin-bottom: clamp(32px, 4.5vh, 48px);
-    }
-
-    .cs-showcase-grid {
+    /* ── 03. UI Showcase — Large Image Placeholder ─────── */
+    .cs-showcase-container {
+      margin-top: clamp(24px, 3.5vh, 36px);
+      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: clamp(48px, 7vh, 72px);
-      width: 100%;
-    }
-
-    .cs-showcase-item {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
     }
 
     .cs-showcase-frame {
       position: relative;
       width: 100%;
-      min-height: clamp(340px, 48vh, 560px);
-      background: rgba(18, 18, 18, 0.75);
+      min-height: clamp(380px, 50vh, 580px);
+      background: rgba(18, 18, 18, 0.7);
       border: 1px dashed rgba(232, 230, 227, 0.16);
       border-radius: 8px;
       overflow: hidden;
@@ -331,7 +472,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: clamp(28px, 4vw, 56px);
+      padding: clamp(32px, 4.5vw, 64px);
       box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
       transition: border-color 0.3s ease, background 0.3s ease;
     }
@@ -352,21 +493,22 @@
       pointer-events: none;
     }
 
-    /* Supporting large screenshots without cropping */
+    /* Automatic adaptation when an <img> tag is inserted */
     .cs-showcase-frame img {
       width: 100%;
       height: auto;
-      max-height: 85vh;
+      max-height: 88vh;
       object-fit: contain;
       display: block;
-      border-radius: 4px;
+      border-radius: 6px;
     }
 
     .cs-showcase-frame:has(img) {
       border-style: solid;
-      border-color: rgba(232, 230, 227, 0.1);
+      border-color: rgba(232, 230, 227, 0.12);
       padding: 0;
       min-height: auto;
+      background: #0d0d0d;
     }
 
     .cs-showcase-frame:has(img) .cs-placeholder-content {
@@ -380,12 +522,12 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      max-width: 520px;
+      max-width: 540px;
     }
 
     .cs-placeholder-icon {
-      width: 56px;
-      height: 56px;
+      width: 58px;
+      height: 58px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(232, 230, 227, 0.12);
@@ -408,124 +550,122 @@
 
     .cs-placeholder-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+      font-size: clamp(1.15rem, 1.7vw, 1.45rem);
       font-weight: 700;
       letter-spacing: -0.01em;
       text-transform: uppercase;
       color: var(--color-fg);
-      margin-bottom: 14px;
-    }
-
-    .cs-placeholder-pills {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .cs-placeholder-pill {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 3px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(232, 230, 227, 0.1);
-      color: rgba(247, 237, 216, 0.7);
+      margin-bottom: 12px;
     }
 
     .cs-placeholder-hint {
       font-family: var(--font-primary);
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       color: var(--color-fg-muted);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
+      line-height: 1.5;
     }
 
     .cs-showcase-caption {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 24px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(232, 230, 227, 0.08);
-      margin-top: 18px;
+      gap: 20px;
+      padding: 16px 4px 0;
     }
 
     .cs-showcase-caption-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--color-fg);
+      color: var(--color-accent);
+      white-space: nowrap;
       flex-shrink: 0;
     }
 
     .cs-showcase-caption-desc {
       font-family: var(--font-primary);
-      font-size: 0.9rem;
-      line-height: 1.6;
+      font-size: 0.82rem;
+      line-height: 1.55;
       color: var(--color-fg-muted);
       text-align: right;
+      max-width: 620px;
     }
 
-    /* ── 04. Design Process Flow & Narrative ────────────── */
+    /* ── 04. Design Process Components ──────────────────── */
     .cs-process-flow {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px 12px;
-      margin-bottom: clamp(28px, 4vh, 36px);
-      padding: clamp(14px, 2vh, 18px) clamp(16px, 2.5vw, 24px);
+      gap: 10px 14px;
+      padding: 16px 20px;
       background: rgba(18, 18, 18, 0.55);
-      border: 1px solid rgba(232, 230, 227, 0.09);
+      border: 1px solid rgba(232, 230, 227, 0.08);
       border-radius: 6px;
+      margin-bottom: clamp(24px, 3.5vh, 32px);
+      max-width: 100%;
     }
 
     .cs-process-step {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--color-fg);
+      white-space: nowrap;
     }
 
     .cs-process-sep {
-      color: rgba(226, 109, 92, 0.75);
-      font-size: 0.8rem;
+      color: #e26d5c;
+      font-size: 0.78rem;
+      user-select: none;
     }
 
     .cs-process-narrative {
-      margin-bottom: clamp(32px, 4.5vh, 48px);
+      margin-bottom: clamp(28px, 4vh, 40px);
     }
 
     .cs-process-frame {
       position: relative;
       width: 100%;
-      min-height: clamp(240px, 35vh, 380px);
-      background: rgba(18, 18, 18, 0.6);
-      border: 1px dashed rgba(232, 230, 227, 0.14);
+      min-height: clamp(260px, 36vh, 420px);
+      background: rgba(18, 18, 18, 0.7);
+      border: 1px dashed rgba(232, 230, 227, 0.16);
       border-radius: 8px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: clamp(24px, 3.5vw, 40px);
-      transition: border-color 0.3s ease;
+      padding: clamp(28px, 4vw, 48px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.3s ease, background 0.3s ease;
     }
 
     .cs-process-frame:hover {
-      border-color: rgba(232, 230, 227, 0.25);
+      border-color: rgba(232, 230, 227, 0.28);
+      background: rgba(22, 22, 22, 0.85);
+    }
+
+    .cs-process-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+      pointer-events: none;
     }
 
     .cs-process-frame img {
       width: 100%;
       height: auto;
+      max-height: 80vh;
+      object-fit: contain;
       display: block;
       border-radius: 4px;
     }
@@ -541,12 +681,12 @@
       display: none;
     }
 
-    /* ── 05. Result Outcomes Grid ───────────────────────── */
+    /* ── 05. Result Components ─────────────────────────── */
     .cs-outcome-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px 20px;
-      margin-top: clamp(28px, 4vh, 36px);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: clamp(24px, 3.5vh, 32px);
       max-width: 820px;
     }
 
@@ -579,10 +719,10 @@
       flex-shrink: 0;
     }
 
-    /* ── 8. Bottom Project Navigation ───────────────────── */
+    /* ── Bottom Project Navigation ─────────────────────── */
     .cs-bottom-nav {
       border-top: 1px solid rgba(232, 230, 227, 0.08);
-      padding: clamp(32px, 5vh, 48px) 0 clamp(64px, 8vh, 96px);
+      padding: clamp(36px, 5vh, 48px) 0 clamp(64px, 8vh, 96px);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -622,9 +762,69 @@
     }
 
     /* ── Responsive: Tablet & Mobile ────────────────────── */
-    @media (max-width: 900px) {
-      .cs-title {
-        font-size: clamp(2.1rem, 6vw, 3.4rem);
+    @media (max-width: 960px) {
+      .cs-layout-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      /* Compact Horizontal Sticky Navigation Bar on Mobile / Tablet */
+      .cs-sidebar {
+        position: -webkit-sticky;
+        position: sticky;
+        top: var(--header-height);
+        z-index: 40;
+        background: rgba(10, 10, 10, 0.94);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(232, 230, 227, 0.08);
+        margin: 0 calc(-1 * var(--page-padding-x)) 32px calc(-1 * var(--page-padding-x));
+        padding: 10px var(--page-padding-x);
+        align-self: auto;
+        height: auto;
+      }
+
+      .cs-toc-sticky {
+        padding-right: 0;
+      }
+
+      .cs-toc-heading {
+        display: none;
+      }
+
+      .cs-toc-list {
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        border-left: none;
+        padding-left: 0;
+        gap: 8px;
+        white-space: nowrap;
+      }
+
+      .cs-toc-list::-webkit-scrollbar {
+        display: none;
+      }
+
+      .cs-toc-link {
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(232, 230, 227, 0.08);
+        border-radius: 4px;
+        font-size: 0.68rem;
+        transform: none !important;
+      }
+
+      .cs-toc-link.active::before {
+        display: none;
+      }
+
+      .cs-toc-link.active {
+        background: rgba(226, 109, 92, 0.12);
+        border-color: rgba(226, 109, 92, 0.35);
+        color: var(--color-fg);
       }
 
       .cs-showcase-caption {
@@ -649,7 +849,6 @@
         --page-padding-x: 6vw;
       }
 
-      /* Mobile Header */
       .header {
         height: var(--header-height);
         padding: 0 var(--page-padding-x);
@@ -748,6 +947,7 @@
 
       .cs-body-text {
         font-size: 0.95rem;
+        line-height: 1.7;
       }
 
       .cs-bottom-nav {
@@ -801,181 +1001,184 @@
       </header>
 
       <!-- ══════════════════════════════════════════════════════
-           01 — ABOUT THE PROJECT
+           EDITORIAL TWO-COLUMN LAYOUT
+           Left: Sticky Section Navigation (In This Case Study)
+           Right: 5 Case Study Sections
            ══════════════════════════════════════════════════════ -->
-      <section class="cs-section" id="about-the-project">
-        <h2 class="cs-heading">ABOUT THE PROJECT</h2>
-        <p class="cs-body-text">Severna: Blood &amp; Betrayal is an in-development medieval dark-fantasy strategy game. I worked on designing and refining selected in-game UI systems and widgets, focusing on readability, information hierarchy, consistency, and gameplay interactions.</p>
-      </section>
+      <div class="cs-layout-grid">
 
-      <!-- ══════════════════════════════════════════════════════
-           02 — MY CONTRIBUTION
-           ══════════════════════════════════════════════════════ -->
-      <section class="cs-section" id="my-contribution">
-        <h2 class="cs-heading">MY CONTRIBUTION</h2>
-        <p class="cs-body-text">I worked on the game’s interface layer, designing and refining 20+ in-game widgets and interface elements across character management, faction and building information, gameplay interactions, and supporting systems.</p>
-        <p class="cs-body-text">My focus was on creating clear information hierarchy, readable layouts, consistent widget structures, and reusable UI components that could work across different gameplay situations.</p>
-        <p class="cs-body-text">A key priority was balancing the game’s medieval dark-fantasy visual language with practical in-game readability, ensuring tactical information remains immediately legible during high-pressure decision-making.</p>
-      </section>
+        <!-- ── LEFT COLUMN: IN THIS CASE STUDY ────────────── -->
+        <aside class="cs-sidebar" aria-label="Case Study Table of Contents">
+          <div class="cs-toc-sticky">
+            <span class="cs-toc-heading">IN THIS CASE STUDY</span>
+            <nav class="cs-toc-nav">
+              <ul class="cs-toc-list">
+                <li class="cs-toc-item">
+                  <a href="#about-the-project" class="cs-toc-link active" data-target="about-the-project">
+                    <span class="cs-toc-num">01</span>
+                    <span class="cs-toc-dash">—</span>
+                    <span class="cs-toc-label">ABOUT THE PROJECT</span>
+                  </a>
+                </li>
+                <li class="cs-toc-item">
+                  <a href="#my-contribution" class="cs-toc-link" data-target="my-contribution">
+                    <span class="cs-toc-num">02</span>
+                    <span class="cs-toc-dash">—</span>
+                    <span class="cs-toc-label">MY CONTRIBUTION</span>
+                  </a>
+                </li>
+                <li class="cs-toc-item">
+                  <a href="#ui-showcase" class="cs-toc-link" data-target="ui-showcase">
+                    <span class="cs-toc-num">03</span>
+                    <span class="cs-toc-dash">—</span>
+                    <span class="cs-toc-label">UI SHOWCASE</span>
+                  </a>
+                </li>
+                <li class="cs-toc-item">
+                  <a href="#design-process" class="cs-toc-link" data-target="design-process">
+                    <span class="cs-toc-num">04</span>
+                    <span class="cs-toc-dash">—</span>
+                    <span class="cs-toc-label">DESIGN PROCESS</span>
+                  </a>
+                </li>
+                <li class="cs-toc-item">
+                  <a href="#result" class="cs-toc-link" data-target="result">
+                    <span class="cs-toc-num">05</span>
+                    <span class="cs-toc-dash">—</span>
+                    <span class="cs-toc-label">RESULT</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </aside>
 
-      <!-- ══════════════════════════════════════════════════════
-           03 — UI SHOWCASE
-           Reusable template/component area.
-           When your final image is ready, simply replace the placeholder
-           block inside .cs-showcase-frame with:
-           <img src="your-image.png" alt="Description" />
-           ══════════════════════════════════════════════════════ -->
-      <section class="cs-section" id="ui-showcase">
-        <div class="cs-section-intro-block">
-          <h2 class="cs-heading">UI SHOWCASE</h2>
-          <p class="cs-body-text">A modular visual showcase displaying core in-game interfaces and tactical widget systems designed for player clarity and medieval dark-fantasy atmosphere.</p>
-        </div>
+        <!-- ── RIGHT COLUMN: Case Study Narrative & Visuals ── -->
+        <div class="cs-main-content">
 
-        <div class="cs-showcase-grid">
+          <!-- 01 — ABOUT THE PROJECT -->
+          <section class="cs-section" id="about-the-project">
+            <h2 class="cs-heading">ABOUT THE PROJECT</h2>
+            <p class="cs-body-text">Severna: Blood &amp; Betrayal is an in-development medieval dark-fantasy strategy game. I worked on designing and refining selected in-game UI systems and widgets, focusing on readability, information hierarchy, consistency, and gameplay interactions.</p>
+          </section>
 
-          <!-- SHOWCASE ITEM 01: Character Information -->
-          <article class="cs-showcase-item">
-            <div class="cs-showcase-frame">
-              <!-- Reusable Template Placeholder (Hidden automatically when an <img> tag is added) -->
+          <!-- 02 — MY CONTRIBUTION -->
+          <section class="cs-section" id="my-contribution">
+            <h2 class="cs-heading">MY CONTRIBUTION</h2>
+            <p class="cs-body-text">I worked on the game’s interface layer, designing and refining 20+ in-game widgets and interface elements across character management, faction and building information, gameplay interactions, and supporting systems.</p>
+            <p class="cs-body-text">My focus was on creating clear information hierarchy, readable layouts, consistent widget structures, and reusable UI components that could work across different gameplay situations.</p>
+            <p class="cs-body-text">A key priority was balancing the game’s medieval dark-fantasy visual language with practical in-game readability, ensuring tactical information remains immediately legible during high-pressure decision-making.</p>
+          </section>
+
+          <!-- 03 — UI SHOWCASE (Exactly ONE Reusable Image Placeholder) -->
+          <section class="cs-section" id="ui-showcase">
+            <h2 class="cs-heading">UI SHOWCASE</h2>
+
+            <figure class="cs-showcase-container">
+              <div class="cs-showcase-frame">
+                <!-- Reusable Image Slot: Replace this placeholder block with <img src="..." alt="..." /> later -->
+                <div class="cs-placeholder-content">
+                  <div class="cs-placeholder-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                  </div>
+                  <span class="cs-placeholder-badge">UI SHOWCASE PLACEHOLDER</span>
+                  <h3 class="cs-placeholder-title">LARGE IN-GAME UI SHOWCASE</h3>
+                  <p class="cs-placeholder-hint">[ Severna UI showcase image slot — uncropped, high-resolution visual will be inserted here ]</p>
+                </div>
+              </div>
+              <figcaption class="cs-showcase-caption">
+                <span class="cs-showcase-caption-title">SEVERNA INTERFACE SUITE</span>
+                <span class="cs-showcase-caption-desc">Comprehensive in-game UI showcase highlighting tactical widget hierarchies, character management systems, and interaction flows.</span>
+              </figcaption>
+            </figure>
+          </section>
+
+          <!-- 04 — DESIGN PROCESS -->
+          <section class="cs-section" id="design-process">
+            <h2 class="cs-heading">DESIGN PROCESS</h2>
+
+            <!-- Process Roadmap Flow Strip -->
+            <div class="cs-process-flow">
+              <span class="cs-process-step">REQUIREMENT</span>
+              <span class="cs-process-sep">→</span>
+              <span class="cs-process-step">RESEARCH &amp; REFERENCES</span>
+              <span class="cs-process-sep">→</span>
+              <span class="cs-process-step">EXPLORATION</span>
+              <span class="cs-process-sep">→</span>
+              <span class="cs-process-step">FEEDBACK</span>
+              <span class="cs-process-sep">→</span>
+              <span class="cs-process-step">HIGH-FIDELITY DESIGN</span>
+              <span class="cs-process-sep">→</span>
+              <span class="cs-process-step">REFINEMENT</span>
+              <span class="cs-process-sep">→</span>
+              <span class="cs-process-step">DEVELOPMENT HANDOFF</span>
+            </div>
+
+            <div class="cs-process-narrative">
+              <p class="cs-body-text">The process started by understanding the gameplay requirement and identifying the information the player needed at each interaction.</p>
+              <p class="cs-body-text">I researched and referenced related medieval and strategy games to understand established interaction patterns and visual approaches.</p>
+              <p class="cs-body-text">The initial concepts were explored through low-fidelity layouts before moving into high-fidelity designs. Feedback was used throughout the process to refine hierarchy, spacing, readability, and consistency.</p>
+              <p class="cs-body-text">Once the widgets were finalized, individual UI elements were separated and prepared for development in Unreal Engine.</p>
+            </div>
+
+            <!-- Reusable Process Visual Placeholder -->
+            <div class="cs-process-frame">
               <div class="cs-placeholder-content">
                 <div class="cs-placeholder-icon">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <polyline points="21 15 16 10 5 21"></polyline>
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
                   </svg>
                 </div>
-                <span class="cs-placeholder-badge">SHOWCASE TEMPLATE · 01</span>
-                <h3 class="cs-placeholder-title">CHARACTER INFORMATION</h3>
-                <div class="cs-placeholder-pills">
-                  <span class="cs-placeholder-pill">CHARACTER DETAILS</span>
-                  <span class="cs-placeholder-pill">SKILL TREE</span>
-                  <span class="cs-placeholder-pill">HERO HISTORY</span>
-                </div>
-                <span class="cs-placeholder-hint">[ Insert final screenshot or visual template here ]</span>
+                <span class="cs-placeholder-badge">PROCESS VISUAL TEMPLATE</span>
+                <h3 class="cs-placeholder-title">WORKFLOW &amp; ITERATION ARTIFACTS</h3>
+                <span class="cs-placeholder-hint">[ Process visual template will be inserted here ]</span>
               </div>
             </div>
-            <div class="cs-showcase-caption">
-              <span class="cs-showcase-caption-title">CHARACTER INFORMATION</span>
-              <span class="cs-showcase-caption-desc">Character details, skill progression trees, and hero background records structured for quick tactical assessment.</span>
-            </div>
-          </article>
+          </section>
 
-          <!-- SHOWCASE ITEM 02: Faction & Building Information -->
-          <article class="cs-showcase-item">
-            <div class="cs-showcase-frame">
-              <!-- Reusable Template Placeholder (Hidden automatically when an <img> tag is added) -->
-              <div class="cs-placeholder-content">
-                <div class="cs-placeholder-icon">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <polyline points="21 15 16 10 5 21"></polyline>
-                  </svg>
-                </div>
-                <span class="cs-placeholder-badge">SHOWCASE TEMPLATE · 02</span>
-                <h3 class="cs-placeholder-title">FACTION &amp; BUILDING MANAGEMENT</h3>
-                <div class="cs-placeholder-pills">
-                  <span class="cs-placeholder-pill">BUILDING UPGRADES</span>
-                  <span class="cs-placeholder-pill">FACTION MANAGEMENT</span>
-                  <span class="cs-placeholder-pill">TERRITORY STATUS</span>
-                </div>
-                <span class="cs-placeholder-hint">[ Insert final screenshot or visual template here ]</span>
+          <!-- 05 — RESULT -->
+          <section class="cs-section" id="result">
+            <h2 class="cs-heading">RESULT</h2>
+
+            <p class="cs-body-text">The final UI system improved readability and information hierarchy while creating a more consistent visual language across the game’s interface.</p>
+            <p class="cs-body-text">The resulting widgets were designed to be reusable and easier for the development team to implement, while maintaining the intended medieval dark-fantasy aesthetic.</p>
+
+            <div class="cs-outcome-grid">
+              <div class="cs-outcome-item">
+                <span class="cs-outcome-bullet"></span>
+                <span class="cs-outcome-text">Improved readability</span>
+              </div>
+              <div class="cs-outcome-item">
+                <span class="cs-outcome-bullet"></span>
+                <span class="cs-outcome-text">More consistent widgets</span>
+              </div>
+              <div class="cs-outcome-item">
+                <span class="cs-outcome-bullet"></span>
+                <span class="cs-outcome-text">Better information hierarchy</span>
+              </div>
+              <div class="cs-outcome-item">
+                <span class="cs-outcome-bullet"></span>
+                <span class="cs-outcome-text">Easier gameplay interactions</span>
+              </div>
+              <div class="cs-outcome-item">
+                <span class="cs-outcome-bullet"></span>
+                <span class="cs-outcome-text">Reusable components for developers</span>
+              </div>
+              <div class="cs-outcome-item">
+                <span class="cs-outcome-bullet"></span>
+                <span class="cs-outcome-text">Better visual consistency</span>
               </div>
             </div>
-            <div class="cs-showcase-caption">
-              <span class="cs-showcase-caption-title">FACTION &amp; BUILDING INFORMATION</span>
-              <span class="cs-showcase-caption-desc">Settlement management, building upgrade hierarchies, and territory control interface states.</span>
-            </div>
-          </article>
+          </section>
 
         </div>
-      </section>
-
-      <!-- ══════════════════════════════════════════════════════
-           04 — DESIGN PROCESS
-           Presented as one continuous story.
-           ══════════════════════════════════════════════════════ -->
-      <section class="cs-section" id="design-process">
-        <h2 class="cs-heading">DESIGN PROCESS</h2>
-
-        <!-- Process Roadmap Flow Strip -->
-        <div class="cs-process-flow">
-          <span class="cs-process-step">REQUIREMENT</span>
-          <span class="cs-process-sep">→</span>
-          <span class="cs-process-step">RESEARCH &amp; REFERENCES</span>
-          <span class="cs-process-sep">→</span>
-          <span class="cs-process-step">EXPLORATION</span>
-          <span class="cs-process-sep">→</span>
-          <span class="cs-process-step">FEEDBACK</span>
-          <span class="cs-process-sep">→</span>
-          <span class="cs-process-step">HIGH-FIDELITY DESIGN</span>
-          <span class="cs-process-sep">→</span>
-          <span class="cs-process-step">REFINEMENT</span>
-          <span class="cs-process-sep">→</span>
-          <span class="cs-process-step">DEVELOPMENT HANDOFF</span>
-        </div>
-
-        <div class="cs-process-narrative">
-          <p class="cs-body-text">The process started by understanding the gameplay requirement and identifying the information the player needed at each interaction.</p>
-          <p class="cs-body-text">I researched and referenced related medieval and strategy games to understand established interaction patterns and visual approaches.</p>
-          <p class="cs-body-text">The initial concepts were explored through low-fidelity layouts before moving into high-fidelity designs. Feedback was used throughout the process to refine hierarchy, spacing, readability, and consistency.</p>
-          <p class="cs-body-text">Once the widgets were finalized, individual UI elements were separated and prepared for development in Unreal Engine.</p>
-        </div>
-
-        <!-- Reusable Process Visual Placeholder -->
-        <div class="cs-process-frame">
-          <div class="cs-placeholder-content">
-            <div class="cs-placeholder-icon">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
-              </svg>
-            </div>
-            <span class="cs-placeholder-badge">PROCESS VISUAL TEMPLATE</span>
-            <h3 class="cs-placeholder-title">WORKFLOW &amp; ITERATION ARTIFACTS</h3>
-            <span class="cs-placeholder-hint">[ Process visual template will be inserted here ]</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- ══════════════════════════════════════════════════════
-           05 — RESULT
-           ══════════════════════════════════════════════════ -->
-      <section class="cs-section" id="result">
-        <h2 class="cs-heading">RESULT</h2>
-
-        <p class="cs-body-text">The final UI system improved readability and information hierarchy while creating a more consistent visual language across the game’s interface.</p>
-        <p class="cs-body-text">The resulting widgets were designed to be reusable and easier for the development team to implement, while maintaining the intended medieval dark-fantasy aesthetic.</p>
-
-        <div class="cs-outcome-grid">
-          <div class="cs-outcome-item">
-            <span class="cs-outcome-bullet"></span>
-            <span class="cs-outcome-text">Improved readability</span>
-          </div>
-          <div class="cs-outcome-item">
-            <span class="cs-outcome-bullet"></span>
-            <span class="cs-outcome-text">More consistent widgets</span>
-          </div>
-          <div class="cs-outcome-item">
-            <span class="cs-outcome-bullet"></span>
-            <span class="cs-outcome-text">Better information hierarchy</span>
-          </div>
-          <div class="cs-outcome-item">
-            <span class="cs-outcome-bullet"></span>
-            <span class="cs-outcome-text">Easier gameplay interactions</span>
-          </div>
-          <div class="cs-outcome-item">
-            <span class="cs-outcome-bullet"></span>
-            <span class="cs-outcome-text">Reusable components for developers</span>
-          </div>
-          <div class="cs-outcome-item">
-            <span class="cs-outcome-bullet"></span>
-            <span class="cs-outcome-text">Better visual consistency</span>
-          </div>
-        </div>
-      </section>
+      </div>
 
       <!-- ─── Bottom Project Navigation ────────────────────── -->
       <nav class="cs-bottom-nav">
@@ -1034,6 +1237,79 @@
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+
+    /* ── Case Study TOC Active Highlight & Smooth Scrolling ── */
+    const tocLinks = document.querySelectorAll('.cs-toc-link');
+    const sections = Array.from(document.querySelectorAll('.cs-section'));
+
+    function updateActiveTOC() {
+      const headerOffset = 130;
+      const currentScrollY = window.scrollY || window.pageYOffset || 0;
+      const scrollPosition = currentScrollY + headerOffset;
+
+      let currentSectionId = '';
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        const sectionAbsoluteTop = section.getBoundingClientRect().top + currentScrollY;
+        if (sectionAbsoluteTop <= scrollPosition) {
+          currentSectionId = section.id;
+          break;
+        }
+      }
+
+      if (!currentSectionId && sections.length > 0) {
+        currentSectionId = sections[0].id;
+      }
+
+      tocLinks.forEach(link => {
+        const targetId = link.getAttribute('data-target') || link.getAttribute('href').replace('#', '');
+        if (targetId === currentSectionId) {
+          link.classList.add('active');
+          // If on mobile horizontal scroll track, scroll the active item into view
+          if (window.innerWidth <= 960) {
+            const list = link.closest('.cs-toc-list');
+            if (list) {
+              const linkLeft = link.offsetLeft;
+              const linkWidth = link.offsetWidth;
+              const listWidth = list.offsetWidth;
+              if (linkLeft < list.scrollLeft || (linkLeft + linkWidth) > (list.scrollLeft + listWidth)) {
+                list.scrollTo({ left: linkLeft - 20, behavior: 'smooth' });
+              }
+            }
+          }
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveTOC, { passive: true });
+    updateActiveTOC();
+
+    // Smooth scroll on TOC link click with header offset
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const targetId = link.getAttribute('href');
+        if (targetId && targetId.startsWith('#')) {
+          const targetSection = document.querySelector(targetId);
+          if (targetSection) {
+            e.preventDefault();
+            const headerOffset = window.innerWidth <= 768 ? 70 : 92;
+            const elementPosition = targetSection.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+
+            history.pushState(null, null, targetId);
+            setTimeout(updateActiveTOC, 300);
+          }
+        }
+      });
+    });
 
     /* ── Mark return navigation to projects section on back ── */
     document.querySelectorAll('a[href*="#projects"], .cs-back-link, .cs-nav-btn--prev').forEach(link => {
