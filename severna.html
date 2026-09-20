@@ -569,8 +569,8 @@
     /* ── 4 Thumbnails Row Directly Below ─────────────────── */
     .cs-gallery-strip {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
       width: 100%;
     }
 
@@ -687,7 +687,7 @@
 
     @media (max-width: 540px) {
       .cs-gallery-strip {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
       }
       .cs-gallery-screen {
@@ -1207,42 +1207,22 @@
                   </div>
                 </button>
 
-                <button type="button" class="cs-thumb" data-index="1" role="tab" aria-selected="false" aria-label="View Character Skills">
-                  <div class="cs-thumb-media">
-                    <img src="severna-character-skills.png" alt="Character Skills Thumbnail" />
-                  </div>
-                  <div class="cs-thumb-info">
-                    <span class="cs-thumb-idx">02</span>
-                    <span class="cs-thumb-name">SKILLS</span>
-                  </div>
-                </button>
-
-                <button type="button" class="cs-thumb" data-index="2" role="tab" aria-selected="false" aria-label="View Character History">
-                  <div class="cs-thumb-media">
-                    <img src="severna-character-history.png" alt="Character History Thumbnail" />
-                  </div>
-                  <div class="cs-thumb-info">
-                    <span class="cs-thumb-idx">03</span>
-                    <span class="cs-thumb-name">HISTORY</span>
-                  </div>
-                </button>
-
-                <button type="button" class="cs-thumb" data-index="3" role="tab" aria-selected="false" aria-label="View Main Title Menu">
+                <button type="button" class="cs-thumb" data-index="1" role="tab" aria-selected="false" aria-label="View Main Title Menu">
                   <div class="cs-thumb-media">
                     <img src="severna-main-menu.png" alt="Main Title Menu Thumbnail" />
                   </div>
                   <div class="cs-thumb-info">
-                    <span class="cs-thumb-idx">04</span>
+                    <span class="cs-thumb-idx">02</span>
                     <span class="cs-thumb-name">MAIN MENU</span>
                   </div>
                 </button>
 
-                <button type="button" class="cs-thumb" data-index="4" role="tab" aria-selected="false" aria-label="View Settings and Options">
+                <button type="button" class="cs-thumb" data-index="2" role="tab" aria-selected="false" aria-label="View Settings and Options">
                   <div class="cs-thumb-media">
                     <img src="severna-game-options.png" alt="Settings and Options Thumbnail" />
                   </div>
                   <div class="cs-thumb-info">
-                    <span class="cs-thumb-idx">05</span>
+                    <span class="cs-thumb-idx">03</span>
                     <span class="cs-thumb-name">OPTIONS</span>
                   </div>
                 </button>
@@ -1500,20 +1480,6 @@
           badge: '01 — CHARACTER MANAGEMENT',
           title: 'OVERVIEW & DETAILS',
           desc: 'Tactical character overview displaying leader attributes, traits, ambition progression, and combat statistics.'
-        },
-        {
-          src: 'severna-character-skills.png',
-          alt: 'Severna: Blood & Betrayal — Character Skills & Abilities UI',
-          badge: '01 — CHARACTER MANAGEMENT',
-          title: 'SKILLS & ABILITIES',
-          desc: 'Interactive skill tree displaying unlocked and locked tactical perks, combat proficiencies, and tier progression.'
-        },
-        {
-          src: 'severna-character-history.png',
-          alt: 'Severna: Blood & Betrayal — Character Narrative & History UI',
-          badge: '01 — CHARACTER MANAGEMENT',
-          title: 'CHARACTER HISTORY',
-          desc: 'Lore-focused narrative interface recording faction lineage, historical deeds, personality traits, and chronicle entries.'
         },
         {
           src: 'severna-main-menu.png',
