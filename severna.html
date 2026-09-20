@@ -267,10 +267,17 @@
       margin-bottom: clamp(16px, 2.4vh, 22px);
     }
 
+    .cs-badge-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
     .cs-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       padding: 6px 12px;
       border-radius: 4px;
       border: 1px solid rgba(232, 230, 227, 0.14);
@@ -284,6 +291,14 @@
       text-transform: uppercase;
       color: rgba(247, 237, 216, 0.75);
       line-height: 1;
+    }
+
+    .cs-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #e26d5c;
+      flex-shrink: 0;
     }
 
     /* ── Editorial Two-Column Case Study Grid ──────────── */
@@ -997,7 +1012,10 @@
       <!-- Project Title & Header Identity -->
       <header class="cs-intro">
         <h1 class="cs-title">SEVERNA:<br>BLOOD &amp; BETRAYAL</h1>
-        <div class="cs-badge">MEDIEVAL DARK FANTASY · PC STRATEGY</div>
+        <div class="cs-badge-group">
+          <div class="cs-badge">MEDIEVAL DARK FANTASY · PC STRATEGY</div>
+          <div class="cs-badge"><span class="cs-badge-dot"></span>IN-DEVELOPMENT</div>
+        </div>
       </header>
 
       <!-- ══════════════════════════════════════════════════════
