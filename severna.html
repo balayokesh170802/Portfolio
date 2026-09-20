@@ -665,61 +665,7 @@
       color: #fff;
     }
 
-    /* ── 3 Conceptual Groups Grid ───────────────────────── */
-    .cs-groups-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: clamp(28px, 4vh, 40px);
-    }
-
-    .cs-group-card {
-      padding: 18px 20px;
-      background: rgba(18, 18, 18, 0.45);
-      border: 1px solid rgba(232, 230, 227, 0.08);
-      border-radius: 6px;
-      transition: border-color 0.3s ease, background 0.3s ease;
-    }
-
-    .cs-group-card:hover {
-      border-color: rgba(232, 230, 227, 0.18);
-      background: rgba(22, 22, 22, 0.65);
-    }
-
-    .cs-group-num {
-      display: inline-block;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: #e26d5c;
-      letter-spacing: 0.14em;
-      margin-bottom: 8px;
-    }
-
-    .cs-group-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--color-fg);
-      margin-bottom: 8px;
-    }
-
-    .cs-group-desc {
-      font-family: var(--font-primary);
-      font-size: 0.8rem;
-      line-height: 1.55;
-      color: var(--color-fg-muted);
-    }
-
     /* ── Responsive Gallery Styles ───────────────────────── */
-    @media (max-width: 960px) {
-      .cs-groups-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-    }
 
     @media (max-width: 860px) {
       .cs-gallery-caption {
@@ -1301,26 +1247,6 @@
                   </div>
                 </button>
               </div>
-
-              <!-- 3 Conceptual Groups Summary -->
-              <div class="cs-groups-grid">
-                <div class="cs-group-card">
-                  <span class="cs-group-num">01</span>
-                  <h3 class="cs-group-title">CHARACTER MANAGEMENT</h3>
-                  <p class="cs-group-desc">Deep tactical character screens including Overview &amp; Attributes, Skill trees &amp; masteries, and biographical narrative history designed with high legibility.</p>
-                </div>
-                <div class="cs-group-card">
-                  <span class="cs-group-num">02</span>
-                  <h3 class="cs-group-title">FACTION &amp; BUILDING INFO</h3>
-                  <p class="cs-group-desc">Faction overview structures, territory status widgets, and building upgrade panels balancing dark fantasy ornamentation with clean numerical hierarchy.</p>
-                </div>
-                <div class="cs-group-card">
-                  <span class="cs-group-num">03</span>
-                  <h3 class="cs-group-title">GAMEPLAY WIDGETS</h3>
-                  <p class="cs-group-desc">Modular tactical widgets including unit / troop cards, active command buttons, icon micro-states, and high-contrast HUD components for real-time play.</p>
-                </div>
-              </div>
-
             </div>
           </section>
 
