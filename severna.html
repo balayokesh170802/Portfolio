@@ -569,8 +569,8 @@
     /* ── 4 Thumbnails Row Directly Below ─────────────────── */
     .cs-gallery-strip {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
       width: 100%;
     }
 
@@ -614,7 +614,7 @@
     .cs-thumb-media {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 1024 / 580;
       background: #080808;
       overflow: hidden;
     }
@@ -721,13 +721,14 @@
       }
     }
 
-    @media (max-width: 840px) {
+    @media (max-width: 860px) {
       .cs-gallery-caption {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
       }
       .cs-gallery-strip {
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
       }
       .cs-thumb-info {
@@ -738,7 +739,7 @@
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 540px) {
       .cs-gallery-strip {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
@@ -1250,17 +1251,17 @@
 
               <!-- 4 Thumbnail Previews in a Single Row (Directly Below Main Image) -->
               <div class="cs-gallery-strip" role="tablist" aria-label="UI Showcase Thumbnails">
-                <button type="button" class="cs-thumb active" data-index="0" role="tab" aria-selected="true" aria-label="View Character Overview & Details">
+                <button type="button" class="cs-thumb active" data-index="0" role="tab" aria-selected="true" aria-label="View Character Details">
                   <div class="cs-thumb-media">
-                    <img src="severna-character-details.png" alt="Character Overview Thumbnail" />
+                    <img src="severna-character-details.png" alt="Character Details Thumbnail" />
                   </div>
                   <div class="cs-thumb-info">
                     <span class="cs-thumb-idx">01</span>
-                    <span class="cs-thumb-name">OVERVIEW</span>
+                    <span class="cs-thumb-name">DETAILS</span>
                   </div>
                 </button>
 
-                <button type="button" class="cs-thumb" data-index="1" role="tab" aria-selected="false" aria-label="View Character Skills & Abilities">
+                <button type="button" class="cs-thumb" data-index="1" role="tab" aria-selected="false" aria-label="View Character Skills">
                   <div class="cs-thumb-media">
                     <img src="severna-character-skills.png" alt="Character Skills Thumbnail" />
                   </div>
@@ -1270,7 +1271,7 @@
                   </div>
                 </button>
 
-                <button type="button" class="cs-thumb" data-index="2" role="tab" aria-selected="false" aria-label="View Character History & Narrative">
+                <button type="button" class="cs-thumb" data-index="2" role="tab" aria-selected="false" aria-label="View Character History">
                   <div class="cs-thumb-media">
                     <img src="severna-character-history.png" alt="Character History Thumbnail" />
                   </div>
@@ -1280,13 +1281,23 @@
                   </div>
                 </button>
 
-                <button type="button" class="cs-thumb" data-index="3" role="tab" aria-selected="false" aria-label="View Faction & Gameplay Widgets">
+                <button type="button" class="cs-thumb" data-index="3" role="tab" aria-selected="false" aria-label="View Main Title Menu">
                   <div class="cs-thumb-media">
-                    <img src="severna-faction-widgets.png" alt="Faction and Gameplay Widgets Thumbnail" />
+                    <img src="severna-main-menu.png" alt="Main Title Menu Thumbnail" />
                   </div>
                   <div class="cs-thumb-info">
                     <span class="cs-thumb-idx">04</span>
-                    <span class="cs-thumb-name">FACTION &amp; WIDGETS</span>
+                    <span class="cs-thumb-name">MAIN MENU</span>
+                  </div>
+                </button>
+
+                <button type="button" class="cs-thumb" data-index="4" role="tab" aria-selected="false" aria-label="View Settings and Options">
+                  <div class="cs-thumb-media">
+                    <img src="severna-game-options.png" alt="Settings and Options Thumbnail" />
+                  </div>
+                  <div class="cs-thumb-info">
+                    <span class="cs-thumb-idx">05</span>
+                    <span class="cs-thumb-name">OPTIONS</span>
                   </div>
                 </button>
               </div>
@@ -1579,11 +1590,18 @@
           desc: 'Lore-focused narrative interface recording faction lineage, historical deeds, personality traits, and chronicle entries.'
         },
         {
-          src: 'severna-faction-widgets.png',
-          alt: 'Severna: Blood & Betrayal — Faction, Building Details and Gameplay Widgets UI',
-          badge: '02 & 03 — FACTION & WIDGETS',
-          title: 'BUILDINGS & TROOP CARDS',
-          desc: 'Territory building management screens paired with real-time troop cards, action states, and tactical micro-widgets.'
+          src: 'severna-main-menu.png',
+          alt: 'Severna: Blood & Betrayal — Main Title Menu UI',
+          badge: '02 — TITLE & CAMPAIGN',
+          title: 'MAIN TITLE MENU',
+          desc: 'Atmospheric dark fantasy title menu featuring central campaign navigation, battle selection, options routing, and exit controls.'
+        },
+        {
+          src: 'severna-game-options.png',
+          alt: 'Severna: Blood & Betrayal — Settings & Options Menu UI',
+          badge: '03 — SETTINGS & OPTIONS',
+          title: 'GAME SETTINGS & OPTIONS',
+          desc: 'Tactical configuration interface managing general interface language, text scaling, main UI theme, graphics quality, and resolution.'
         }
       ];
 
