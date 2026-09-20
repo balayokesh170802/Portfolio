@@ -1411,17 +1411,52 @@
     const tocLinks = document.querySelectorAll('.cs-toc-link');
     const sections = Array.from(document.querySelectorAll('.cs-section'));
 
+    function setActiveTOC(activeId) {
+      tocLinks.forEach(link => {
+        const targetId = link.getAttribute('data-target') || link.getAttribute('href').replace('#', '');
+        if (targetId === activeId) {
+          link.classList.add('active');
+          // If on mobile horizontal scroll track, scroll the active item into view
+          if (window.innerWidth <= 960) {
+            link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
     function updateActiveTOC() {
-      const headerOffset = 130;
       const currentScrollY = window.scrollY || window.pageYOffset || 0;
+      const winH = window.innerHeight;
+      const docH = document.documentElement.scrollHeight;
+      const maxScrollY = docH - winH;
+
+      // 1. Bottom of page check: if scrolled to the very bottom, always highlight the last section
+      if (currentScrollY >= maxScrollY - 60 && sections.length > 0) {
+        setActiveTOC(sections[sections.length - 1].id);
+        return;
+      }
+
+      const headerOffset = window.innerWidth <= 768 ? 90 : 140;
       const scrollPosition = currentScrollY + headerOffset;
 
       let currentSectionId = '';
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
-        const sectionAbsoluteTop = section.getBoundingClientRect().top + currentScrollY;
-        if (sectionAbsoluteTop <= scrollPosition) {
+        const sectionTop = section.getBoundingClientRect().top + currentScrollY;
+
+        // Last section special handling: activates when comfortably in upper viewport (<= 250px)
+        if (i === sections.length - 1) {
+          const r = section.getBoundingClientRect();
+          if (r.top <= 250 && r.bottom > 0) {
+            currentSectionId = section.id;
+            break;
+          }
+        }
+
+        if (sectionTop <= scrollPosition) {
           currentSectionId = section.id;
           break;
         }
@@ -1431,26 +1466,7 @@
         currentSectionId = sections[0].id;
       }
 
-      tocLinks.forEach(link => {
-        const targetId = link.getAttribute('data-target') || link.getAttribute('href').replace('#', '');
-        if (targetId === currentSectionId) {
-          link.classList.add('active');
-          // If on mobile horizontal scroll track, scroll the active item into view
-          if (window.innerWidth <= 960) {
-            const list = link.closest('.cs-toc-list');
-            if (list) {
-              const linkLeft = link.offsetLeft;
-              const linkWidth = link.offsetWidth;
-              const listWidth = list.offsetWidth;
-              if (linkLeft < list.scrollLeft || (linkLeft + linkWidth) > (list.scrollLeft + listWidth)) {
-                list.scrollTo({ left: linkLeft - 20, behavior: 'smooth' });
-              }
-            }
-          }
-        } else {
-          link.classList.remove('active');
-        }
-      });
+      setActiveTOC(currentSectionId);
     }
 
     window.addEventListener('scroll', updateActiveTOC, { passive: true });
@@ -1468,13 +1484,16 @@
             const elementPosition = targetSection.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
+            // Immediately set active state for instant feedback
+            setActiveTOC(targetId.replace('#', ''));
+
             window.scrollTo({
               top: offsetPosition,
               behavior: 'smooth'
             });
 
             history.pushState(null, null, targetId);
-            setTimeout(updateActiveTOC, 300);
+            setTimeout(updateActiveTOC, 400);
           }
         }
       });
