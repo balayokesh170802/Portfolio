@@ -467,179 +467,31 @@
       margin-top: 18px;
     }
 
-    /* ── 03. UI Showcase — Large Image Placeholder ─────── */
-    .cs-showcase-container {
-      margin-top: clamp(24px, 3.5vh, 36px);
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .cs-showcase-frame {
-      position: relative;
-      width: 100%;
-      min-height: clamp(380px, 50vh, 580px);
-      background: rgba(18, 18, 18, 0.7);
-      border: 1px dashed rgba(232, 230, 227, 0.16);
-      border-radius: 8px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(32px, 4.5vw, 64px);
-      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
-      transition: border-color 0.3s ease, background 0.3s ease;
-    }
-
-    .cs-showcase-frame:hover {
-      border-color: rgba(232, 230, 227, 0.28);
-      background: rgba(22, 22, 22, 0.85);
-    }
-
-    .cs-showcase-frame::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
-      pointer-events: none;
-    }
-    /* ── 03. UI Showcase — Stacked Cards Presentation ─── */
-    .cs-stack-container {
+    /* ── 03. UI Showcase — Hero + 4 Thumbnails Gallery ── */
+    .cs-showcase-gallery {
       margin-top: clamp(24px, 3.5vh, 32px);
       width: 100%;
       display: flex;
       flex-direction: column;
+      gap: 16px;
     }
 
-    .cs-stack-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: clamp(16px, 2.5vh, 24px);
-    }
-
-    .cs-stack-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .cs-stack-pill {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 4px;
-      background: rgba(18, 18, 18, 0.65);
-      border: 1px solid rgba(232, 230, 227, 0.1);
-      color: rgba(247, 237, 216, 0.6);
-      cursor: pointer;
-      transition: all 0.35s var(--ease-out-expo);
-      outline: none;
-      user-select: none;
-    }
-
-    .cs-stack-pill:hover {
-      border-color: rgba(232, 230, 227, 0.25);
-      color: var(--color-fg);
-      background: rgba(26, 26, 26, 0.85);
-    }
-
-    .cs-stack-pill.active {
-      background: rgba(226, 109, 92, 0.14);
-      border-color: rgba(226, 109, 92, 0.45);
-      color: var(--color-fg);
-    }
-
-    .cs-stack-hint {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.66rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(247, 237, 216, 0.35);
-      user-select: none;
-    }
-
-    .cs-stack-hint svg {
-      color: #e26d5c;
-    }
-
-    /* Stack Viewport Stage */
-    .cs-stack-viewport {
-      position: relative;
+    /* Main Featured Screen Container (Top Large Image) */
+    .cs-gallery-hero {
       width: 100%;
-      min-height: clamp(480px, 58vh, 620px);
-      padding: 10px 0 20px;
-    }
-
-    .cs-stack-stage {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Individual Stack Card */
-    .cs-stack-card {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 80%;
-      max-width: 820px;
-      border-radius: 8px;
-      background: #0f0f0f;
+      background: #0d0d0d;
       border: 1px solid rgba(232, 230, 227, 0.12);
-      box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.85),
-                  0 0 0 1px rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
       overflow: hidden;
-      cursor: pointer;
-      transform-origin: top left;
-      transition: transform 0.65s var(--ease-out-expo),
-                  box-shadow 0.65s var(--ease-out-expo),
-                  filter 0.5s ease,
-                  opacity 0.5s ease;
-      user-select: none;
+      box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.85);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .cs-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 16px;
-      background: rgba(16, 16, 16, 0.95);
-      border-bottom: 1px solid rgba(232, 230, 227, 0.08);
+    .cs-gallery-hero:hover {
+      border-color: rgba(232, 230, 227, 0.22);
     }
 
-    .cs-card-badge {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.64rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-    }
-
-    .cs-card-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(247, 237, 216, 0.7);
-    }
-
-    .cs-card-media {
+    .cs-gallery-screen {
       position: relative;
       width: 100%;
       background: #080808;
@@ -647,79 +499,173 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      min-height: clamp(280px, 46vw, 560px);
     }
 
-    .cs-card-media img {
+    .cs-gallery-screen img {
       width: 100%;
       height: auto;
-      display: block;
+      max-height: 75vh;
       object-fit: contain;
+      display: block;
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Stack Position Layers */
-    /* Layer 0: Front / Focused */
-    .cs-stack-card[data-layer="0"] {
-      z-index: 10;
-      transform: translate3d(0, 56px, 0) scale(1);
+    .cs-gallery-screen img.fade-out {
+      opacity: 0.25;
+      transform: scale(0.995);
+    }
+
+    /* Caption bar below the main image */
+    .cs-gallery-caption {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 24px;
+      padding: 14px 20px;
+      background: rgba(16, 16, 16, 0.96);
+      border-top: 1px solid rgba(232, 230, 227, 0.08);
+    }
+
+    .cs-gallery-caption-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cs-gallery-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(232, 230, 227, 0.1);
+      border-radius: 4px;
+    }
+
+    .cs-gallery-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-fg);
+      margin: 0;
+    }
+
+    .cs-gallery-desc {
+      font-family: var(--font-primary);
+      font-size: 0.82rem;
+      color: var(--color-fg-muted);
+      margin: 0;
+      max-width: 580px;
+      line-height: 1.5;
+    }
+
+    /* ── 4 Thumbnails Row Directly Below ─────────────────── */
+    .cs-gallery-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+
+    .cs-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      background: #111;
+      border: 1px solid rgba(232, 230, 227, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0.65;
+      position: relative;
+      outline: none;
+    }
+
+    .cs-thumb:hover {
+      opacity: 0.95;
+      border-color: rgba(232, 230, 227, 0.28);
+      transform: translateY(-2px);
+    }
+
+    .cs-thumb.active {
       opacity: 1;
-      filter: brightness(1);
-      border-color: rgba(232, 230, 227, 0.24);
-      box-shadow: 0 32px 75px -12px rgba(0, 0, 0, 0.95),
-                  0 0 0 1px rgba(226, 109, 92, 0.18);
+      border-color: #e26d5c;
+      box-shadow: 0 0 0 1px #e26d5c, 0 10px 24px -6px rgba(226, 109, 92, 0.3);
+      background: #151515;
+      transform: translateY(-2px);
     }
 
-    /* Layer 1: Second */
-    .cs-stack-card[data-layer="1"] {
-      z-index: 8;
-      transform: translate3d(6.5%, 38px, 0) scale(0.97);
-      opacity: 0.92;
-      filter: brightness(0.82);
+    .cs-thumb:focus-visible {
+      outline: 2px solid #e26d5c;
+      outline-offset: 2px;
     }
 
-    /* Layer 2: Third */
-    .cs-stack-card[data-layer="2"] {
-      z-index: 6;
-      transform: translate3d(13%, 20px, 0) scale(0.94);
-      opacity: 0.84;
-      filter: brightness(0.68);
+    .cs-thumb-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: #080808;
+      overflow: hidden;
     }
 
-    /* Layer 3: Fourth / Back */
-    .cs-stack-card[data-layer="3"] {
-      z-index: 4;
-      transform: translate3d(19.5%, 2px, 0) scale(0.91);
-      opacity: 0.76;
-      filter: brightness(0.55);
+    .cs-thumb-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
     }
 
-    /* Hover Interaction: Front lifts slightly, background layers gently separate */
-    .cs-stack-viewport:hover .cs-stack-card[data-layer="0"] {
-      transform: translate3d(0, 48px, 0) scale(1.008);
-      box-shadow: 0 40px 90px -12px rgba(0, 0, 0, 0.98),
-                  0 0 25px rgba(226, 109, 92, 0.12);
+    .cs-thumb:hover .cs-thumb-media img {
+      transform: scale(1.04);
     }
 
-    .cs-stack-viewport:hover .cs-stack-card[data-layer="1"] {
-      transform: translate3d(8%, 32px, 0) scale(0.975);
-      filter: brightness(0.88);
+    .cs-thumb-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 8px 10px;
+      background: rgba(18, 18, 18, 0.95);
+      border-top: 1px solid rgba(232, 230, 227, 0.06);
     }
 
-    .cs-stack-viewport:hover .cs-stack-card[data-layer="2"] {
-      transform: translate3d(16%, 16px, 0) scale(0.945);
-      filter: brightness(0.74);
+    .cs-thumb-idx {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #e26d5c;
     }
 
-    .cs-stack-viewport:hover .cs-stack-card[data-layer="3"] {
-      transform: translate3d(24%, 0px, 0) scale(0.915);
-      filter: brightness(0.62);
+    .cs-thumb-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(247, 237, 216, 0.8);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .cs-stack-card:not([data-layer="0"]):hover {
-      filter: brightness(0.96) !important;
-      border-color: rgba(232, 230, 227, 0.3);
+    .cs-thumb.active .cs-thumb-name {
+      color: #fff;
     }
 
-    /* ── Conceptual Groups Cards below the stack ────────── */
+    /* ── 3 Conceptual Groups Grid ───────────────────────── */
     .cs-groups-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -767,73 +713,38 @@
       color: var(--color-fg-muted);
     }
 
-    /* Responsive Stack Styling */
+    /* ── Responsive Gallery Styles ───────────────────────── */
     @media (max-width: 960px) {
-      .cs-stack-viewport {
-        min-height: clamp(380px, 50vh, 480px);
-      }
-
-      .cs-stack-card {
-        width: 85%;
-      }
-
-      .cs-stack-card[data-layer="0"] {
-        transform: translate3d(0, 40px, 0) scale(1);
-      }
-
-      .cs-stack-card[data-layer="1"] {
-        transform: translate3d(4.5%, 26px, 0) scale(0.97);
-      }
-
-      .cs-stack-card[data-layer="2"] {
-        transform: translate3d(9%, 13px, 0) scale(0.94);
-      }
-
-      .cs-stack-card[data-layer="3"] {
-        transform: translate3d(13.5%, 0px, 0) scale(0.91);
-      }
-
       .cs-groups-grid {
         grid-template-columns: 1fr;
         gap: 12px;
       }
     }
 
-    @media (max-width: 640px) {
-      .cs-stack-viewport {
-        min-height: clamp(260px, 42vh, 340px);
+    @media (max-width: 840px) {
+      .cs-gallery-caption {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
       }
-
-      .cs-stack-card {
-        width: 90%;
+      .cs-gallery-strip {
+        gap: 8px;
       }
-
-      .cs-card-header {
-        padding: 6px 10px;
+      .cs-thumb-info {
+        padding: 6px 8px;
       }
-
-      .cs-card-badge {
+      .cs-thumb-name {
         font-size: 0.58rem;
       }
+    }
 
-      .cs-card-name {
-        display: none;
+    @media (max-width: 560px) {
+      .cs-gallery-strip {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
       }
-
-      .cs-stack-card[data-layer="0"] {
-        transform: translate3d(0, 24px, 0) scale(1);
-      }
-
-      .cs-stack-card[data-layer="1"] {
-        transform: translate3d(3%, 16px, 0) scale(0.97);
-      }
-
-      .cs-stack-card[data-layer="2"] {
-        transform: translate3d(6%, 8px, 0) scale(0.94);
-      }
-
-      .cs-stack-card[data-layer="3"] {
-        transform: translate3d(9%, 0px, 0) scale(0.91);
+      .cs-gallery-screen {
+        min-height: 200px;
       }
     }
 
@@ -1319,85 +1230,65 @@
           <!-- 03 — UI SHOWCASE -->
           <section class="cs-section" id="ui-showcase">
             <h2 class="cs-heading">UI SHOWCASE</h2>
-            <p class="cs-body-text">A layered overview of the tactical interface suite designed for Severna: Blood &amp; Betrayal — spanning character management systems, faction and building panels, and core gameplay widgets.</p>
+            <p class="cs-body-text">A curated presentation of the tactical interface suite designed for Severna: Blood &amp; Betrayal — showcasing character management systems, faction and building panels, and core gameplay widgets.</p>
 
-            <div class="cs-stack-container">
-              <!-- Filter & Interactive Reordering Pills -->
-              <div class="cs-stack-meta">
-                <div class="cs-stack-pills" role="tablist" aria-label="UI Showcase Screens">
-                  <button type="button" class="cs-stack-pill active" data-index="0" role="tab" aria-selected="true">
-                    01 — OVERVIEW
-                  </button>
-                  <button type="button" class="cs-stack-pill" data-index="1" role="tab" aria-selected="false">
-                    01 — SKILLS
-                  </button>
-                  <button type="button" class="cs-stack-pill" data-index="2" role="tab" aria-selected="false">
-                    01 — HISTORY
-                  </button>
-                  <button type="button" class="cs-stack-pill" data-index="3" role="tab" aria-selected="false">
-                    02 &amp; 03 — FACTION &amp; WIDGETS
-                  </button>
+            <div class="cs-showcase-gallery">
+
+              <!-- Main Featured Image Display (Large Image on Top) -->
+              <div class="cs-gallery-hero">
+                <div class="cs-gallery-screen">
+                  <img id="cs-hero-img" src="severna-character-details.png" alt="Severna: Blood &amp; Betrayal — Character Management Overview &amp; Details UI" />
                 </div>
-                <span class="cs-stack-hint">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <polyline points="9 21 3 21 3 15"></polyline>
-                    <line x1="21" y1="3" x2="14" y2="10"></line>
-                    <line x1="3" y1="21" x2="10" y2="14"></line>
-                  </svg>
-                  CLICK CARD OR PILL TO BRING TO FRONT
-                </span>
+                <div class="cs-gallery-caption">
+                  <div class="cs-gallery-caption-meta">
+                    <span class="cs-gallery-badge" id="cs-hero-badge">01 — CHARACTER MANAGEMENT</span>
+                    <h3 class="cs-gallery-title" id="cs-hero-title">OVERVIEW &amp; DETAILS</h3>
+                  </div>
+                  <p class="cs-gallery-desc" id="cs-hero-desc">Tactical character overview displaying leader attributes, traits, ambition progression, and combat statistics.</p>
+                </div>
               </div>
 
-              <!-- Layered Stack Viewport -->
-              <div class="cs-stack-viewport" aria-label="Interactive Stacked UI Showcase">
-                <div class="cs-stack-stage">
+              <!-- 4 Thumbnail Previews in a Single Row (Directly Below Main Image) -->
+              <div class="cs-gallery-strip" role="tablist" aria-label="UI Showcase Thumbnails">
+                <button type="button" class="cs-thumb active" data-index="0" role="tab" aria-selected="true" aria-label="View Character Overview & Details">
+                  <div class="cs-thumb-media">
+                    <img src="severna-character-details.png" alt="Character Overview Thumbnail" />
+                  </div>
+                  <div class="cs-thumb-info">
+                    <span class="cs-thumb-idx">01</span>
+                    <span class="cs-thumb-name">OVERVIEW</span>
+                  </div>
+                </button>
 
-                  <!-- Card 0: Character Overview & Details -->
-                  <article class="cs-stack-card" data-index="0" data-layer="0" tabindex="0" aria-label="Character Management: Overview & Details">
-                    <header class="cs-card-header">
-                      <span class="cs-card-badge">01 — CHARACTER MANAGEMENT</span>
-                      <span class="cs-card-name">OVERVIEW &amp; DETAILS</span>
-                    </header>
-                    <div class="cs-card-media">
-                      <img src="severna-character-details.png" alt="Severna: Blood &amp; Betrayal — Character Management Overview &amp; Details UI" loading="lazy" />
-                    </div>
-                  </article>
+                <button type="button" class="cs-thumb" data-index="1" role="tab" aria-selected="false" aria-label="View Character Skills & Abilities">
+                  <div class="cs-thumb-media">
+                    <img src="severna-character-skills.png" alt="Character Skills Thumbnail" />
+                  </div>
+                  <div class="cs-thumb-info">
+                    <span class="cs-thumb-idx">02</span>
+                    <span class="cs-thumb-name">SKILLS</span>
+                  </div>
+                </button>
 
-                  <!-- Card 1: Character Skills -->
-                  <article class="cs-stack-card" data-index="1" data-layer="1" tabindex="0" aria-label="Character Management: Skills & Abilities">
-                    <header class="cs-card-header">
-                      <span class="cs-card-badge">01 — CHARACTER MANAGEMENT</span>
-                      <span class="cs-card-name">SKILLS &amp; ABILITIES</span>
-                    </header>
-                    <div class="cs-card-media">
-                      <img src="severna-character-skills.png" alt="Severna: Blood &amp; Betrayal — Character Skills &amp; Abilities UI" loading="lazy" />
-                    </div>
-                  </article>
+                <button type="button" class="cs-thumb" data-index="2" role="tab" aria-selected="false" aria-label="View Character History & Narrative">
+                  <div class="cs-thumb-media">
+                    <img src="severna-character-history.png" alt="Character History Thumbnail" />
+                  </div>
+                  <div class="cs-thumb-info">
+                    <span class="cs-thumb-idx">03</span>
+                    <span class="cs-thumb-name">HISTORY</span>
+                  </div>
+                </button>
 
-                  <!-- Card 2: Character History -->
-                  <article class="cs-stack-card" data-index="2" data-layer="2" tabindex="0" aria-label="Character Management: Character History">
-                    <header class="cs-card-header">
-                      <span class="cs-card-badge">01 — CHARACTER MANAGEMENT</span>
-                      <span class="cs-card-name">CHARACTER HISTORY</span>
-                    </header>
-                    <div class="cs-card-media">
-                      <img src="severna-character-history.png" alt="Severna: Blood &amp; Betrayal — Character Narrative &amp; History UI" loading="lazy" />
-                    </div>
-                  </article>
-
-                  <!-- Card 3: Faction & Gameplay Widgets -->
-                  <article class="cs-stack-card" data-index="3" data-layer="3" tabindex="0" aria-label="Faction & Building Details and Gameplay Widgets">
-                    <header class="cs-card-header">
-                      <span class="cs-card-badge">02 &amp; 03 — FACTION &amp; WIDGETS</span>
-                      <span class="cs-card-name">BUILDINGS &amp; TROOP CARDS</span>
-                    </header>
-                    <div class="cs-card-media">
-                      <img src="severna-faction-widgets.png" alt="Severna: Blood &amp; Betrayal — Faction, Building Details and Gameplay Widgets UI" loading="lazy" />
-                    </div>
-                  </article>
-
-                </div>
+                <button type="button" class="cs-thumb" data-index="3" role="tab" aria-selected="false" aria-label="View Faction & Gameplay Widgets">
+                  <div class="cs-thumb-media">
+                    <img src="severna-faction-widgets.png" alt="Faction and Gameplay Widgets Thumbnail" />
+                  </div>
+                  <div class="cs-thumb-info">
+                    <span class="cs-thumb-idx">04</span>
+                    <span class="cs-thumb-name">FACTION &amp; WIDGETS</span>
+                  </div>
+                </button>
               </div>
 
               <!-- 3 Conceptual Groups Summary -->
@@ -1655,96 +1546,100 @@
       });
     });
   
-    /* ── Stacked UI Showcase Layer Manager ─────────────── */
-    function initUIStack() {
-      const stage = document.querySelector('.cs-stack-stage');
-      if (!stage) return;
+    /* ── UI Showcase Hero + Thumbnails Gallery Manager ── */
+    function initUIGallery() {
+      const heroImg = document.getElementById('cs-hero-img');
+      const heroBadge = document.getElementById('cs-hero-badge');
+      const heroTitle = document.getElementById('cs-hero-title');
+      const heroDesc = document.getElementById('cs-hero-desc');
+      const thumbs = Array.from(document.querySelectorAll('.cs-thumb'));
 
-      const cards = Array.from(stage.querySelectorAll('.cs-stack-card'));
-      const pills = Array.from(document.querySelectorAll('.cs-stack-pill'));
+      if (!heroImg || thumbs.length === 0) return;
 
-      let order = [0, 1, 2, 3];
-
-      function updateStageHeight() {
-        let maxHeight = 0;
-        cards.forEach(card => {
-          if (card.offsetHeight > maxHeight) {
-            maxHeight = card.offsetHeight;
-          }
-        });
-        if (maxHeight > 0) {
-          const extraOffset = window.innerWidth <= 640 ? 36 : (window.innerWidth <= 960 ? 56 : 76);
-          stage.style.height = (maxHeight + extraOffset) + 'px';
+      const galleryData = [
+        {
+          src: 'severna-character-details.png',
+          alt: 'Severna: Blood & Betrayal — Character Management Overview & Details UI',
+          badge: '01 — CHARACTER MANAGEMENT',
+          title: 'OVERVIEW & DETAILS',
+          desc: 'Tactical character overview displaying leader attributes, traits, ambition progression, and combat statistics.'
+        },
+        {
+          src: 'severna-character-skills.png',
+          alt: 'Severna: Blood & Betrayal — Character Skills & Abilities UI',
+          badge: '01 — CHARACTER MANAGEMENT',
+          title: 'SKILLS & ABILITIES',
+          desc: 'Interactive skill tree displaying unlocked and locked tactical perks, combat proficiencies, and tier progression.'
+        },
+        {
+          src: 'severna-character-history.png',
+          alt: 'Severna: Blood & Betrayal — Character Narrative & History UI',
+          badge: '01 — CHARACTER MANAGEMENT',
+          title: 'CHARACTER HISTORY',
+          desc: 'Lore-focused narrative interface recording faction lineage, historical deeds, personality traits, and chronicle entries.'
+        },
+        {
+          src: 'severna-faction-widgets.png',
+          alt: 'Severna: Blood & Betrayal — Faction, Building Details and Gameplay Widgets UI',
+          badge: '02 & 03 — FACTION & WIDGETS',
+          title: 'BUILDINGS & TROOP CARDS',
+          desc: 'Territory building management screens paired with real-time troop cards, action states, and tactical micro-widgets.'
         }
-      }
+      ];
 
-      function applyLayers() {
-        order.forEach((cardIdx, layerIdx) => {
-          const card = cards[cardIdx];
-          if (card) {
-            card.setAttribute('data-layer', layerIdx);
-            card.setAttribute('aria-hidden', layerIdx === 0 ? 'false' : 'true');
-          }
+      let currentIndex = 0;
+
+      function selectGalleryItem(index) {
+        if (index === currentIndex && heroImg.getAttribute('src') === galleryData[index].src) return;
+        currentIndex = index;
+
+        const data = galleryData[index];
+        if (!data) return;
+
+        // Update active thumbnail
+        thumbs.forEach((thumb, idx) => {
+          const isActive = idx === index;
+          thumb.classList.toggle('active', isActive);
+          thumb.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
 
-        const activeCardIdx = order[0];
-        pills.forEach(pill => {
-          const idx = parseInt(pill.getAttribute('data-index'), 10);
-          const isActive = idx === activeCardIdx;
-          pill.classList.toggle('active', isActive);
-          pill.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-
-        updateStageHeight();
+        // Smooth transition on hero image
+        heroImg.classList.add('fade-out');
+        setTimeout(() => {
+          heroImg.src = data.src;
+          heroImg.alt = data.alt;
+          if (heroBadge) heroBadge.textContent = data.badge;
+          if (heroTitle) heroTitle.textContent = data.title;
+          if (heroDesc) heroDesc.textContent = data.desc;
+          heroImg.classList.remove('fade-out');
+        }, 160);
       }
 
-      function bringCardToFront(cardIdx) {
-        const pos = order.indexOf(cardIdx);
-        if (pos > 0) {
-          order.splice(pos, 1);
-          order.unshift(cardIdx);
-          applyLayers();
-        }
-      }
-
-      cards.forEach(card => {
-        card.addEventListener('click', () => {
-          const idx = parseInt(card.getAttribute('data-index'), 10);
-          bringCardToFront(idx);
-        });
-        card.addEventListener('keydown', (e) => {
+      thumbs.forEach((thumb, idx) => {
+        thumb.addEventListener('click', () => selectGalleryItem(idx));
+        thumb.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            const idx = parseInt(card.getAttribute('data-index'), 10);
-            bringCardToFront(idx);
+            selectGalleryItem(idx);
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            const nextIdx = (idx + 1) % thumbs.length;
+            thumbs[nextIdx].focus();
+            selectGalleryItem(nextIdx);
+          } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const prevIdx = (idx - 1 + thumbs.length) % thumbs.length;
+            thumbs[prevIdx].focus();
+            selectGalleryItem(prevIdx);
           }
         });
       });
-
-      pills.forEach(pill => {
-        pill.addEventListener('click', () => {
-          const idx = parseInt(pill.getAttribute('data-index'), 10);
-          bringCardToFront(idx);
-        });
-      });
-
-      const imgs = stage.querySelectorAll('img');
-      imgs.forEach(img => {
-        if (img.complete) {
-          updateStageHeight();
-        } else {
-          img.addEventListener('load', updateStageHeight);
-        }
-      });
-      window.addEventListener('resize', updateStageHeight);
-
-      applyLayers();
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initUIStack);
+      document.addEventListener('DOMContentLoaded', initUIGallery);
     } else {
-      initUIStack();
+      initUIGallery();
     }
   </script>
 </body>
