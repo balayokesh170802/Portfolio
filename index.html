@@ -21,11 +21,12 @@
         var nav = (window.performance && performance.getEntriesByType)
           ? performance.getEntriesByType('navigation')[0]
           : null;
-        var navType = nav ? nav.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
+        var navType = nav ? nav.type : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : (performance.navigation.type === 2 ? 'back_forward' : 'navigate')) : 'navigate');
         var isReload = navType === 'reload';
+        var isBackForward = navType === 'back_forward';
 
-        // An explicit jump to projects is ONLY valid if returning from a project case study AND not a page reload
-        var isReturn = !isReload && (sessionStorage.getItem('jump_to_projects') === '1' || sessionStorage.getItem('skip_intro_return') === '1');
+        // An explicit jump to projects is valid if returning from a project case study OR browser back-button navigation
+        var isReturn = !isReload && (isBackForward || sessionStorage.getItem('jump_to_projects') === '1' || sessionStorage.getItem('skip_intro_return') === '1');
 
         if (isReload) {
           // Clean reload: reset flags and strip any hash so intro plays completely from top
@@ -43,12 +44,22 @@
           window.scrollTo(0, 0);
           document.documentElement.classList.remove('skip-intro');
         } else if (isReturn) {
-          // Returning to projects: skip intro completely, disable smooth scroll so positioning is instant
+          // Returning to projects or back navigation: skip intro completely, disable smooth scroll so positioning is instant
           document.documentElement.classList.add('skip-intro');
           document.documentElement.style.scrollBehavior = 'auto';
           window.__jumpToProjects = true;
           if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
+            history.scrollRestoration = 'auto';
+          }
+          var savedY = null;
+          try {
+            savedY = sessionStorage.getItem('portfolio_scroll_y');
+          } catch (e) {}
+          if (savedY !== null && !window.location.hash) {
+            var parsedY = parseInt(savedY, 10);
+            if (!isNaN(parsedY) && parsedY > 0) {
+              window.scrollTo(0, parsedY);
+            }
           }
           try {
             sessionStorage.removeItem('skip_intro_return');
@@ -64,8 +75,27 @@
         }
 
         window.addEventListener('beforeunload', function() {
-          if (!sessionStorage.getItem('skip_intro_return') && !sessionStorage.getItem('jump_to_projects')) {
-            window.scrollTo(0, 0);
+          try {
+            sessionStorage.setItem('portfolio_scroll_y', String(window.scrollY || window.pageYOffset || 0));
+          } catch (e) {}
+        });
+
+        window.addEventListener('pagehide', function() {
+          try {
+            sessionStorage.setItem('portfolio_scroll_y', String(window.scrollY || window.pageYOffset || 0));
+          } catch (e) {}
+        });
+
+        window.addEventListener('pageshow', function(e) {
+          if (e.persisted) {
+            document.documentElement.classList.add('skip-intro');
+            document.body.classList.remove('intro');
+            document.body.classList.add('intro-complete');
+            var sc = document.getElementById('intro-screen');
+            if (sc) {
+              sc.classList.add('is-dismissed');
+              sc.style.display = 'none';
+            }
           }
         });
       } catch (e) {}
@@ -2587,10 +2617,10 @@
       border: 1px solid rgba(216, 195, 158, 0.4);
       border-radius: 3px;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.70rem;
       font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-transform: none;
       color: #dfceb5;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
     }
@@ -2621,6 +2651,36 @@
       color: #a8a6a2;
       margin: 0;
       font-weight: 400;
+    }
+
+    /* Experience skill tags */
+    .experience__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .experience__tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: 3px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(232, 230, 227, 0.7);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(232, 230, 227, 0.1);
+      transition: border-color 0.25s ease, color 0.25s ease;
+    }
+
+    .experience__card.is-active .experience__tag {
+      color: #dfceb5;
+      background: rgba(216, 195, 158, 0.06);
+      border-color: rgba(216, 195, 158, 0.25);
     }
 
     /* Mobile-only elements hidden on desktop & tablet */
@@ -3026,13 +3086,23 @@
     }
 
     .contact__copyright,
-    .contact__credit {
+    .contact__credit,
+    .contact__footer-phone {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--color-fg-muted);
+    }
+
+    .contact__footer-phone {
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact__footer-phone:hover {
+      color: var(--color-fg-hover);
     }
 
     /* Responsive adjustments */
@@ -3739,13 +3809,13 @@
           </div>
         </a>
 
-        <!-- Project 02 Card: NYTWOLF GAMES -->
-        <a href="nytwolf.html" class="project-card project-card--2" id="project-card-2" aria-label="Open Project: NYTWOLF Games">
+        <!-- Project 02 Card: Nytwolf Games -->
+        <a href="nytwolf.html" class="project-card project-card--2" id="project-card-2" aria-label="Open Project: Nytwolf Games">
           <div class="project-card__media">
-            <img src="nyt-cover.jpg" alt="NYTWOLF Games Studio" class="project-card__img" loading="lazy" />
+            <img src="nyt-cover.jpg" alt="Nytwolf Games Studio" class="project-card__img" loading="lazy" />
           </div>
           <div class="project-card__body">
-            <h3 class="project-card__title">NYTWOLF Games</h3>
+            <h3 class="project-card__title">Nytwolf Games</h3>
             <p class="project-card__desc">Company website design for an independent game studio, featuring responsive layout and studio game showcases.</p>
             <div class="project-card__tags">
               <span class="project-card__tag">UI &amp; UX</span>
@@ -3869,10 +3939,15 @@
               <div class="experience__date">OCT 2025 — PRESENT</div>
               <div class="experience__badge">
                 <span class="experience__badge-diamond">◆</span>
-                <span>NYTWOLF GAMES</span>
+                <span>Nytwolf Games</span>
               </div>
               <h3 class="experience__role">UX/UI DESIGNER</h3>
-              <p class="experience__desc">Designing game interfaces, user flows, and interactive experiences that make gameplay easier to understand and more enjoyable.</p>
+              <p class="experience__desc">Lead UI/UX designer for dark-fantasy strategy title Severna: Blood &amp; Betrayal. Designing 20+ in-game HUD widgets, tactical combat overlays, and inventory systems tailored for PC gaming.</p>
+              <div class="experience__tags">
+                <span class="experience__tag">Game UI</span>
+                <span class="experience__tag">Tactical HUD</span>
+                <span class="experience__tag">PC Strategy</span>
+              </div>
             </div>
           </div>
 
@@ -3887,10 +3962,15 @@
               <div class="experience__date">APR 2025 — SEP 2025</div>
               <div class="experience__badge">
                 <span class="experience__badge-diamond">◆</span>
-                <span>NYTWOLF GAMES</span>
+                <span>Nytwolf Games</span>
               </div>
               <h3 class="experience__role">UX/UI DESIGNER INTERN</h3>
-              <p class="experience__desc">Explored game mechanics and player behaviour while creating wireframes, interface concepts, and user flows for in-game experiences.</p>
+              <p class="experience__desc">Designed the official responsive studio website for Nytwolf Games. Prototyped interactive player journeys, gameplay wireframes, and interface systems for game releases.</p>
+              <div class="experience__tags">
+                <span class="experience__tag">Studio Website</span>
+                <span class="experience__tag">Game Mechanics</span>
+                <span class="experience__tag">Interactive Prototype</span>
+              </div>
             </div>
           </div>
 
@@ -3908,7 +3988,12 @@
                 <span>LEADPRO INFOTECH</span>
               </div>
               <h3 class="experience__role">UX/UI DESIGNER</h3>
-              <p class="experience__desc">Worked on responsive websites, admin interfaces, and digital experiences from early wireframes through implementation.</p>
+              <p class="experience__desc">Worked on responsive client websites, B2B SaaS web applications, and administrative dashboards, establishing design tokens and component libraries in Figma.</p>
+              <div class="experience__tags">
+                <span class="experience__tag">Website Design</span>
+                <span class="experience__tag">B2B SaaS</span>
+                <span class="experience__tag">Design Systems</span>
+              </div>
             </div>
           </div>
 
@@ -3962,6 +4047,13 @@
             </div>
 
             <div class="contact__detail-item">
+              <span class="contact__detail-key">PHONE</span>
+              <a href="tel:+919876543210" class="contact__detail-link">
+                +91 98765 43210
+              </a>
+            </div>
+
+            <div class="contact__detail-item">
               <span class="contact__detail-key">LINKEDIN</span>
               <a href="https://www.linkedin.com/in/balayokesh-s-s-583b04235/" target="_blank" rel="noopener noreferrer" class="contact__detail-link contact__detail-link--arrow">
                 <span>VIEW PROFILE</span>
@@ -3978,6 +4070,7 @@
       <!-- Subtle Footer -->
       <footer class="contact__footer">
         <span class="contact__copyright">© 2026 BALAYOKESH</span>
+        <a href="tel:+919876543210" class="contact__footer-phone">+91 98765 43210</a>
         <span class="contact__credit">DESIGNED &amp; BUILT BY ME</span>
       </footer>
     </div>
@@ -4096,16 +4189,18 @@
         : null;
       const navType = navEntry
         ? navEntry.type
-        : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : 'navigate') : 'navigate');
+        : (window.performance && performance.navigation ? (performance.navigation.type === 1 ? 'reload' : (performance.navigation.type === 2 ? 'back_forward' : 'navigate')) : 'navigate');
       const isReload = navType === 'reload';
-      const isReturn = !isReload && (window.__jumpToProjects || sessionStorage.getItem('jump_to_projects') === '1' || sessionStorage.getItem('skip_intro_return') === '1');
+      const isBackForward = navType === 'back_forward';
+      const isReturn = !isReload && (isBackForward || window.__jumpToProjects || sessionStorage.getItem('jump_to_projects') === '1' || sessionStorage.getItem('skip_intro_return') === '1');
       const isSkipClass = !isReload && document.documentElement.classList.contains('skip-intro');
+
+      const savedScrollY = sessionStorage.getItem('portfolio_scroll_y');
 
       try {
         sessionStorage.removeItem('skip_intro_return');
         sessionStorage.removeItem('jump_to_projects');
         sessionStorage.removeItem('intro-seen');
-        sessionStorage.removeItem('portfolio_scroll_y');
       } catch (e) {}
 
       const introScreen = document.getElementById('intro-screen');
@@ -4123,9 +4218,18 @@
         }
 
         if (isReturn || window.__jumpToProjects) {
-          const target = document.getElementById('projects');
-          if (target) {
-            target.scrollIntoView({ behavior: 'instant', block: 'start' });
+          if (window.location.hash) {
+            const target = document.querySelector(window.location.hash);
+            if (target) {
+              target.scrollIntoView({ behavior: 'instant', block: 'start' });
+            }
+          } else if (savedScrollY !== null && !isNaN(parseInt(savedScrollY, 10)) && parseInt(savedScrollY, 10) > 0) {
+            window.scrollTo(0, parseInt(savedScrollY, 10));
+          } else {
+            const target = document.getElementById('projects');
+            if (target) {
+              target.scrollIntoView({ behavior: 'instant', block: 'start' });
+            }
           }
           try {
             if (window.location.hash) {
@@ -4145,6 +4249,17 @@
           }, 150);
         }
       }
+
+      // Save scroll position when clicking any project case study link
+      document.querySelectorAll('.project-card, a[href$=".html"]').forEach(function(link) {
+        link.addEventListener('click', function() {
+          try {
+            sessionStorage.setItem('portfolio_scroll_y', String(window.scrollY || window.pageYOffset || 0));
+            sessionStorage.setItem('skip_intro_return', '1');
+            sessionStorage.setItem('jump_to_projects', '1');
+          } catch (e) {}
+        });
+      });
 
       if (!isReload && (isReturn || isSkipClass)) {
         completeImmediately();

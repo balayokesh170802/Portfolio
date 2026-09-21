@@ -890,6 +890,12 @@
       transform: translateX(4px);
     }
 
+    .cs-nav-btn--next {
+      text-transform: none;
+      letter-spacing: 0.08em;
+      font-size: 0.76rem;
+    }
+
     /* ── Responsive: Tablet & Mobile ────────────────────── */
     @media (max-width: 960px) {
       .cs-layout-grid {
@@ -1359,7 +1365,7 @@
           BACK TO SELECTED WORKS
         </a>
         <a href="nytwolf.html" class="cs-nav-btn cs-nav-btn--next">
-          NYTWOLF GAMES
+          Nytwolf Games
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -1492,7 +1498,7 @@
               behavior: 'smooth'
             });
 
-            history.pushState(null, null, targetId);
+            history.replaceState(null, null, targetId);
             setTimeout(updateActiveTOC, 400);
           }
         }
@@ -1507,6 +1513,13 @@
           sessionStorage.setItem('jump_to_projects', '1');
         } catch (e) {}
       });
+    });
+
+    window.addEventListener('pagehide', () => {
+      try {
+        sessionStorage.setItem('skip_intro_return', '1');
+        sessionStorage.setItem('jump_to_projects', '1');
+      } catch (e) {}
     });
 
     document.querySelectorAll('.header__logo').forEach(link => {

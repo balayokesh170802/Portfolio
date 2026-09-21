@@ -1162,6 +1162,13 @@
       });
     });
 
+    window.addEventListener('pagehide', () => {
+      try {
+        sessionStorage.setItem('skip_intro_return', '1');
+        sessionStorage.setItem('jump_to_projects', '1');
+      } catch (e) {}
+    });
+
     document.querySelectorAll('.header__logo').forEach(link => {
       link.addEventListener('click', () => {
         try {
