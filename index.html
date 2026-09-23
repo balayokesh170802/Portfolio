@@ -146,8 +146,7 @@
     }
 
     body.intro-complete {
-      overflow-x: hidden !important;
-      overflow-y: visible !important;
+      overflow: visible !important;
     }
 
     /* ── Header ─────────────────────────────────────────── */
@@ -431,7 +430,6 @@
     .intro-screen__footer {
       margin-top: clamp(28px, 4vh, 48px);
       width: clamp(280px, 40vw, 520px);
-      max-width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -619,8 +617,7 @@
     html.skip-intro body,
     html.skip-intro body.intro,
     html.skip-intro body.intro-complete {
-      overflow-x: hidden !important;
-      overflow-y: visible !important;
+      overflow: visible !important;
     }
 
     html.skip-intro .header {
@@ -1127,7 +1124,6 @@
     @media (max-width: 768px) {
       :root {
         --header-height: 58px;
-        --page-padding-x: clamp(16px, 5vw, 24px);
       }
 
       /* ── Mobile Header Single Row Layout ──────────────── */
@@ -1187,10 +1183,9 @@
         left: 0;
         right: 0;
         bottom: 0;
-        width: 100%;
+        width: 100vw;
         height: 100vh;
         height: 100dvh;
-        overflow-y: auto;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -1387,7 +1382,7 @@
     /* Extra Narrow Mobile (<= 340px) */
     @media (max-width: 340px) {
       .hero__heading {
-        font-size: clamp(1.25rem, 5vw, 1.4rem);
+        font-size: 1.65rem;
       }
 
       .hero__phrase {
@@ -3132,8 +3127,7 @@
       }
 
       .contact__heading {
-        font-size: clamp(1.8rem, 8vw, 2.8rem);
-        overflow-wrap: break-word;
+        font-size: clamp(2.2rem, 9.5vw, 3.2rem);
       }
 
       .contact__cta-btn {
@@ -3674,7 +3668,7 @@
         </div>
         <div class="info-col">
           <span class="info-col__label">EXPERIENCE</span>
-          <span class="info-col__value">2 Years</span>
+          <span class="info-col__value">1 Year 9 Months</span>
         </div>
         <div class="info-col">
           <span class="info-col__label">FOCUS</span>
