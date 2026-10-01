@@ -5351,8 +5351,6 @@
         isVisible = true;
       }
 
-      window.addEventListener('mousemove', onMouseMove, { passive: true });
-      document.addEventListener('mouseleave', onMouseLeave);
       window.addEventListener('resize', () => {
         resize();
         wakeLoop();
@@ -5362,10 +5360,7 @@
     })();
   </script>
 
-  <!-- ─── Three.js & Organic Jellyfish Swarm Particle System ─── -->
-  <script src="assets/js/three.min.js"></script>
-  <script src="assets/js/experience-particles.js"></script>
+
 
 </body>
 </html>
-
